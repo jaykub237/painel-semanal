@@ -1,0 +1,1677 @@
+<!doctype html><html><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"capabilities":{"downloads":"downloads.BABDwU1K.js","mcp":"mcp.hoz5jxDa.js","permissions":"permissions.ByA9Fd8x.js","self":"self.D3u1zjZe.js","user":"user.Cp1-RnjB.js"},"transforms":"_transforms.DYk1Ltlh.js","comments":"_comments.DiwQajF_.js","translate":"_translate.C5leZL2A.js"}</script><script>(function(){"use strict";const Ee="modulepreload",we=function(e){return"/"+e},Se={},ee=function(t,n,l){let i=Promise.resolve();function s(f){const c=new Event("vite:preloadError",{cancelable:!0});if(c.payload=f,window.dispatchEvent(c),!c.defaultPrevented)throw f}return i.then(f=>{for(const c of f||[])c.status==="rejected"&&s(c.reason);return t().catch(s)})},te=["light","dark","system"];function ne(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function W(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function re(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&te.includes(n)}function se(e){try{typeof reportError=="function"?reportError(e):setTimeout(()=>{throw e},0)}catch{}}const oe=Object.freeze(Object.assign(Object.create(null),{user:Object.freeze(Object.assign(Object.create(null),{id:null,isOwner:!1,canEdit:!1,name:null,avatarUrl:null,email:null}))}));function Y(e){if(window===top||e.type==="auxclick"&&e.button!==1)return;const t=e.composedPath?e.composedPath():[e.target];let n=null;for(let f=0;f<t.length;f++){const c=t[f];if(c&&c.matches&&c.matches("a[href],area[href]")){n=c;break}}if(!n&&e.target&&e.target.closest&&(n=e.target.closest("a[href],area[href]")),!n)return;const l=n.getAttribute("href");if(!l)return;let i,s;try{i=new URL(l,document.baseURI),s=new URL(document.baseURI).origin}catch{return}(i.protocol==="http:"||i.protocol==="https:")&&i.origin!==s&&(e.preventDefault(),parent.postMessage({__frame_nav:!0,url:i.href},"*"))}const K={};function D(e){if(window===top)return;const t=Date.now();t-(K[e]||0)<500||(K[e]=t,parent.postMessage({__frame_engaged:!0,kind:e},"*"))}const ie=2e3,x=["wheel","touchstart","touchmove","keydown","pointerdown"];let J=0;function ae(e){e.isTrusted&&(J=Date.now())}function ce(){addEventListener("click",Y,!0),addEventListener("auxclick",Y,!0)}function le(){for(let e=0;e<x.length;e++)addEventListener(x[e],ae,{capture:!0,passive:!0});addEventListener("scroll",e=>{e.isTrusted&&Date.now()-J<ie&&D("scroll")},{capture:!0,passive:!0}),addEventListener("pointermove",e=>{e.isTrusted&&D("pointer")},{capture:!0,passive:!0}),addEventListener("click",e=>{e.isTrusted&&D("click")},{capture:!0,passive:!0})}const I="__frame_scroll",ue=150,fe=310,de=160,me=3e4;function pe(){let e=0,t=!1,n=!1,l=!1,i=0;const s=a=>{try{sessionStorage.setItem(I,JSON.stringify({y:a}))}catch{}},f=()=>{if(t){t=!1;return}n=!0,clearTimeout(e),e=setTimeout(()=>s(scrollY),ue)};try{addEventListener("scroll",f,{passive:!0}),addEventListener("pagehide",()=>{clearTimeout(e),s(scrollY)})}catch{}const c=()=>{let a;try{a=sessionStorage.getItem(I)}catch{return null}if(a===null)return null;let _;try{_=JSON.parse(a)}catch{_=null}const m=_?.y;if(!(typeof m=="number"&&Number.isFinite(m)&&m>=0)){try{sessionStorage.removeItem(I)}catch{}return null}return m};let g=!1;const p=a=>{try{const _=scrollY;scrollTo({top:a,left:0,behavior:"instant"}),i=a,l=!0,s(a);const m=scrollY;m!==_&&(t=!0),m!==a&&!g&&(g=!0,addEventListener("load",()=>{try{if(scrollY===m){const y=c();p(y!==null?y:i)}}catch{}},{once:!0}))}catch{}},o=()=>{try{return!!location.hash}catch{return!0}};let u=!1;const d=()=>{try{if(u||innerWidth>fe||innerHeight>de)return;u=!0;const a=Date.now(),_=()=>{try{removeEventListener("resize",_)}catch{}if(Date.now()-a>me||n||o())return;const m=c();p(m!==null?m:i)};addEventListener("resize",_)}catch{}};let h=!1,b=!1;return{restore(){if(h||(h=!0,o()))return;const a=c();a!==null&&(p(a),d())},promoted(){if(b||(b=!0,o()))return;const a=c();a!==null?(p(a),d()):l&&p(i)}}}function he(e,t,n){const l=[...t.values()].filter(i=>i.targets.some(s=>s.startsWith(e+".")));return{wrap(i,s){const f=`${e}.${i}`,c=l.filter(g=>g.targets.includes(f));return c.length===0?(...g)=>{try{return s(...g)}catch(p){return Promise.reject(p)}}:(...g)=>{let p=g;for(const u of c){const d=u.module.parameters;if(d)try{p=d(p)}catch{return Promise.reject({code:"transform_error",id:u.id,scope:e,message:"parameters transform failed"})}}let o;try{o=s(...p)}catch(u){o=Promise.reject(u)}return o.then(u=>{for(let d=c.length-1;d>=0;d--){const h=c[d],b=h.module.returns;if(b)try{u=b(u)}catch{return n({id:h.id,scope:e,leg:"returns"}),u}}return u},u=>{for(let d=c.length-1;d>=0;d--){const h=c[d],b=h.module.throws;if(b)try{u=b(u)}catch{return n({id:h.id,scope:e,leg:"throws"}),Promise.reject(u)}}return Promise.reject(u)})}}}}function ge(e,t,n,l=()=>{}){const i=new Set(e.changes??[]),s=new Map;for(const f of i){const c=t[f];c&&s.set(f,c)}return{contract:e.contract,changes:i,flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:s,shellOrigin:n.shellOrigin,mount:n.mount,pipe:f=>he(f,s,l)}}(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let l=0;for(let i=0;i<n.length;i++){const s=n[i];try{e(t,s,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[s]}catch{}try{e(t,s,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[s]=="function"&&l++}if(l&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:l},"*")}catch{}})();const _e=1e4,ye=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function G(e){for(const t of ye)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}const R=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),U=window.__FRAME_PREAMBLE?.transforms,z=window.__FRAME_PREAMBLE?.comments,$=window.__FRAME_PREAMBLE?.translate,T=/^[\w.-]+\.js$/,be=/^[a-z][a-z0-9_-]{0,63}$/;let V=null,j=null;function q(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}let B=!1;function X(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,B=!0):B&&(delete t.dataset.theme,t.style.colorScheme="",B=!1)}const A=Object.assign(Object.create(null),{mcp:Object.assign(Object.create(null),{watchTool:{handlerArg:3}})}),M=new Map;function Q(e,t){const n=M.get(e);if(!n)return;const l=Object.assign(Object.create(null),t);Object.assign(n.impl,l),n.impl.__settled=()=>Promise.reject({code:"capability_removed",message:`${e}: method not in this runtime`});const i=n.queue;n.queue=[];for(const s of i){const f=l[s.method];if(f)if(A[e]?.[s.method])try{s.resolve(f(...s.args))}catch{k(s,A[e][s.method].handlerArg,{code:"transform_error",message:`${e}.${s.method} rejected its arguments`})}else f(...s.args).then(s.resolve,s.reject);else{const c={code:"capability_removed",message:`${e}.${s.method} is not in this runtime`},g=A[e]?.[s.method];if(g){k(s,g.handlerArg,c);continue}s.reject(c)}}}function ve(e,t){const n=M.get(e);if(!n)return;n.impl.__settled=()=>Promise.reject(t);const l=n.queue;n.queue=[];for(const i of l){const s=A[e]?.[i.method];if(s){k(i,s.handlerArg,t);continue}i.reject(t)}}function N(e,t){const n=oe[e];if(!n){ve(e,t);return}Q(e,Object.fromEntries(Object.entries(n).map(([l,i])=>[l,()=>Promise.resolve(i)])))}function k(e,t,n){if(e.syncState?.dead)return;const l=e.args[t];typeof l=="function"&&queueMicrotask(()=>{if(!e.syncState?.dead)try{l({type:"error",error:n})}catch(i){se(i)}})}const F=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(F&&F.writable===!1)){ce(),le();let e=null;try{e=pe()}catch{}const t=F?.value??{};q(window,"claude",t);const n=o=>{const u={impl:Object.create(null),queue:[]};M.set(o,u);const d=u.impl,h=new Proxy(d,{get:(b,a)=>{if(typeof a!="string"||a==="then"||a==="toJSON"||a==="valueOf")return;if(a==="toString")return Object.prototype.toString;const _=A[o]?.[a];return _?(...m)=>{if(typeof m[_.handlerArg]!="function")throw new TypeError(`${o}.${a} requires a handler function`);const y=d[a];if(y)return y(...m);if(d.__settled){const v={dead:!1},P={args:[...m],syncState:v};return d.__settled().catch(C=>k(P,_.handlerArg,C)),()=>{v.dead=!0}}let E=null;const S={dead:!1};return u.queue.push({method:a,args:m,resolve:v=>{E=typeof v=="function"?v:null,S.dead&&E?.()},reject:()=>{},syncState:S}),()=>{S.dead=!0,E?.()}}:(...m)=>{const y=d[a]??d.__settled;return y?y(...m):new Promise((E,S)=>{u.queue.push({method:a,args:m,resolve:E,reject:S})})}},set:()=>!1});q(t,o,h)};for(const o of Object.keys(R)){if(t[o]!==void 0){q(t,o,t[o]);continue}n(o)}let l=null,i=null,s=0;const f=o=>{o.source!==parent||!G(o.origin)||ne(o.data)&&(l=o.data.__frame_init,j=o.origin,removeEventListener("message",f),clearTimeout(s),i?.())};addEventListener("message",f),parent.postMessage({__frame_connect:!0},"*");const c=new Promise(o=>{i=o,s=setTimeout(()=>{removeEventListener("message",f),o()},_e)}),g=document.readyState==="loading"?new Promise(o=>document.addEventListener("DOMContentLoaded",()=>o(),{once:!0})):Promise.resolve();g.then(()=>{try{e?.restore()}catch{}});const p=o=>{if(!(o.source!==parent||!G(o.origin))&&W(o.data)){removeEventListener("message",p);try{e?.promoted()}catch{}}};addEventListener("message",p),c.then(async()=>{if(!l||!j){for(const r of M.keys())N(r,{code:"not_granted",message:"frame initialization did not arrive - capability unavailable"});return}X(l.theme);const o=j;let u=!1,d=!1;addEventListener("message",r=>{if(r.source!==parent||r.origin!==o)return;re(r.data)&&X(r.data.__frame_theme.theme);const w=r.data?.__fc_mode;w&&typeof w=="object"&&!u&&z&&T.test(z)&&(u=!0,h(z).then(H=>H.install?.(o,w.on===!0)).catch(()=>{}));const O=r.data?.__ft_cmd;O&&typeof O=="object"&&!d&&$&&T.test($)&&(d=!0,h($).then(H=>H.install?.(o,O)).catch(()=>{}))});const h=r=>ee(()=>import("/_runtime/"+r),void 0),b=Object.keys(l.capabilities??{});for(const r of b)Object.hasOwn(R,r)||be.test(r)&&t[r]===void 0&&(n(r),N(r,{code:"capability_disabled",message:"capability not in this runtime generation"}));const a=b.filter(r=>Object.hasOwn(R,r)).map(r=>[r,R[r]]).filter(r=>typeof r[1]=="string"&&T.test(r[1])),[_,...m]=await Promise.allSettled([U&&T.test(U)?h(U):Promise.resolve({}),...a.map(([,r])=>h(r))]),y=j;V=ge(l,_.status==="fulfilled"&&_.value?.TRANSFORMS||{},{shellOrigin:y,mount:Q},r=>parent.postMessage({__frame_cap_telemetry:r},y));const E=r=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:r}},y),S=V;m.forEach((r,w)=>{const O=a[w][0];if(r.status!=="fulfilled"){E(O);return}try{r.value?.install?.(S)}catch{E(O)}});for(const[r,w]of M)if(!(w.queue.length===0&&Object.keys(w.impl).length>0)){if(b.includes(r)){N(r,{code:"capability_disabled",message:"capability not available in this session"});continue}N(r,{code:"not_granted",message:"capability not available in this session"})}await g,parent.postMessage({__frame_ready:!0},j);let v=-1,P=0;const C=()=>{P=0;const r=Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0);r!==v&&(v=r,parent.postMessage({__frame_size:!0,h:r},y))},L=()=>{P||(P=setTimeout(C,200))},Z=new ResizeObserver(L);Z.observe(document.documentElement),document.body&&Z.observe(document.body),document.addEventListener("load",L,!0),document.fonts?.ready.then(L,()=>{}),addEventListener("beforeprint",()=>{v=-1,C()}),L(),addEventListener("message",r=>{if(!(r.source!==parent||r.origin!==y)&&W(r.data)){try{e?.promoted()}catch{}v=-1,L()}})})}})();</script><!-- /frame-runtime --><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Painel Semanal</title>
+
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F6F8FA; --line:#DCE3EA; --line-2:#C6D1DB;
+  --ink:#101820; --ink-2:#4A5A67; --ink-3:#7C8B98;
+  --accent:#2E5AA8; --accent-soft:#E4EBF8;
+  --personal:#9A5B2B; --personal-soft:#F5E9DF;
+  --pro:#2E5AA8; --pro-soft:#E4EBF8;
+  --ok:#2E7D5B; --warn:#B07A12; --crit:#B4453C;
+  --shadow:0 1px 2px rgba(16,24,32,.06), 0 4px 16px rgba(16,24,32,.05);
+  --r:10px;
+  --mono:"Cascadia Mono","JetBrains Mono",ui-monospace,Consolas,"Liberation Mono",monospace;
+  --sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,Roboto,"Helvetica Neue",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0E1418; --surface:#151D23; --surface-2:#1B252C; --line:#27333B; --line-2:#33424D;
+    --ink:#E6EDF2; --ink-2:#A0B0BC; --ink-3:#6F8091;
+    --accent:#7FA6E8; --accent-soft:#1C2B41;
+    --personal:#D79A5B; --personal-soft:#2C2318;
+    --pro:#7FA6E8; --pro-soft:#1C2B41;
+    --ok:#5FBF8F; --warn:#D8A63F; --crit:#E0796E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 18px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1418; --surface:#151D23; --surface-2:#1B252C; --line:#27333B; --line-2:#33424D;
+  --ink:#E6EDF2; --ink-2:#A0B0BC; --ink-3:#6F8091;
+  --accent:#7FA6E8; --accent-soft:#1C2B41;
+  --personal:#D79A5B; --personal-soft:#2C2318;
+  --pro:#7FA6E8; --pro-soft:#1C2B41;
+  --ok:#5FBF8F; --warn:#D8A63F; --crit:#E0796E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 18px rgba(0,0,0,.28);
+}
+:root[data-theme="light"]{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F6F8FA; --line:#DCE3EA; --line-2:#C6D1DB;
+  --ink:#101820; --ink-2:#4A5A67; --ink-3:#7C8B98;
+  --accent:#2E5AA8; --accent-soft:#E4EBF8;
+  --personal:#9A5B2B; --personal-soft:#F5E9DF;
+  --pro:#2E5AA8; --pro-soft:#E4EBF8;
+  --ok:#2E7D5B; --warn:#B07A12; --crit:#B4453C;
+  --shadow:0 1px 2px rgba(16,24,32,.06), 0 4px 16px rgba(16,24,32,.05);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ---------- topo ---------- */
+header.top{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.topgrid{display:flex;align-items:center;gap:20px;padding:14px 0;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:1px;margin-right:auto}
+.brand b{font-size:16px;font-weight:650;letter-spacing:-.01em}
+.brand span{font-size:11.5px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;font-family:var(--mono)}
+
+.weeknav{display:flex;align-items:center;gap:6px}
+.wbtn{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink-2)}
+.wbtn:hover{border-color:var(--line-2);color:var(--ink)}
+.wlabel{display:flex;flex-direction:column;align-items:center;min-width:172px;padding:0 6px}
+.wlabel b{font-family:var(--mono);font-size:14px;letter-spacing:.02em}
+.wlabel small{font-size:11.5px;color:var(--ink-3)}
+.today-pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:1px 6px;border-radius:99px;margin-left:6px}
+
+.ring{display:flex;align-items:center;gap:11px}
+.ring svg{display:block}
+.ring .num{font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.ring .cap{font-size:11px;color:var(--ink-3);font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase}
+
+.tabs{display:flex;gap:2px;border-top:1px solid var(--line);margin-top:-1px}
+.tab{padding:9px 14px;font-size:13.5px;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--accent)}
+
+/* ---------- genéricos ---------- */
+main{padding:24px 0 80px}
+.area{margin-bottom:30px}
+.area-head{display:flex;align-items:center;gap:12px;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.area-head h2{margin:0;font-size:13px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
+.area-head .apct{margin-left:auto;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.area-head .abar{width:110px;height:5px;border-radius:99px;background:var(--line);overflow:hidden;flex:none}
+.area-head .abar i{display:block;height:100%;border-radius:99px}
+.atoggle{display:flex;align-items:center;gap:8px;padding:3px 7px;margin:-3px -7px;border-radius:7px}
+.atoggle:hover{background:var(--surface-2)}
+.atoggle svg{width:14px;height:14px;color:var(--ink-3);transition:transform .18s}
+.atoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.folded{display:flex;flex-wrap:wrap;gap:7px;margin-top:-4px}
+.fold-chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:99px;padding:4px 11px 4px 9px;font-size:12.5px;color:var(--ink-2);background:var(--surface)}
+.fold-chip:hover{border-color:var(--c);color:var(--ink)}
+.fold-chip b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--ink-3)}
+.fold-chip .fb{width:26px;height:4px;border-radius:99px;background:var(--line);overflow:hidden;flex:none}
+.fold-chip .fb i{display:block;height:100%;border-radius:99px;background:var(--c)}
+
+/* ---------- agenda da semana ---------- */
+.agenda{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:26px;overflow:hidden}
+.agenda-head{display:flex;align-items:center;gap:12px;padding:11px 15px;flex-wrap:wrap}
+.agenda-head h2{margin:0;font-size:12px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
+.agenda-head .sum{font-size:12.5px;color:var(--ink-3)}
+.agenda-head .sum b{color:var(--ink-2);font-weight:600}
+.agenda-head .sum .od{color:var(--crit);font-weight:600}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));border-top:1px solid var(--line)}
+.day{border-right:1px solid var(--line);border-top:1px solid var(--line);margin-top:-1px;padding:9px 10px 12px;min-height:84px;display:flex;flex-direction:column;gap:5px}
+.day:last-child{border-right:none}
+.day.today{background:var(--accent-soft)}
+.day.past{background:var(--surface-2)}
+.day.none{background:var(--surface-2)}
+.dayhead{display:flex;align-items:baseline;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+.dayhead b{font-size:13px;letter-spacing:0;color:var(--ink-2);font-weight:600}
+.day.today .dayhead,.day.today .dayhead b{color:var(--accent)}
+.dayhead .n{margin-left:auto;font-size:10px}
+.ai{display:flex;align-items:flex-start;gap:6px;text-align:left;width:100%;padding:2px 0}
+.ai .abox{flex:none;width:13px;height:13px;margin-top:2px;border-radius:4px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent}
+.ai .abox svg{width:8px;height:8px}
+.ai[data-s="doing"] .abox{border-color:var(--warn);color:var(--warn)}
+.ai[data-s="done"] .abox{border-color:var(--ok);background:var(--ok);color:#fff}
+.ai[data-s="skip"] .abox{border-style:dashed;background:var(--line);color:var(--ink-3)}
+.ai .atxt{flex:1;min-width:0;font-size:12.2px;line-height:1.35;overflow-wrap:anywhere;color:var(--ink)}
+.ai .atxt em{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--c);margin-top:2px}
+.ai .atxt em s{text-decoration:none;color:var(--ink-3)}
+.ai.substep{padding-left:9px;position:relative}
+.ai.substep::before{content:"";position:absolute;left:2px;top:5px;bottom:5px;width:1.5px;border-radius:2px;background:var(--c);opacity:.45}
+.ai.substep .atxt{font-size:11.8px}
+.ai[data-s="done"] .atxt,.ai[data-s="skip"] .atxt{color:var(--ink-3)}
+.ai[data-s="done"] .atxt span{text-decoration:line-through}
+.ai.late .atxt em{color:var(--crit)}
+.ai:hover .atxt{color:var(--accent)}
+.ai .atxt time{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--accent);letter-spacing:-.01em;margin-right:1px}
+.ai[data-s="done"] .atxt time,.ai[data-s="skip"] .atxt time{color:var(--ink-3)}
+.day .none-txt{font-size:12px;color:var(--ink-3);font-style:italic}
+.dayfilter{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.dayfilter button{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);padding:3px 8px;border-radius:6px;border:1px solid transparent}
+.dayfilter button:hover{background:var(--surface-2);color:var(--ink)}
+.dayfilter button.hoje{color:var(--ink-2)}
+.dayfilter button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft);font-weight:600}
+.dayfilter button i{font-style:normal;font-size:9px;padding:0 3px;border-radius:99px;background:var(--line);color:var(--ink-2)}
+.dayfilter button[aria-pressed="true"] i{background:var(--accent);color:var(--surface)}
+.days.solo{grid-template-columns:1fr}
+.days.solo .day{min-height:120px;padding:12px 15px 14px}
+.days.solo .ai .atxt{font-size:13.2px}
+.days.solo .ai.substep .atxt{font-size:12.8px}
+.flash{animation:flash 1.4s ease}
+@keyframes flash{0%,60%{background:var(--accent-soft)}100%{background:transparent}}
+
+/* align-items:start — sem isso o cartão recolhido estica até a altura do vizinho aberto */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+.card-head{padding:13px 15px 11px 17px;border-bottom:1px solid var(--line)}
+.card-title{display:flex;align-items:center;gap:9px}
+.card-title h3{margin:0;font-size:14.5px;font-weight:640;letter-spacing:-.005em}
+.ctoggle{width:20px;height:20px;flex:none;display:grid;place-items:center;border-radius:5px;color:var(--ink-3);margin-left:-4px}
+.ctoggle:hover{background:var(--surface-2);color:var(--ink)}
+.ctoggle svg{width:13px;height:13px;transition:transform .18s}
+.ctoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.card.fold .card-head{border-bottom:none;padding-bottom:12px}
+.addcard{align-self:stretch}
+.card-title .h3in{flex:1;min-width:0;font-size:14.5px;font-weight:640;letter-spacing:-.005em;border:1px solid transparent;background:none;border-radius:6px;padding:2px 6px;margin:-2px -6px}
+.card-title .h3in:hover{background:var(--surface-2);border-color:var(--line)}
+.card-title .h3in:focus{background:var(--surface);border-color:var(--accent);outline:none}
+.card-title .kill{width:22px;height:22px;flex:none;display:grid;place-items:center;border-radius:5px;color:var(--ink-3);opacity:0;transition:.15s}
+.card-title .kill svg{width:13px;height:13px}
+.card:hover .kill,.card:focus-within .kill{opacity:1}
+.card-title .kill:hover{background:color-mix(in srgb,var(--crit) 14%,transparent);color:var(--crit)}
+.addcard{display:flex;align-items:center;justify-content:center;gap:7px;min-height:104px;border:1.5px dashed var(--line-2);border-radius:var(--r);color:var(--ink-3);font-size:13.5px;background:none;width:100%}
+.addcard:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.addcard svg{width:15px;height:15px}
+.card-title .pct{margin-left:auto;font-family:var(--mono);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.bar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:9px}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .3s ease}
+.meta{display:flex;gap:10px;margin-top:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+
+.goal{padding:10px 15px 10px 17px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.goal label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.goal textarea{width:100%;border:none;background:none;resize:none;font-size:13.5px;line-height:1.45;padding:0;min-height:20px;overflow:hidden}
+.goal textarea::placeholder{color:var(--ink-3);font-style:italic}
+
+.list{list-style:none;margin:0;padding:4px 0;flex:1}
+.itemwrap{position:relative}
+.itemwrap.dragging{opacity:.4}
+.itemwrap.over{box-shadow:inset 0 2px 0 var(--accent)}
+.item{display:flex;align-items:flex-start;gap:9px;padding:6px 15px 6px 17px}
+.itemwrap:hover .item{background:var(--surface-2)}
+.st{flex:none;width:17px;height:17px;margin-top:2px;border-radius:5px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent;transition:.15s}
+.st:hover{border-color:var(--ink-3)}
+.st svg{width:11px;height:11px}
+.itemwrap[data-s="doing"] .st{border-color:var(--warn);background:transparent;color:var(--warn)}
+.itemwrap[data-s="done"] .st{border-color:var(--ok);background:var(--ok);color:#fff}
+.itemwrap[data-s="skip"] .st{border-color:var(--line-2);background:var(--line);color:var(--ink-3);border-style:dashed}
+.itxt{flex:1;min-width:0}
+/* textarea, não input: o nome quebra em várias linhas e o campo cresce junto */
+.itxt .t{display:block;font-family:inherit;font-size:13.8px;line-height:1.4;overflow-wrap:anywhere;border:1px solid transparent;background:none;width:100%;padding:1px 5px;margin:-1px -5px;border-radius:6px;resize:none;overflow:hidden;min-height:20px}
+.itxt .t:hover{background:var(--surface)}
+.itemwrap:hover .itxt .t:hover{background:var(--bg)}
+.itxt .t:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.itemwrap[data-s="done"] .itxt .t{color:var(--ink-3);text-decoration:line-through}
+.itemwrap[data-s="skip"] .itxt .t{color:var(--ink-3)}
+
+/* subetapas */
+.steps{padding:0 15px 7px 43px;display:flex;flex-direction:column}
+.step{display:flex;align-items:flex-start;gap:8px;padding:2px 0}
+.sbox{flex:none;width:14px;height:14px;margin-top:3px;border-radius:4px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent;transition:.15s}
+.sbox:hover{border-color:var(--ink-3)}
+.sbox svg{width:9px;height:9px}
+.step.done .sbox{border-color:var(--ok);background:var(--ok);color:#fff}
+.step .stx{flex:1;min-width:0;display:block;font-family:inherit;font-size:12.8px;line-height:1.4;color:var(--ink-2);overflow-wrap:anywhere;border:1px solid transparent;background:none;padding:1px 5px;margin:-1px -5px;border-radius:6px;resize:none;overflow:hidden;min-height:18px}
+.step .stx:focus{border-color:var(--accent);background:var(--surface);outline:none;color:var(--ink)}
+.step.done .stx{color:var(--ink-3);text-decoration:line-through}
+.sday{flex:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;margin-top:3px;border-radius:4px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-3);opacity:0;transition:.15s}
+.step:hover .sday,.step:focus-within .sday,.sday.set{opacity:1}
+.sday.set{color:var(--ink-2)}
+.sday.late{color:var(--crit);border-color:transparent;background:color-mix(in srgb,var(--crit) 12%,transparent)}
+.sday:hover{border-color:var(--line-2);color:var(--ink)}
+/* alça de arraste: o texto virou textarea, então arrastar a linha inteira selecionava texto */
+.grip,.sgrip{flex:none;display:grid;place-items:center;border-radius:4px;color:var(--ink-3);cursor:grab;opacity:0;transition:opacity .15s}
+.grip{width:14px;height:20px;margin-left:-6px}
+.sgrip{width:12px;height:18px;margin-left:-7px;margin-top:2px}
+.grip svg,.sgrip svg{width:11px;height:11px}
+.itemwrap:hover .grip,.step:hover .sgrip{opacity:1}
+.grip:active,.sgrip:active{cursor:grabbing}
+.step.over{box-shadow:inset 0 2px 0 var(--accent)}
+.step.dragging{opacity:.4}
+.timein{font-family:var(--mono);font-size:10px;padding:1px 3px;border-radius:4px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);width:74px}
+.timein:focus{border-color:var(--accent);outline:none;background:var(--surface)}
+.timein.set{color:var(--ink);border-color:var(--line-2)}
+.step .timein{margin-top:3px;flex:none}
+@media (hover:none){
+  .grip,.sgrip{opacity:1}
+  .irow,.card-title .kill,.step .sx,.sday{opacity:1}
+}
+.step.done .sday.late{color:var(--ink-3);background:var(--surface-2);border-color:var(--line)}
+.step .sx{flex:none;width:18px;height:18px;display:grid;place-items:center;border-radius:4px;color:var(--ink-3);opacity:0;transition:.15s}
+.step .sx svg{width:11px;height:11px}
+.step:hover .sx,.step:focus-within .sx{opacity:1}
+.step .sx:hover{background:var(--line);color:var(--crit)}
+.stepadd{display:flex;align-items:center;gap:8px;padding:3px 0 1px}
+.stepadd::before{content:"";flex:none;width:14px;height:14px;border-radius:4px;border:1.5px dashed var(--line-2)}
+.stepadd input{flex:1;min-width:0;border:1px solid transparent;background:none;font-size:12.8px;padding:2px 5px;margin:0 -5px;border-radius:6px}
+.stepadd input::placeholder{color:var(--ink-3)}
+.stepadd input:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.chip.steps{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.chip.steps.full{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:transparent}
+.ib.open svg{transform:rotate(90deg)}
+.ib svg{transition:transform .15s}
+.tags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-3)}
+.chip.w{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+.chip.carry{color:var(--warn);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.chip.due{color:var(--ink-2)}
+.chip.late{color:var(--crit);background:color-mix(in srgb,var(--crit) 12%,transparent);border-color:transparent}
+.irow{display:flex;gap:2px;flex:none;opacity:0;transition:.15s}
+.itemwrap:hover .irow,.itemwrap:focus-within .irow{opacity:1}
+.ib.open,.ib[data-on="1"]{opacity:1;color:var(--accent)}
+.ib{width:22px;height:22px;display:grid;place-items:center;border-radius:5px;color:var(--ink-3)}
+.ib:hover{background:var(--line);color:var(--ink)}
+.ib svg{width:13px;height:13px}
+
+.habit{display:flex;align-items:center;gap:9px;padding:6px 15px 6px 17px}
+.habit:hover{background:var(--surface-2)}
+.habit .hn{flex:1;font-size:13.8px}
+.habit .hn small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.counter{display:flex;align-items:center;gap:2px;flex:none}
+.counter button{width:22px;height:22px;border-radius:5px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink-2);font-size:14px;line-height:1}
+.counter button:hover{border-color:var(--line-2);color:var(--ink)}
+.counter .v{font-family:var(--mono);font-size:12.5px;min-width:42px;text-align:center;font-variant-numeric:tabular-nums}
+.counter .v.full{color:var(--ok);font-weight:600}
+.dots{display:flex;gap:3px;flex:none}
+.dots i{width:7px;height:7px;border-radius:99px;background:var(--line);display:block}
+.dots i.on{background:var(--c)}
+
+.sep{height:1px;background:var(--line);margin:2px 15px 2px 17px}
+.subhead{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:8px 15px 3px 17px}
+.add{display:flex;align-items:center;gap:8px;padding:8px 15px 11px 17px;border-top:1px solid var(--line)}
+.add input{flex:1;border:1px solid transparent;background:var(--surface-2);border-radius:7px;padding:6px 9px;font-size:13.5px}
+.add input:focus{border-color:var(--accent);outline:none;background:var(--surface)}
+.add input::placeholder{color:var(--ink-3)}
+
+/* ---------- botões ---------- */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);padding:6px 11px;border-radius:8px;font-size:13px;color:var(--ink-2)}
+.btn:hover{border-color:var(--line-2);color:var(--ink)}
+.btn svg{width:14px;height:14px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme:dark){.btn.pri{color:#0E1418}}
+:root[data-theme="dark"] .btn.pri{color:#0E1418}
+:root[data-theme="light"] .btn.pri{color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.dgr:hover{color:var(--crit);border-color:var(--crit)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search{position:relative;flex:1;min-width:180px;max-width:320px}
+.search input{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px 6px 30px;font-size:13px}
+.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--ink-3)}
+
+/* ---------- retrospectiva ---------- */
+.retro{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;margin-top:6px}
+.retro h2{margin:0 0 3px;font-size:13px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
+.retro p.hint{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
+.retro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.field textarea{width:100%;min-height:76px;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.5;resize:vertical}
+.field textarea:focus{border-color:var(--accent);outline:none;background:var(--surface)}
+.scale{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
+.scale .s label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.scale .s div{display:flex;gap:4px}
+.scale button{width:28px;height:28px;border:1px solid var(--line);border-radius:7px;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+:root[data-theme="dark"] .scale button[aria-pressed="true"]{color:#0E1418}
+@media (prefers-color-scheme:dark){.scale button[aria-pressed="true"]{color:#0E1418}}
+:root[data-theme="light"] .scale button[aria-pressed="true"]{color:#fff}
+
+/* ---------- histórico ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;box-shadow:var(--shadow)}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:var(--mono);font-size:25px;font-weight:600;letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .d{font-size:12px;color:var(--ink-3);margin-top:2px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
+.panel h2{margin:0 0 2px;font-size:13px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
+.panel p.hint{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
+.chartwrap{overflow-x:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:99px;display:block}
+
+table.hist{width:100%;border-collapse:collapse;font-size:13.5px}
+table.hist th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:400;padding:0 10px 7px 0;border-bottom:1px solid var(--line)}
+table.hist td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+table.hist tr:last-child td{border-bottom:none}
+.tbar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;min-width:80px}
+.tbar i{display:block;height:100%;border-radius:99px}
+.spark{display:block}
+.warnrow{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.warnrow:last-child{border-bottom:none}
+.warnrow .dot{flex:none;width:7px;height:7px;border-radius:99px;margin-top:7px}
+
+/* ---------- ajustes ---------- */
+.setrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.setrow:last-child{border-bottom:none}
+.setrow .grow{flex:1;min-width:0}
+.setrow input[type=text]{width:100%;border:1px solid transparent;background:none;border-radius:6px;padding:4px 7px;font-size:14px}
+.setrow input[type=text]:hover{background:var(--surface-2)}
+.setrow input[type=text]:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
+.indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{padding:5px 12px;font-size:12.5px;color:var(--ink-2);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.empty{color:var(--ink-3);font-size:13px;font-style:italic;padding:10px 15px 10px 17px}
+.hidden{display:none !important}
+
+/* Diálogo próprio: confirm() nativo é bloqueado quando a página roda em iframe
+   com sandbox sem allow-modals — era isso que impedia as exclusões. */
+.mask{position:fixed;inset:0;background:rgba(8,14,20,.5);display:grid;place-items:center;padding:20px;z-index:80;opacity:0;pointer-events:none;transition:opacity .15s}
+.mask.on{opacity:1;pointer-events:auto}
+.dlg{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);max-width:430px;width:100%;padding:20px 22px 18px;transform:translateY(6px);transition:transform .15s}
+.mask.on .dlg{transform:none}
+.dlg h3{margin:0 0 7px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.dlg p{margin:0 0 18px;font-size:13.8px;line-height:1.55;color:var(--ink-2)}
+.dlg .row{display:flex;gap:8px;justify-content:flex-end}
+.dlg .btn.danger{background:var(--crit);border-color:var(--crit);color:#fff}
+.dlg .btn.danger:hover{filter:brightness(1.08)}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:60}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+@media (max-width:620px){
+  .topgrid{gap:12px}
+  .brand{width:100%;margin-right:0}
+  .wlabel{min-width:140px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="topgrid">
+      <div class="brand">
+        <b>Painel Semanal</b>
+        <span id="brandsub">registro de progresso</span>
+      </div>
+
+      <div class="weeknav">
+        <button class="wbtn" id="prev" title="Semana anterior (←)" aria-label="Semana anterior">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="wlabel">
+          <b id="wkey">—</b>
+          <small id="wrange">—</small>
+        </div>
+        <button class="wbtn" id="next" title="Próxima semana (→)" aria-label="Próxima semana">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <button class="btn" id="today">Hoje</button>
+      </div>
+
+      <div class="ring">
+        <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+          <circle cx="23" cy="23" r="19" fill="none" stroke="var(--line)" stroke-width="5"/>
+          <circle id="ringarc" cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5"
+                  stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4" transform="rotate(-90 23 23)"/>
+        </svg>
+        <div>
+          <div class="num mono" id="overall">0%</div>
+          <div class="cap">semana</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-view="week" aria-selected="true">Semana</button>
+      <button class="tab" role="tab" data-view="hist" aria-selected="false">Histórico</button>
+      <button class="tab" role="tab" data-view="set" aria-selected="false">Ajustes</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="view-week">
+    <div class="toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Filtrar atividades…" autocomplete="off">
+      </div>
+      <button class="btn" id="carry" title="Traz objetivos, hábitos e pendências da semana anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        Puxar semana anterior
+      </button>
+      <button class="btn" id="expmd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
+        Exportar semana
+      </button>
+      <button class="btn" id="hideDone" aria-pressed="false">Ocultar concluídas</button>
+      <button class="btn" id="foldAll">Recolher áreas</button>
+      <button class="btn" id="foldSubs">Recolher subcategorias</button>
+    </div>
+    <div id="agenda"></div>
+    <div id="areas"></div>
+
+    <div class="retro">
+      <h2>Retrospectiva</h2>
+      <p class="hint">Fechamento da semana. Preenchido, aparece no histórico e no relatório exportado.</p>
+      <div class="retro-grid">
+        <div class="field"><label for="r-win">O que funcionou</label><textarea id="r-win" data-retro="win" placeholder="Entregas, decisões, hábitos que pegaram…"></textarea></div>
+        <div class="field"><label for="r-block">O que travou</label><textarea id="r-block" data-retro="block" placeholder="Obstáculos, estimativas erradas, interrupções…"></textarea></div>
+        <div class="field"><label for="r-next">Foco da próxima semana</label><textarea id="r-next" data-retro="next" placeholder="A única coisa que não pode ficar para depois…"></textarea></div>
+      </div>
+      <div class="scale">
+        <div class="s"><label>Energia</label><div id="sc-energy"></div></div>
+        <div class="s"><label>Satisfação</label><div id="sc-mood"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-hist" class="hidden">
+    <div class="stats" id="stats"></div>
+    <div class="panel">
+      <h2>Evolução</h2>
+      <p class="hint">Percentual concluído por semana. A linha grossa é o total; as finas, cada área.</p>
+      <div class="chartwrap"><svg id="chart" height="200" role="img" aria-label="Gráfico de evolução semanal"></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--ink)"></i>Total</span>
+        <span><i style="background:var(--personal)"></i>Vida pessoal</span>
+        <span><i style="background:var(--pro)"></i>Vida profissional</span>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Por subcategoria</h2>
+      <p class="hint">Média das últimas <span id="lookback">8</span> semanas registradas, com a trajetória ao lado.</p>
+      <div class="chartwrap"><table class="hist" id="subtable"></table></div>
+    </div>
+    <div class="panel">
+      <h2>Pontos de atenção</h2>
+      <p class="hint">Sinais de desequilíbrio entre as frentes.</p>
+      <div id="alerts"></div>
+    </div>
+    <div class="panel">
+      <h2>Semanas registradas</h2>
+      <div class="chartwrap"><table class="hist" id="weektable"></table></div>
+    </div>
+  </section>
+
+  <section id="view-set" class="hidden">
+    <div class="panel">
+      <h2>Categorias</h2>
+      <p class="hint">Renomeie, reordene ou acrescente frentes. Excluir uma subcategoria apaga também as atividades ligadas a ela.</p>
+      <div id="cats"></div>
+      <div style="margin-top:14px"><button class="btn" id="addArea">+ Nova área</button></div>
+    </div>
+    <div class="panel">
+      <h2>Hábitos recorrentes</h2>
+      <p class="hint">Metas de frequência que se repetem toda semana — treinar 4×, ler 3×. Entram no cálculo junto com as atividades.</p>
+      <div id="habits"></div>
+      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input id="hname" type="text" placeholder="Nome do hábito" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:13.5px;flex:1;min-width:160px">
+        <select id="hsub" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:13.5px"></select>
+        <input id="htarget" class="num" type="number" min="1" max="21" value="3" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-family:var(--mono);width:64px;text-align:center">
+        <span style="font-size:13px;color:var(--ink-3)">× por semana</span>
+        <button class="btn pri" id="addHabit">Adicionar</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Preferências</h2>
+      <div class="setrow"><div class="grow">Tema</div>
+        <div class="seg" id="theme">
+          <button data-t="auto" aria-pressed="true">Automático</button>
+          <button data-t="light" aria-pressed="false">Claro</button>
+          <button data-t="dark" aria-pressed="false">Escuro</button>
+        </div>
+      </div>
+      <div class="setrow"><div class="grow">Meta semanal <small style="color:var(--ink-3)">— percentual que conta como semana boa na sequência</small></div>
+        <input class="num" id="goalpct" type="number" min="10" max="100" step="5">
+      </div>
+      <div class="setrow"><div class="grow">Atividade em andamento vale <small style="color:var(--ink-3)">— crédito parcial no cálculo</small></div>
+        <input class="num" id="partial" type="number" min="0" max="100" step="5">
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Sincronização</h2>
+      <p class="hint">Guarda o painel num Gist privado do GitHub, para abrir em qualquer dispositivo. O token fica só neste navegador — nunca entra no Gist nem no backup exportado.</p>
+
+      <div class="setrow">
+        <div class="grow">
+          <label for="ghtoken" style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px">Token de acesso</label>
+          <input id="ghtoken" type="password" autocomplete="off" spellcheck="false" placeholder="cole aqui o fine-grained token com permissão Gists: read and write">
+        </div>
+        <button class="btn" id="ghsavetok">Salvar</button>
+      </div>
+
+      <div class="setrow">
+        <div class="grow">
+          <label for="ghgist" style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px">Gist</label>
+          <input id="ghgist" type="text" autocomplete="off" spellcheck="false" placeholder="deixe vazio — o primeiro envio cria um Gist privado">
+        </div>
+      </div>
+
+      <div class="setrow">
+        <div class="grow">Sincronizar automaticamente <small style="color:var(--ink-3)">— envia sozinho alguns segundos depois de cada alteração, e puxa ao abrir</small></div>
+        <div class="seg" id="ghauto">
+          <button data-a="1" aria-pressed="false">Ligado</button>
+          <button data-a="0" aria-pressed="true">Desligado</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px">
+        <button class="btn pri" id="ghpush">Enviar para o GitHub</button>
+        <button class="btn" id="ghpull">Puxar do GitHub</button>
+        <span id="ghstatus" class="hint" style="margin:0;font-size:12.5px"></span>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Dados</h2>
+      <p class="hint">Cópia local no navegador. Mesmo com a sincronização ligada, exporte um backup de tempos em tempos.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="expjson">Exportar backup (.json)</button>
+        <button class="btn" id="impjson">Importar backup</button>
+        <input type="file" id="file" accept="application/json" class="hidden">
+        <button class="btn dgr" id="reset">Apagar tudo</button>
+      </div>
+      <p class="hint" style="margin:14px 0 0">Atalhos: <span class="mono">←</span> <span class="mono">→</span> mudam de semana · <span class="mono">/</span> foca o filtro · <span class="mono">Esc</span> limpa · terminar a nova atividade com <span class="mono">!2</span> ou <span class="mono">!3</span> define o peso · a seta <span class="mono">›</span> na atividade abre as subetapas.</p>
+    </div>
+  </section>
+</main>
+
+<div class="mask" id="mask" role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+  <div class="dlg">
+    <h3 id="dlg-t"></h3>
+    <p id="dlg-m"></p>
+    <div class="row">
+      <button class="btn" id="dlg-no">Cancelar</button>
+      <button class="btn danger" id="dlg-yes">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY="painel-semanal-v1";
+const uid=()=> (crypto.randomUUID?crypto.randomUUID():"id"+Math.random().toString(36).slice(2)+Date.now().toString(36));
+const $=(s,r)=> (r||document).querySelector(s);
+const $$=(s,r)=> Array.from((r||document).querySelectorAll(s));
+const esc=s=> String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- semanas ISO ---------- */
+function isoKey(d){
+  const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day);
+  const y=t.getUTCFullYear();
+  const wk=Math.ceil(((t-Date.UTC(y,0,1))/864e5+1)/7);
+  return y+"-W"+String(wk).padStart(2,"0");
+}
+function keyMonday(key){
+  const [y,w]=key.split("-W").map(Number);
+  const jan4=new Date(Date.UTC(y,0,4));
+  const day=jan4.getUTCDay()||7;
+  const mon=new Date(jan4); mon.setUTCDate(jan4.getUTCDate()-day+1+(w-1)*7);
+  return mon;
+}
+function shiftKey(key,n){ const m=keyMonday(key); m.setUTCDate(m.getUTCDate()+n*7); return isoKey(new Date(m.getUTCFullYear(),m.getUTCMonth(),m.getUTCDate())); }
+const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const DIAS=["seg","ter","qua","qui","sex","sáb","dom"];
+function rangeLabel(key){
+  const a=keyMonday(key), b=new Date(a); b.setUTCDate(a.getUTCDate()+6);
+  const f=d=> d.getUTCDate()+" "+MES[d.getUTCMonth()];
+  return f(a)+" – "+f(b)+" de "+b.getUTCFullYear();
+}
+const todayKey=()=> isoKey(new Date());
+
+/* ---------- estado ---------- */
+const DEFAULT={
+  version:1,
+  settings:{theme:"auto",goal:75,partial:50,hideDone:false,folded:{},foldedSubs:{},agendaDay:null},
+  areas:[
+    {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
+      {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
+      {id:"s13",name:"Saúde domiciliar"},{id:"s14",name:"Hobbies"}]},
+    {id:"a2",name:"Vida profissional",tone:"pro",subs:[
+      {id:"s21",name:"Tese PPGCP"},{id:"s22",name:"Trabalho S&C"},
+      {id:"s23",name:"Pesquisador"},{id:"s24",name:"Idiomas"}]}
+  ],
+  habits:[],
+  weeks:{}
+};
+let S=load(), cur=todayKey(), view="week", query="";
+
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw) return structuredClone(DEFAULT);
+    const p=JSON.parse(raw);
+    const s=Object.assign(structuredClone(DEFAULT),p,{settings:Object.assign({},DEFAULT.settings,p.settings||{})});
+    s.settings.folded=s.settings.folded||{};
+    s.settings.foldedSubs=s.settings.foldedSubs||{};
+    return s;
+  }catch(e){ return structuredClone(DEFAULT); }
+}
+let saveT;
+function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ toast("Não foi possível salvar: armazenamento cheio."); } syncTouch(); },120); }
+
+function week(k,make){
+  if(!S.weeks[k]){ if(!make) return {goals:{},acts:[],habits:{},retro:{}}; S.weeks[k]={goals:{},acts:[],habits:{},retro:{}}; }
+  const w=S.weeks[k]; w.goals=w.goals||{}; w.acts=w.acts||[]; w.habits=w.habits||{}; w.retro=w.retro||{};
+  return w;
+}
+const allSubs=()=> S.areas.flatMap(a=> a.subs.map(s=> ({...s,area:a})));
+// devolve o objeto vivo do estado — nunca uma cópia, senão renomear não persiste
+function findSub(id){ for(const a of S.areas){ const s=a.subs.find(x=>x.id===id); if(s) return s; } return null; }
+const subArea=id=> S.areas.find(a=> a.subs.some(s=>s.id===id))||null;
+
+/* ---------- cálculo ---------- */
+// Uma atividade com subetapas vale a fração de subetapas concluídas — mais fiel
+// que "em andamento" genérico. Marcada como concluída à mão, vale 1 de qualquer jeito.
+function actFactor(a){
+  if(a.status==="done") return 1;
+  if(a.status==="skip") return 0;
+  const st=a.steps||[];
+  if(st.length) return st.filter(x=>x.done).length/st.length;
+  return a.status==="doing" ? S.settings.partial/100 : 0;
+}
+function subScore(subId,k){
+  const w=week(k), acts=w.acts.filter(a=> a.sub===subId && a.status!=="skip");
+  let num=0,den=0;
+  acts.forEach(a=>{ const wt=a.weight||1; den+=wt; num+=wt*actFactor(a); });
+  S.habits.filter(h=> h.sub===subId).forEach(h=>{
+    const c=(w.habits[h.id]||0), wt=h.weight||2;
+    den+=wt; num+=wt*Math.min(c/Math.max(1,h.target),1);
+  });
+  const total=w.acts.filter(a=> a.sub===subId).length;
+  return {num,den,pct:den?Math.round(num/den*100):null,
+    done:acts.filter(a=>a.status==="done").length, count:acts.length, total};
+}
+function areaScore(area,k){
+  let num=0,den=0;
+  area.subs.forEach(s=>{ const r=subScore(s.id,k); num+=r.num; den+=r.den; });
+  return {num,den,pct:den?Math.round(num/den*100):null};
+}
+function weekScore(k){
+  let num=0,den=0;
+  S.areas.forEach(a=>{ const r=areaScore(a,k); num+=r.num; den+=r.den; });
+  return {num,den,pct:den?Math.round(num/den*100):null};
+}
+const hasData=k=>{ const w=S.weeks[k]; return !!w && (w.acts.length>0 || Object.values(w.habits||{}).some(v=>v>0) || Object.values(w.goals||{}).some(v=>v&&v.trim())); };
+const dataWeeks=()=> Object.keys(S.weeks).filter(hasData).sort();
+
+/* ---------- ícones ---------- */
+const IC={
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6"/></svg>',
+  half:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>',
+  skip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+  more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>'
+};
+function stIcon(s){ return s==="done"?IC.check: s==="doing"?IC.half: s==="skip"?IC.skip:""; }
+const NEXT={todo:"doing",doing:"done",done:"skip",skip:"todo"};
+const STNAME={todo:"pendente",doing:"em andamento",done:"concluída",skip:"adiada"};
+
+/* ---------- render: semana ---------- */
+function renderWeek(){
+  $("#wkey").textContent=cur.replace("-W"," · semana ");
+  $("#wrange").textContent=rangeLabel(cur);
+  const isNow=cur===todayKey();
+  $("#wkey").innerHTML=esc(cur.replace("-W"," · sem "))+(isNow?'<span class="today-pill">atual</span>':"");
+
+  const ws=weekScore(cur), pct=ws.pct==null?0:ws.pct;
+  $("#overall").textContent=(ws.pct==null?"—":pct+"%");
+  const C=2*Math.PI*19;
+  $("#ringarc").setAttribute("stroke-dashoffset", C-(C*pct/100));
+
+  const q=query.trim().toLowerCase();
+  const w=week(cur);
+  const hd=S.settings.hideDone;
+
+  renderAgenda(w);
+
+  $("#areas").innerHTML=S.areas.map(area=>{
+    const as=areaScore(area,cur);
+    const cards=area.subs.map(sub=>{
+      const r=subScore(sub.id,cur);
+      let acts=w.acts.filter(a=> a.sub===sub.id);
+      if(q) acts=acts.filter(a=> (a.text||"").toLowerCase().includes(q) || (a.steps||[]).some(s=> (s.text||"").toLowerCase().includes(q)));
+      if(hd) acts=acts.filter(a=> a.status!=="done");
+      const hs=S.habits.filter(h=> h.sub===sub.id);
+      const pctTxt=r.pct==null?"—":r.pct+"%";
+      const sopen=!S.settings.foldedSubs[sub.id];
+      const pendentes=w.acts.filter(a=> a.sub===sub.id && a.status!=="done" && a.status!=="skip").length;
+      const temObj=(w.goals[sub.id]||"").trim().length>0;
+      return `<article class="card ${sopen?"":"fold"}" style="--c:var(--${area.tone})" data-sub="${sub.id}">
+        <div class="card-head">
+          <div class="card-title">
+            <button class="ctoggle" data-foldsub="${sub.id}" aria-expanded="${sopen}" aria-controls="body-${sub.id}" title="${sopen?"Recolher":"Expandir"} ${esc(sub.name)}">${IC.chev}</button>
+            <input class="h3in" value="${esc(sub.name)}" data-sname="${sub.id}" aria-label="Nome da subcategoria" title="Clique para renomear">
+            <button class="kill" data-sdel="${sub.id}" title="Excluir subcategoria">${IC.x}</button>
+            <span class="pct mono" style="color:${r.pct==null?"var(--ink-3)":r.pct>=100?"var(--ok)":"var(--ink)"}">${pctTxt}</span>
+          </div>
+          <div class="bar"><i style="width:${r.pct||0}%;background:var(--${area.tone})"></i></div>
+          <div class="meta"><span>${r.done}/${r.count} atividades</span>${hs.length?`<span>${hs.length} hábito${hs.length>1?"s":""}</span>`:""}${
+            sopen?"":`${pendentes?`<span>${pendentes} pendente${pendentes>1?"s":""}</span>`:""}${temObj?`<span>com objetivo</span>`:""}`}</div>
+        </div>
+        ${sopen?`<div id="body-${sub.id}" style="display:contents">
+        <div class="goal">
+          <label for="g-${sub.id}">Objetivo da semana</label>
+          <textarea id="g-${sub.id}" data-goal="${sub.id}" rows="1" placeholder="O que essa frente precisa entregar até domingo?">${esc(w.goals[sub.id]||"")}</textarea>
+        </div>
+        ${hs.length?`<div class="subhead">Hábitos</div>`+hs.map(h=>{
+          const c=w.habits[h.id]||0, full=c>=h.target;
+          return `<div class="habit" style="--c:var(--${area.tone})">
+            <div class="dots">${Array.from({length:Math.min(h.target,10)},(_,i)=>`<i class="${i<c?"on":""}"></i>`).join("")}</div>
+            <div class="hn">${esc(h.name)}<small>meta ${h.target}× · ${full?"cumprido":(h.target-c)+" restante"+(h.target-c>1?"s":"")}</small></div>
+            <div class="counter">
+              <button data-hab="${h.id}" data-d="-1" aria-label="Diminuir">−</button>
+              <span class="v mono ${full?"full":""}">${c} / ${h.target}</span>
+              <button data-hab="${h.id}" data-d="1" aria-label="Aumentar">+</button>
+            </div>
+          </div>`;
+        }).join("")+`<div class="sep"></div>`:""}
+        <ul class="list">${acts.length?acts.map(a=>itemHTML(a)).join(""):`<li class="empty">${q?"Nada corresponde ao filtro.":"Nenhuma atividade ainda."}</li>`}</ul>
+        <div class="add">
+          <input type="text" data-add="${sub.id}" placeholder="Nova atividade — Enter para salvar" autocomplete="off">
+        </div>
+        </div>`:""}
+      </article>`;
+    }).join("");
+
+    const open=!S.settings.folded[area.id];
+    // recolhida, a área vira uma fita de chips — o percentual de cada frente continua à vista
+    const folded=area.subs.map(sub=>{
+      const r=subScore(sub.id,cur);
+      return `<button class="fold-chip" data-open="${area.id}:${sub.id}" style="--c:var(--${area.tone})" title="Abrir ${esc(area.name)} nesta subcategoria">
+        <span class="fb"><i style="width:${r.pct||0}%"></i></span>${esc(sub.name)} <b>${r.pct==null?"—":r.pct+"%"}</b>
+      </button>`;
+    }).join("");
+
+    return `<section class="area">
+      <div class="area-head">
+        <button class="atoggle" data-fold="${area.id}" aria-expanded="${open}" aria-controls="grid-${area.id}">
+          ${IC.chev}<h2 style="color:var(--${area.tone})">${esc(area.name)}</h2>
+        </button>
+        <div class="abar"><i style="width:${as.pct||0}%;background:var(--${area.tone})"></i></div>
+        <span class="apct mono">${as.pct==null?"—":as.pct+"%"}</span>
+      </div>
+      ${open?`<div class="grid" id="grid-${area.id}">${cards}<button class="addcard" data-newsub="${area.id}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nova subcategoria em ${esc(area.name)}
+      </button></div>`:`<div class="folded" id="grid-${area.id}">${folded}</div>`}
+    </section>`;
+  }).join("");
+  $("#foldAll").textContent=S.areas.every(a=>S.settings.folded[a.id])?"Expandir áreas":"Recolher áreas";
+  $("#foldSubs").textContent=allSubs().every(s=>S.settings.foldedSubs[s.id])?"Expandir subcategorias":"Recolher subcategorias";
+
+  $$("#areas textarea").forEach(autosize);
+  const r=w.retro||{};
+  $("#r-win").value=r.win||""; $("#r-block").value=r.block||""; $("#r-next").value=r.next||"";
+  scale("#sc-energy","energy",r.energy); scale("#sc-mood","mood",r.mood);
+  $("#hideDone").setAttribute("aria-pressed",hd?"true":"false");
+}
+
+// Agenda: distribui pelo dia-alvo as atividades da semana aberta.
+// Só lê a tag que já existe em cada atividade — não cria um segundo lugar para marcar prioridade.
+function renderAgenda(w){
+  const mon=keyMonday(cur);
+  const isNow=cur===todayKey();
+  const today=isNow ? ((new Date().getDay()||7)-1) : -1;
+  const cols=[0,1,2,3,4,5,6].map(()=>[]), semDia=[];
+  const q=query.trim().toLowerCase();
+  const casa=t=> !q || (t||"").toLowerCase().includes(q);
+  const hd=S.settings.hideDone;
+
+  // Duas fontes de entrada: a atividade (pelo dia dela) e cada subetapa que tenha dia próprio.
+  // Uma atividade sem dia cujas subetapas já estão distribuídas não vai para "sem dia" —
+  // o cronograma dela está expresso nas etapas.
+  w.acts.forEach(a=>{
+    const steps=a.steps||[];
+    const bateNaAtividade=casa(a.text)||steps.some(s=>casa(s.text));
+    steps.forEach(s=>{
+      if(s.due==null || s.due<0 || s.due>6) return;
+      if(hd && s.done) return;
+      if(!(casa(s.text)||casa(a.text))) return;
+      cols[s.due].push({a,s,pend:!s.done});
+    });
+    if(hd && a.status==="done") return;
+    if(!bateNaAtividade) return;
+    const e={a,pend:a.status!=="done"&&a.status!=="skip"};
+    if(a.due!=null && a.due>=0 && a.due<=6) cols[a.due].push(e);
+    else if(!steps.some(s=> s.due!=null)) semDia.push(e);
+  });
+
+  const cnt=arr=> arr.filter(e=>e.pend).length;
+  const hoje=today>=0?cnt(cols[today]):0;
+  const atrasadas=today>0?cnt(cols.slice(0,today).flat()):0;
+  const restoSemana=today>=0?cnt(cols.slice(today+1).flat()):cnt(cols.flat());
+
+  // pendentes primeiro; dentro disso, por horário — os sem horário vão para o fim do bloco
+  const hora=e=> (e.s?e.s.at:e.a.at)||null;
+  const ordena=(x,y)=>{
+    if(y.pend-x.pend) return y.pend-x.pend;
+    const hx=hora(x), hy=hora(y);
+    if(hx&&hy) return hx.localeCompare(hy);
+    if(hx) return -1; if(hy) return 1;
+    return (x.a.created||0)-(y.a.created||0);
+  };
+  const foco=S.settings.agendaDay;   // null = semana inteira; 0..6 = um dia; "none" = sem dia
+  const dayCol=(i)=>{
+    const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+i);
+    const list=cols[i].slice().sort(ordena);
+    const n=cnt(list);
+    const cls=i===today?"today":(today>=0&&i<today?"past":"");
+    return `<div class="day ${cls}">
+      <div class="dayhead"><span>${DIAS[i]}</span><b>${d.getUTCDate()}</b>${n?`<span class="n mono">${n}</span>`:""}</div>
+      ${list.length?list.map(e=> agendaItem(e, today>=0 && i<today && e.pend)).join(""):`<span class="none-txt">—</span>`}
+    </div>`;
+  };
+  const dias=foco==null?[0,1,2,3,4,5,6]:(foco==="none"?[]:[Number(foco)]);
+  const mostraSemDia=foco==null||foco==="none";
+  const filtro=[["","Semana"],...DIAS.map((d,i)=>[String(i),d]),["none","sem dia"]]
+    .map(([v,r])=>{
+      const ativo=(v===""&&foco==null)||(v!==""&&String(foco)===v);
+      const qtd=v===""?null:(v==="none"?cnt(semDia):cnt(cols[Number(v)]));
+      return `<button data-agday="${v}" aria-pressed="${ativo}" class="${v!==""&&Number(v)===today?"hoje":""}">${r}${qtd?`<i>${qtd}</i>`:""}</button>`;
+    }).join("");
+
+  $("#agenda").innerHTML=`<div class="agenda">
+    <div class="agenda-head">
+      <h2>Agenda da semana</h2>
+      <span class="sum">${isNow
+        ? `<b>${hoje}</b> para hoje · <b>${restoSemana}</b> no resto da semana${atrasadas?` · <span class="od">${atrasadas} em atraso</span>`:""}`
+        : `<b>${cnt(cols.flat())}</b> com dia marcado · <b>${cnt(semDia)}</b> sem dia`}</span>
+      <div class="dayfilter">${filtro}</div>
+    </div>
+    <div class="days ${foco!=null?"solo":""}">
+      ${dias.map(dayCol).join("")}
+      ${mostraSemDia?`<div class="day none">
+        <div class="dayhead"><span>sem dia</span>${cnt(semDia)?`<span class="n mono">${cnt(semDia)}</span>`:""}</div>
+        ${semDia.length?semDia.slice().sort(ordena).map(e=> agendaItem(e,false)).join(""):`<span class="none-txt">—</span>`}
+      </div>`:""}
+    </div>
+  </div>`;
+}
+function agendaItem(e,late){
+  const a=e.a, s=e.s;
+  const ar=subArea(a.sub), sub=findSub(a.sub);
+  const cor=`--c:var(--${ar?ar.tone:"ink-3"})`;
+  if(s){
+    // subetapa com dia próprio: o contexto é a atividade-mãe, não a subcategoria
+    return `<div class="ai substep ${late?"late":""}" data-s="${s.done?"done":"todo"}" style="${cor}">
+      <button class="abox" data-steptoggle="${a.id}:${s.id}" title="${s.done?"Concluída":"Pendente"} — clique para marcar" aria-label="Subetapa ${s.done?"concluída":"pendente"}">${s.done?IC.check:""}</button>
+      <button class="atxt" data-jump="${a.id}" title="Ir para a atividade">
+        <span>${s.at?`<time>${esc(s.at)}</time> `:""}${esc(s.text)}</span>
+        <em>${esc(a.text)}${late?" · atrasada":""}</em>
+      </button>
+    </div>`;
+  }
+  const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
+  return `<div class="ai ${late?"late":""}" data-s="${a.status}" style="${cor}">
+    <button class="abox" data-cycle="${a.id}" title="${STNAME[a.status]} — clique para avançar" aria-label="Estado: ${STNAME[a.status]}">${stIcon(a.status)}</button>
+    <button class="atxt" data-jump="${a.id}" title="Ir para a atividade">
+      <span>${a.at?`<time>${esc(a.at)}</time> `:""}${esc(a.text)}</span>
+      <em>${esc(sub?sub.name:"")}${steps.length?` · <s>${sdone}/${steps.length}</s>`:""}${late?" · atrasada":""}</em>
+    </button>
+  </div>`;
+}
+
+function itemHTML(a){
+  const late=a.due!=null && a.status!=="done" && a.status!=="skip" && cur===todayKey() && a.due < ((new Date().getDay()||7)-1);
+  const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
+  const chips=[];
+  if(steps.length) chips.push(`<span class="chip steps ${sdone===steps.length?"full":""}">${sdone}/${steps.length} subetapas</span>`);
+  if((a.weight||1)>1) chips.push(`<span class="chip w">peso ${a.weight}</span>`);
+  if(a.due!=null) chips.push(`<span class="chip due ${late?"late":""}">${DIAS[a.due]}</span>`);
+  if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
+  if(a.status==="skip") chips.push(`<span class="chip">adiada</span>`);
+  // o horário só faz sentido depois que há um dia — por isso o campo aparece junto do chip do dia
+  if(a.due!=null) chips.push(`<input class="timein ${a.at?"set":""}" type="time" value="${esc(a.at||"")}" data-attime="${a.id}" title="Horário desejado" aria-label="Horário da atividade">`);
+  const open=!!a.open;
+  return `<li class="itemwrap" data-s="${a.status}" data-id="${a.id}">
+    <div class="item">
+      <span class="grip" data-grip="${a.id}" draggable="true" title="Arrastar para reordenar ou mover de subcategoria">${IC.grip}</span>
+      <button class="st" data-cycle="${a.id}" title="${STNAME[a.status]} — clique para avançar" aria-label="Estado: ${STNAME[a.status]}">${stIcon(a.status)}</button>
+      <div class="itxt">
+        <textarea class="t" rows="1" data-text="${a.id}" aria-label="Descrição da atividade">${esc(a.text)}</textarea>
+        ${chips.length?`<div class="tags">${chips.join("")}</div>`:""}
+      </div>
+      <div class="irow">
+        <button class="ib ${open?"open":""}" data-steps="${a.id}" data-on="${steps.length?1:0}" aria-expanded="${open}" title="${steps.length?"Mostrar subetapas":"Dividir em subetapas"}">${IC.chev}</button>
+        <button class="ib" data-weight="${a.id}" title="Alternar peso (1 → 2 → 3)">${IC.up}</button>
+        <button class="ib" data-due="${a.id}" title="Definir dia-alvo">${IC.more}</button>
+        <button class="ib" data-del="${a.id}" title="Excluir">${IC.x}</button>
+      </div>
+    </div>
+    ${open?`<div class="steps">
+      ${steps.map(s=>{
+        const slate=s.due!=null && !s.done && cur===todayKey() && s.due < ((new Date().getDay()||7)-1);
+        return `<div class="step ${s.done?"done":""}" data-aid="${a.id}" data-sid="${s.id}">
+        <span class="sgrip" data-stepgrip="${a.id}:${s.id}" draggable="true" title="Arrastar para reordenar">${IC.grip}</span>
+        <button class="sbox" data-steptoggle="${a.id}:${s.id}" aria-label="${s.done?"Concluída":"Pendente"}">${IC.check}</button>
+        <textarea class="stx" rows="1" data-steptext="${a.id}:${s.id}" aria-label="Descrição da subetapa">${esc(s.text)}</textarea>
+        ${s.due!=null?`<input class="timein ${s.at?"set":""}" type="time" value="${esc(s.at||"")}" data-attime="${a.id}:${s.id}" title="Horário desejado" aria-label="Horário da subetapa">`:""}
+        <button class="sday ${s.due!=null?"set":""} ${slate?"late":""}" data-stepdue="${a.id}:${s.id}" title="Dia-alvo da subetapa">${s.due!=null?DIAS[s.due]:"dia"}</button>
+        <button class="sx" data-stepdel="${a.id}:${s.id}" title="Excluir subetapa">${IC.x}</button>
+      </div>`;}).join("")}
+      <div class="stepadd"><input type="text" data-stepadd="${a.id}" placeholder="Nova subetapa — Enter para salvar" autocomplete="off"></div>
+    </div>`:""}
+  </li>`;
+}
+// box-sizing é border-box, então a altura precisa somar as bordas —
+// sem isso a última linha fica cortada por alguns pixels
+function autosize(t){
+  t.style.height="auto";
+  const cs=getComputedStyle(t);
+  const b=(parseFloat(cs.borderTopWidth)||0)+(parseFloat(cs.borderBottomWidth)||0);
+  t.style.height=(t.scrollHeight+b)+"px";
+}
+function scale(sel,field,val){
+  $(sel).innerHTML=[1,2,3,4,5].map(n=>`<button data-scale="${field}" data-v="${n}" aria-pressed="${val===n}">${n}</button>`).join("");
+}
+
+/* ---------- render: histórico ---------- */
+function renderHist(){
+  const ks=dataWeeks();
+  const series=ks.map(k=> ({k,total:weekScore(k).pct,a:S.areas.map(a=> areaScore(a,k).pct)}));
+  const done=series.filter(s=> s.total!=null);
+
+  // sequência de semanas na meta (a partir da mais recente com dados)
+  let streak=0;
+  for(let i=done.length-1;i>=0;i--){ if(done[i].total>=S.settings.goal) streak++; else break; }
+  let best=0,run=0; done.forEach(s=>{ if(s.total>=S.settings.goal){run++;best=Math.max(best,run);} else run=0; });
+
+  const avg4=avg(done.slice(-4).map(s=>s.total)), avgAll=avg(done.map(s=>s.total));
+  const w=week(cur);
+  const totalActs=Object.values(S.weeks).reduce((n,x)=> n+((x.acts||[]).filter(a=>a.status==="done").length),0);
+
+  $("#stats").innerHTML=[
+    ["Semana atual", weekScore(cur).pct==null?"—":weekScore(cur).pct+"%", `${w.acts.filter(a=>a.status==="done").length} de ${w.acts.length} atividades`],
+    ["Média 4 semanas", avg4==null?"—":avg4+"%", avgAll==null?"":"média geral "+avgAll+"%"],
+    ["Sequência na meta", streak+(streak===1?" semana":" semanas"), `meta ${S.settings.goal}% · recorde ${best}`],
+    ["Semanas registradas", String(done.length), totalActs+" atividades concluídas"]
+  ].map(([k,v,d])=>`<div class="stat"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="d">${esc(d)}</div></div>`).join("");
+
+  $("#chart").innerHTML=chartSVG(series.slice(-14));
+
+  // tabela por subcategoria
+  const look=8; $("#lookback").textContent=look;
+  const recent=ks.slice(-look);
+  let rows="";
+  S.areas.forEach(area=>{
+    area.subs.forEach(sub=>{
+      const vals=recent.map(k=> subScore(sub.id,k).pct);
+      const m=avg(vals.filter(v=> v!=null));
+      const acts=recent.reduce((n,k)=> n+week(k).acts.filter(a=>a.sub===sub.id).length,0);
+      rows+=`<tr>
+        <td style="width:34%"><span style="display:inline-block;width:3px;height:13px;background:var(--${area.tone});border-radius:2px;vertical-align:-2px;margin-right:8px"></span>${esc(sub.name)}</td>
+        <td class="mono" style="width:52px;text-align:right;padding-right:14px">${m==null?"—":m+"%"}</td>
+        <td><div class="tbar"><i style="width:${m||0}%;background:var(--${area.tone})"></i></div></td>
+        <td style="width:110px">${sparkSVG(vals,`var(--${area.tone})`)}</td>
+        <td class="mono" style="width:64px;text-align:right;color:var(--ink-3);font-size:12px">${acts} ativ.</td>
+      </tr>`;
+    });
+  });
+  $("#subtable").innerHTML=`<thead><tr><th>Subcategoria</th><th style="text-align:right">Média</th><th></th><th>Trajetória</th><th style="text-align:right">Volume</th></tr></thead><tbody>${rows}</tbody>`;
+
+  // alertas
+  const last3=ks.slice(-3);
+  const al=[];
+  allSubs().forEach(s=>{
+    const acts=last3.reduce((n,k)=> n+week(k).acts.filter(a=>a.sub===s.id).length,0);
+    const hab=S.habits.some(h=>h.sub===s.id);
+    if(last3.length>=2 && acts===0 && !hab) al.push([ "var(--warn)", `<b>${esc(s.name)}</b> está sem atividades há ${last3.length} semanas. Frente esquecida ou fora do escopo atual?`]);
+  });
+  if(done.length>=2){
+    const a=done[done.length-1], b=done[done.length-2];
+    if(a.total-b.total<=-15) al.push(["var(--crit)",`Queda de ${b.total-a.total} pontos entre <span class="mono">${b.k}</span> e <span class="mono">${a.k}</span>. Vale olhar a retrospectiva daquela semana.`]);
+    if(a.total-b.total>=15) al.push(["var(--ok)",`Alta de ${a.total-b.total} pontos na última semana registrada.`]);
+  }
+  S.areas.forEach(a=>{
+    const vals=recent.map(k=> areaScore(a,k).pct).filter(v=>v!=null);
+    const m=avg(vals); if(m!=null && m<40 && vals.length>=3) al.push(["var(--warn)",`<b>${esc(a.name)}</b> está em ${m}% de média nas últimas semanas — abaixo do resto do painel.`]);
+  });
+  const skipped=Object.entries(S.weeks).reduce((n,[k,x])=> n+(x.acts||[]).filter(a=>a.status==="skip").length,0);
+  if(skipped>=6) al.push(["var(--ink-3)",`${skipped} atividades adiadas no total. Adiar sempre a mesma coisa costuma significar que ela não é prioridade — ou que está grande demais.`]);
+  $("#alerts").innerHTML=al.length?al.map(([c,t])=>`<div class="warnrow"><span class="dot" style="background:${c}"></span><span>${t}</span></div>`).join("")
+    :`<div class="warnrow"><span class="dot" style="background:var(--ok)"></span><span>Nenhum desequilíbrio evidente. Registre mais algumas semanas para análises melhores.</span></div>`;
+
+  // tabela de semanas
+  $("#weektable").innerHTML=`<thead><tr><th>Semana</th><th>Período</th><th style="text-align:right">Total</th><th></th><th>Atividades</th><th>Energia</th><th></th></tr></thead><tbody>`+
+    ks.slice().reverse().map(k=>{
+      const s=weekScore(k), x=week(k), r=x.retro||{};
+      return `<tr>
+        <td class="mono">${k}${k===cur?' <span class="chip w">aberta</span>':""}</td>
+        <td style="color:var(--ink-3);font-size:12.5px">${rangeLabel(k)}</td>
+        <td class="mono" style="text-align:right;padding-right:14px">${s.pct==null?"—":s.pct+"%"}</td>
+        <td style="width:120px"><div class="tbar"><i style="width:${s.pct||0}%;background:${s.pct>=S.settings.goal?"var(--ok)":"var(--accent)"}"></i></div></td>
+        <td class="mono" style="font-size:12.5px">${x.acts.filter(a=>a.status==="done").length}/${x.acts.length}</td>
+        <td class="mono" style="font-size:12.5px;color:var(--ink-3)">${r.energy?r.energy+"/5":"—"}</td>
+        <td><button class="btn" data-go="${k}" style="padding:3px 9px;font-size:12px">Abrir</button></td>
+      </tr>`;
+    }).join("")+`</tbody>`;
+  if(!ks.length) $("#weektable").innerHTML=`<tbody><tr><td style="color:var(--ink-3);font-style:italic;padding:8px 0">Nada registrado ainda.</td></tr></tbody>`;
+}
+function avg(a){ return a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):null; }
+
+function chartSVG(series){
+  const W=Math.max(560,series.length*64), H=200, P={t:14,r:14,b:30,l:34};
+  const iw=W-P.l-P.r, ih=H-P.t-P.b;
+  const x=i=> P.l+(series.length<2?iw/2:i*iw/(series.length-1));
+  const y=v=> P.t+ih-(v/100)*ih;
+  let g="";
+  [0,25,50,75,100].forEach(v=>{
+    g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+    g+=`<text x="${P.l-8}" y="${y(v)+4}" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--ink-3)">${v}</text>`;
+  });
+  if(!series.length) return `<svg width="${W}" height="${H}">${g}<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="var(--ink-3)">Sem semanas registradas.</text></svg>`;
+  const line=(vals,color,width,op)=>{
+    const pts=vals.map((v,i)=> v==null?null:[x(i),y(v)]).filter(Boolean);
+    if(!pts.length) return "";
+    const d=pts.map((p,i)=> (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" opacity="${op}"/>`
+      + pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${width>2?3:2}" fill="${color}"/>`).join("");
+  };
+  const totals=series.map(s=>s.total);
+  const areaFill=(()=>{
+    const pts=totals.map((v,i)=> v==null?null:[x(i),y(v)]).filter(Boolean);
+    if(pts.length<2) return "";
+    return `<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")} L ${pts[pts.length-1][0].toFixed(1)} ${P.t+ih} L ${pts[0][0].toFixed(1)} ${P.t+ih} Z" fill="var(--ink)" opacity=".055"/>`;
+  })();
+  const goalY=y(S.settings.goal);
+  const meta=`<line x1="${P.l}" x2="${W-P.r}" y1="${goalY}" y2="${goalY}" stroke="var(--ok)" stroke-width="1" stroke-dasharray="3 4"/>`;
+  const labels=series.map((s,i)=> `<text x="${x(i)}" y="${H-10}" text-anchor="middle" font-size="9.5" font-family="var(--mono)" fill="${s.k===cur?"var(--ink)":"var(--ink-3)"}">${s.k.split("-W")[1]}</text>`).join("");
+  const lines=S.areas.map((a,ai)=> line(series.map(s=>s.a[ai]),`var(--${a.tone})`,1.6,.75)).join("");
+  const lastPt=(()=>{ const i=totals.map((v,i)=>[v,i]).filter(p=>p[0]!=null).pop(); if(!i) return "";
+    return `<circle cx="${x(i[1])}" cy="${y(i[0])}" r="5" fill="none" stroke="var(--ink)" stroke-width="1.6"/>`; })();
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}${meta}${areaFill}${lines}${line(totals,"var(--ink)",2.4,1)}${lastPt}${labels}</svg>`;
+}
+function sparkSVG(vals,color){
+  const v=vals.filter(x=>x!=null); if(v.length<2) return `<span style="color:var(--ink-3);font-size:12px">—</span>`;
+  const W=100,H=22;
+  const pts=v.map((n,i)=>[4+i*(W-8)/(v.length-1), H-3-(n/100)*(H-6)]);
+  return `<svg class="spark" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">
+    <path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${pts[pts.length-1][0].toFixed(1)}" cy="${pts[pts.length-1][1].toFixed(1)}" r="2.4" fill="${color}"/></svg>`;
+}
+
+/* ---------- render: ajustes ---------- */
+function renderSet(){
+  $("#cats").innerHTML=S.areas.map((a,ai)=>`
+    <div style="margin-bottom:18px">
+      <div class="setrow">
+        <span style="width:3px;height:18px;background:var(--${a.tone});border-radius:2px;flex:none"></span>
+        <div class="grow"><input type="text" value="${esc(a.name)}" data-aname="${a.id}" style="font-weight:640"></div>
+        <button class="ib" data-amove="${a.id}" data-d="-1" title="Subir" ${ai===0?"disabled style=opacity:.3":""}>${IC.up}</button>
+        <button class="ib" data-amove="${a.id}" data-d="1" title="Descer" ${ai===S.areas.length-1?"disabled style=opacity:.3":""}>${IC.down}</button>
+        <button class="ib" data-adel="${a.id}" title="Excluir área">${IC.x}</button>
+      </div>
+      <div class="indent" style="--c:var(--${a.tone})">
+        ${a.subs.map((s,si)=>`<div class="setrow">
+          <div class="grow"><input type="text" value="${esc(s.name)}" data-sname="${s.id}"></div>
+          <button class="ib" data-smove="${s.id}" data-d="-1" ${si===0?"disabled style=opacity:.3":""} title="Subir">${IC.up}</button>
+          <button class="ib" data-smove="${s.id}" data-d="1" ${si===a.subs.length-1?"disabled style=opacity:.3":""} title="Descer">${IC.down}</button>
+          <button class="ib" data-sdel="${s.id}" title="Excluir">${IC.x}</button>
+        </div>`).join("")}
+        <div class="setrow"><button class="btn" data-addsub="${a.id}" style="padding:4px 10px;font-size:12.5px">+ Subcategoria</button></div>
+      </div>
+    </div>`).join("");
+
+  $("#habits").innerHTML=S.habits.length?S.habits.map(h=>{
+    const s=findSub(h.sub), ar=subArea(h.sub);
+    return `<div class="setrow">
+      <div class="grow"><input type="text" value="${esc(h.name)}" data-hname="${h.id}"></div>
+      <span class="chip" style="color:var(--${ar?ar.tone:"ink-3"})">${esc(s?s.name:"sem categoria")}</span>
+      <input class="num" type="number" min="1" max="21" value="${h.target}" data-htarget="${h.id}">
+      <span style="font-size:12px;color:var(--ink-3)">×/sem</span>
+      <button class="ib" data-hdel="${h.id}" title="Excluir">${IC.x}</button>
+    </div>`;
+  }).join(""):`<p style="color:var(--ink-3);font-style:italic;font-size:13.5px;margin:0">Nenhum hábito ainda.</p>`;
+
+  $("#hsub").innerHTML=S.areas.map(a=>`<optgroup label="${esc(a.name)}">${a.subs.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+  $("#goalpct").value=S.settings.goal;
+  $("#partial").value=S.settings.partial;
+  $$("#theme button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.t===S.settings.theme));
+  renderSync();
+}
+
+function render(){
+  $$(".tab").forEach(t=> t.setAttribute("aria-selected", t.dataset.view===view));
+  $("#view-week").classList.toggle("hidden",view!=="week");
+  $("#view-hist").classList.toggle("hidden",view!=="hist");
+  $("#view-set").classList.toggle("hidden",view!=="set");
+  if(view==="week") renderWeek();
+  if(view==="hist") renderHist();
+  if(view==="set") renderSet();
+  applyTheme();
+}
+function applyTheme(){
+  const t=S.settings.theme;
+  if(t==="auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme",t);
+}
+// Substitui confirm(): promessa resolvida pelos botões do diálogo.
+let askResolve=null;
+function ask(titulo,msg,rotulo){
+  $("#dlg-t").textContent=titulo;
+  $("#dlg-m").textContent=msg||"";
+  $("#dlg-yes").textContent=rotulo||"Excluir";
+  $("#mask").classList.add("on");
+  setTimeout(()=>$("#dlg-yes").focus(),20);
+  return new Promise(res=>{ askResolve=res; });
+}
+function closeAsk(v){
+  $("#mask").classList.remove("on");
+  const r=askResolve; askResolve=null;
+  if(r) r(v);
+}
+$("#dlg-yes").onclick=()=>closeAsk(true);
+$("#dlg-no").onclick=()=>closeAsk(false);
+$("#mask").onclick=e=>{ if(e.target.id==="mask") closeAsk(false); };
+
+let toastT;
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),2600); }
+
+/* ---------- ações ---------- */
+function addAct(subId,text){
+  text=text.trim(); if(!text) return;
+  const m=text.match(/\s!([123])\s*$/);
+  let weight=1; if(m){ weight=+m[1]; text=text.slice(0,m.index).trim(); }
+  week(cur,true).acts.push({id:uid(),sub:subId,text,status:"todo",weight,due:null,created:Date.now()});
+  save(); renderWeek();
+}
+function act(id){ return week(cur).acts.find(a=>a.id===id); }
+function step(ref){ const [aid,sid]=ref.split(":"); const a=act(aid); return {a,s:a&&(a.steps||[]).find(x=>x.id===sid)}; }
+
+function addStep(actId,text){
+  text=text.trim(); if(!text) return;
+  const a=act(actId); if(!a) return;
+  (a.steps=a.steps||[]).push({id:uid(),text,done:false,due:null});
+  if(a.status==="done") a.status="doing"; // nova subetapa reabre a atividade
+  save(); renderWeek();
+}
+// Concluir a última subetapa fecha a atividade; desmarcar uma reabre.
+function syncFromSteps(a){
+  const st=a.steps||[]; if(!st.length || a.status==="skip") return;
+  const done=st.filter(x=>x.done).length;
+  a.status = done===st.length ? "done" : done>0 ? "doing" : "todo";
+}
+
+function flash(el){
+  if(!el) return;
+  el.scrollIntoView({block:"center",behavior:"smooth"});
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+}
+// Abre o que estiver recolhido no caminho — área e subcategoria — antes de destacar o alvo.
+function reveal(subId){
+  const ar=subArea(subId); let mudou=false;
+  if(ar && S.settings.folded[ar.id]){ S.settings.folded[ar.id]=false; mudou=true; }
+  if(S.settings.foldedSubs[subId]){ S.settings.foldedSubs[subId]=false; mudou=true; }
+  if(mudou){ save(); renderWeek(); }
+}
+function jumpToAct(id){
+  const a=act(id); if(!a) return;
+  reveal(a.sub);
+  // vindo de uma subetapa da agenda, abre o painel de subetapas junto
+  if((a.steps||[]).length && !a.open){ a.open=true; save(); renderWeek(); }
+  flash(document.querySelector(`.itemwrap[data-id="${CSS.escape(id)}"]`)
+     || document.querySelector(`.card[data-sub="${CSS.escape(a.sub)}"]`));
+}
+function openSub(ref){
+  const subId=ref.split(":")[1];
+  reveal(subId);
+  flash(document.querySelector(`.card[data-sub="${CSS.escape(subId)}"]`));
+}
+
+function addSub(areaId){
+  const a=S.areas.find(x=>x.id===areaId); if(!a) return;
+  const s={id:uid(),name:"Nova subcategoria"};
+  a.subs.push(s); save(); render();
+  const el=document.querySelector(`[data-sname="${CSS.escape(s.id)}"]`);
+  if(el){ el.scrollIntoView({block:"center",behavior:"smooth"}); el.focus(); el.select(); }
+}
+
+function carryOver(){
+  const prev=shiftKey(cur,-1), p=S.weeks[prev];
+  if(!p){ toast("A semana anterior não tem registro."); return; }
+  const w=week(cur,true);
+  let g=0,c=0;
+  Object.entries(p.goals||{}).forEach(([k,v])=>{ if(v&&v.trim()&&!(w.goals[k]||"").trim()){ w.goals[k]=v; g++; } });
+  (p.acts||[]).filter(a=> a.status==="todo"||a.status==="doing"||a.status==="skip").forEach(a=>{
+    if(w.acts.some(x=> x.text===a.text && x.sub===a.sub)) return;
+    // só as subetapas que ficaram pendentes vêm junto — o que já foi feito, foi
+    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null}));
+    w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,steps,carried:true,created:Date.now()});
+    c++;
+  });
+  save(); renderWeek();
+  toast(c+" pendência"+(c===1?"":"s")+" e "+g+" objetivo"+(g===1?"":"s")+" trazidos de "+prev+".");
+}
+
+function exportMD(){
+  const w=week(cur), ws=weekScore(cur);
+  let out=`# ${cur} · ${rangeLabel(cur)}\n\nProgresso geral: **${ws.pct==null?"—":ws.pct+"%"}**\n`;
+  S.areas.forEach(a=>{
+    const as=areaScore(a,cur);
+    out+=`\n## ${a.name} — ${as.pct==null?"—":as.pct+"%"}\n`;
+    a.subs.forEach(s=>{
+      const r=subScore(s.id,cur), acts=w.acts.filter(x=>x.sub===s.id), hs=S.habits.filter(h=>h.sub===s.id);
+      if(!acts.length && !hs.length && !(w.goals[s.id]||"").trim()) return;
+      out+=`\n### ${s.name} — ${r.pct==null?"—":r.pct+"%"}\n`;
+      if((w.goals[s.id]||"").trim()) out+=`\n> ${w.goals[s.id].trim().replace(/\n/g,"\n> ")}\n\n`;
+      acts.forEach(x=>{
+        const quando=q=> q.due!=null?` (${DIAS[q.due]}${q.at?` ${q.at}`:""})`:"";
+        out+=`- [${x.status==="done"?"x":x.status==="doing"?"~":x.status==="skip"?">":" "}] ${x.text}${quando(x)}${(x.weight||1)>1?` (peso ${x.weight})`:""}\n`;
+        (x.steps||[]).forEach(s=> out+=`  - [${s.done?"x":" "}] ${s.text}${quando(s)}\n`);
+      });
+      hs.forEach(h=> out+=`- ${h.name}: ${(w.habits[h.id]||0)}/${h.target}\n`);
+    });
+  });
+  const r=w.retro||{};
+  if(r.win||r.block||r.next||r.energy||r.mood){
+    out+=`\n## Retrospectiva\n`;
+    if(r.win) out+=`\n**O que funcionou** — ${r.win}\n`;
+    if(r.block) out+=`\n**O que travou** — ${r.block}\n`;
+    if(r.next) out+=`\n**Foco da próxima semana** — ${r.next}\n`;
+    if(r.energy||r.mood) out+=`\nEnergia ${r.energy||"—"}/5 · Satisfação ${r.mood||"—"}/5\n`;
+  }
+  download(out,`semana-${cur}.md`,"text/markdown");
+}
+function download(text,name,mime){
+  const b=new Blob([text],{type:(mime||"application/json")+";charset=utf-8"});
+  const u=URL.createObjectURL(b), a=document.createElement("a");
+  a.href=u; a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(u),1500);
+  toast("Arquivo gerado: "+name);
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  if(!t) return;
+  const d=t.dataset;
+
+  if(t.classList.contains("tab")){ view=d.view; render(); return; }
+  if(d.cycle){ const a=act(d.cycle); if(a){
+    a.status=NEXT[a.status];
+    // marcar/desmarcar a atividade inteira arrasta as subetapas junto
+    if(a.steps&&a.steps.length){
+      if(a.status==="done") a.steps.forEach(s=> s.done=true);
+      if(a.status==="todo") a.steps.forEach(s=> s.done=false);
+    }
+    if(a.status==="done") a.doneAt=Date.now(); save(); renderWeek(); } return; }
+  if(d.steps){ const a=act(d.steps); if(a){ a.open=!a.open; save(); renderWeek();
+      const inp=document.querySelector(`[data-stepadd="${CSS.escape(d.steps)}"]`);
+      if(inp && !(a.steps||[]).length) inp.focus(); } return; }
+  if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){ s.done=!s.done; syncFromSteps(a); save(); renderWeek(); } return; }
+  if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){ a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek(); } return; }
+  if(d.stepdue){ const {s}=step(d.stepdue); if(s){ s.due = s.due==null?0 : (s.due>=6? null : s.due+1); save(); renderWeek(); } return; }
+  if(d.agday!=null && "agday" in d){ S.settings.agendaDay = d.agday===""?null:(d.agday==="none"?"none":Number(d.agday)); save(); renderAgenda(week(cur)); return; }
+  if(d.fold){ S.settings.folded[d.fold]=!S.settings.folded[d.fold]; save(); renderWeek(); return; }
+  if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
+  if(d.open){ openSub(d.open); return; }
+  if(d.jump){ jumpToAct(d.jump); return; }
+  if(d.del){ const w=week(cur); w.acts=w.acts.filter(a=>a.id!==d.del); save(); renderWeek(); return; }
+  if(d.weight){ const a=act(d.weight); if(a){ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); } return; }
+  if(d.due){ const a=act(d.due); if(a){ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); } return; }
+  if(d.hab){ const w=week(cur,true); const h=S.habits.find(x=>x.id===d.hab);
+    w.habits[d.hab]=Math.max(0,Math.min((h?h.target*2:99),(w.habits[d.hab]||0)+ +d.d)); save(); renderWeek(); return; }
+  if(d.scale){ const w=week(cur,true); w.retro[d.scale]= w.retro[d.scale]===+d.v?null:+d.v; save(); renderWeek(); return; }
+  if(d.go){ cur=d.go; view="week"; render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+  if(d.t){ S.settings.theme=d.t; save(); render(); return; }
+
+  if(d.amove){ const i=S.areas.findIndex(a=>a.id===d.amove), j=i+ +d.d;
+    if(j>=0&&j<S.areas.length){ const [x]=S.areas.splice(i,1); S.areas.splice(j,0,x); save(); renderSet(); } return; }
+  if(d.adel){ const a=S.areas.find(x=>x.id===d.adel); if(!a) return;
+    const ids=a.subs.map(s=>s.id);
+    const n=Object.values(S.weeks).reduce((n,w)=> n+(w.acts||[]).filter(x=>ids.includes(x.sub)).length,0);
+    ask(`Excluir a área "${a.name}"?`,
+        `As ${a.subs.length} subcategorias dela saem junto${n?`, e ${n} atividade${n>1?"s":""} registrada${n>1?"s":""} em todas as semanas ${n>1?"serão apagadas":"será apagada"}`:""}. Não há como desfazer.`)
+    .then(ok=>{ if(!ok) return;
+      Object.values(S.weeks).forEach(w=>{ w.acts=(w.acts||[]).filter(x=>!ids.includes(x.sub)); ids.forEach(i=> delete w.goals[i]); });
+      S.habits=S.habits.filter(h=>!ids.includes(h.sub));
+      ids.forEach(i=> delete S.settings.foldedSubs[i]);
+      delete S.settings.folded[a.id];
+      S.areas=S.areas.filter(x=>x.id!==d.adel); save(); render(); toast(`Área "${a.name}" excluída.`); });
+    return; }
+  if(d.addsub||d.newsub){ addSub(d.addsub||d.newsub); return; }
+  if(d.smove){ const a=S.areas.find(x=>x.subs.some(s=>s.id===d.smove));
+    const i=a.subs.findIndex(s=>s.id===d.smove), j=i+ +d.d;
+    if(j>=0&&j<a.subs.length){ const [x]=a.subs.splice(i,1); a.subs.splice(j,0,x); save(); render(); } return; }
+  if(d.sdel){ const a=S.areas.find(x=>x.subs.some(s=>s.id===d.sdel)); if(!a) return;
+    const s=a.subs.find(s=>s.id===d.sdel);
+    const n=Object.values(S.weeks).reduce((n,w)=> n+(w.acts||[]).filter(x=>x.sub===d.sdel).length,0);
+    ask(`Excluir "${s.name}"?`,
+        n?`${n} atividade${n>1?"s":""} registrada${n>1?"s":""} em todas as semanas ${n>1?"serão apagadas":"será apagada"}. Não há como desfazer.`
+         :`A subcategoria está vazia — nada mais será perdido.`)
+    .then(ok=>{ if(!ok) return;
+      a.subs=a.subs.filter(x=>x.id!==d.sdel);
+      Object.values(S.weeks).forEach(w=>{ w.acts=(w.acts||[]).filter(x=>x.sub!==d.sdel); delete w.goals[d.sdel]; });
+      S.habits=S.habits.filter(h=>h.sub!==d.sdel);
+      delete S.settings.foldedSubs[d.sdel];
+      save(); render(); toast(`"${s.name}" excluída.`); });
+    return; }
+  if(d.hdel){ S.habits=S.habits.filter(h=>h.id!==d.hdel); save(); render(); return; }
+});
+
+document.addEventListener("keydown",e=>{
+  if(askResolve){ // diálogo aberto: só Esc e Enter respondem
+    if(e.key==="Escape"){ e.preventDefault(); closeAsk(false); }
+    if(e.key==="Enter"){ e.preventDefault(); closeAsk(true); }
+    return;
+  }
+  const el=e.target, typing=/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+  if(e.key==="Enter" && el.dataset && el.dataset.add){ addAct(el.dataset.add, el.value); el.value=""; setTimeout(()=>{ const n=document.querySelector(`[data-add="${CSS.escape(el.dataset.add)}"]`); if(n) n.focus(); },0); return; }
+  if(e.key==="Enter" && el.dataset && el.dataset.stepadd){ const id=el.dataset.stepadd; addStep(id, el.value); el.value="";
+    setTimeout(()=>{ const n=document.querySelector(`[data-stepadd="${CSS.escape(id)}"]`); if(n) n.focus(); },0); return; }
+  // Enter confirma o texto em vez de inserir quebra de linha
+  if(e.key==="Enter" && !e.shiftKey && el.dataset && (el.dataset.text||el.dataset.steptext||el.dataset.sname||el.dataset.aname||el.dataset.hname)){ e.preventDefault(); el.blur(); return; }
+  if(e.key==="Escape" && el.id==="q"){ el.value=""; query=""; renderWeek(); el.blur(); return; }
+  if(typing) return;
+  if(e.key==="/"){ e.preventDefault(); view="week"; render(); $("#q").focus(); return; }
+  if(e.key==="ArrowLeft"){ cur=shiftKey(cur,-1); render(); }
+  if(e.key==="ArrowRight"){ cur=shiftKey(cur,1); render(); }
+});
+
+document.addEventListener("input",e=>{
+  const d=e.target.dataset;
+  if(d.goal!=null && "goal" in d){ week(cur,true).goals[d.goal]=e.target.value; autosize(e.target); save(); return; }
+  if(d.text){ const a=act(d.text); if(a){ a.text=e.target.value; autosize(e.target); save(); } return; }
+  if(d.steptext){ const {s}=step(d.steptext); if(s){ s.text=e.target.value; autosize(e.target); save(); } return; }
+  if(d.retro){ week(cur,true).retro[d.retro]=e.target.value; save(); return; }
+  // ids não contêm ":", então a chave composta identifica uma subetapa
+  if(d.attime){
+    const alvo=d.attime.includes(":") ? step(d.attime).s : act(d.attime);
+    if(alvo){
+      alvo.at=e.target.value||null;
+      save(); e.target.classList.toggle("set",!!alvo.at);
+      renderAgenda(week(cur)); // só a agenda reordena; não redesenha o campo sob o cursor
+    }
+    return;
+  }
+  if(e.target.id==="q"){ query=e.target.value; renderWeek(); return; }
+});
+document.addEventListener("change",e=>{
+  const d=e.target.dataset, id=e.target.id;
+  if(d.aname){ S.areas.find(a=>a.id===d.aname).name=e.target.value.trim()||"Área"; save(); render(); return; }
+  if(d.sname){ const s=findSub(d.sname); if(s){ s.name=e.target.value.trim()||"Subcategoria"; save(); render(); } return; }
+  if(d.hname){ const h=S.habits.find(x=>x.id===d.hname); if(h){ h.name=e.target.value.trim()||"Hábito"; save(); } return; }
+  if(d.htarget){ const h=S.habits.find(x=>x.id===d.htarget); if(h){ h.target=Math.max(1,Math.min(21,+e.target.value||1)); save(); } return; }
+  if(id==="goalpct"){ S.settings.goal=Math.max(10,Math.min(100,+e.target.value||75)); save(); return; }
+  if(id==="partial"){ S.settings.partial=Math.max(0,Math.min(100,+e.target.value||50)); save(); return; }
+});
+
+/* arrastar para reordenar/mover entre cartões */
+let drag=null, dragStep=null;
+document.addEventListener("dragstart",e=>{
+  // subetapa: arrasta só dentro da própria atividade
+  const sg=e.target.closest("[data-stepgrip]");
+  if(sg){
+    dragStep=sg.dataset.stepgrip;
+    const row=sg.closest(".step"); row.classList.add("dragging");
+    e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain","");
+    try{ e.dataTransfer.setDragImage(row,14,12); }catch(_){}
+    e.stopPropagation(); return;
+  }
+  const g=e.target.closest("[data-grip]");
+  if(!g){ e.preventDefault(); return; }
+  const li=g.closest(".itemwrap");
+  drag=li.dataset.id; li.classList.add("dragging");
+  e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain","");
+  try{ e.dataTransfer.setDragImage(li,14,12); }catch(_){}
+});
+document.addEventListener("dragend",()=>{
+  $$(".itemwrap,.step").forEach(x=>x.classList.remove("dragging","over"));
+  drag=null; dragStep=null;
+});
+document.addEventListener("dragover",e=>{
+  if(dragStep){
+    const st=e.target.closest(".step");
+    if(!e.target.closest(".steps")) return;
+    e.preventDefault();
+    $$(".step.over").forEach(x=>x.classList.remove("over"));
+    const [aid,sid]=dragStep.split(":");
+    if(st && st.dataset.aid===aid && st.dataset.sid!==sid) st.classList.add("over");
+    return;
+  }
+  if(!drag) return;
+  const li=e.target.closest(".itemwrap");
+  if(!e.target.closest(".card")) return;
+  e.preventDefault(); $$(".itemwrap.over").forEach(x=>x.classList.remove("over"));
+  if(li&&li.dataset.id!==drag) li.classList.add("over");
+});
+document.addEventListener("drop",e=>{
+  if(dragStep){
+    const [aid,sid]=dragStep.split(":");
+    if(!e.target.closest(".steps")) return;
+    e.preventDefault();
+    const a=act(aid); if(!a||!a.steps) return;
+    const i=a.steps.findIndex(x=>x.id===sid); if(i<0) return;
+    const [it]=a.steps.splice(i,1);
+    const st=e.target.closest(".step");
+    const j=(st && st.dataset.aid===aid) ? a.steps.findIndex(x=>x.id===st.dataset.sid) : -1;
+    if(j>=0) a.steps.splice(j,0,it); else a.steps.push(it);
+    save(); renderWeek(); return;
+  }
+  if(!drag) return; const card=e.target.closest(".card"); if(!card) return; e.preventDefault();
+  const w=week(cur), i=w.acts.findIndex(a=>a.id===drag); if(i<0) return;
+  const [it]=w.acts.splice(i,1); it.sub=card.dataset.sub;
+  const li=e.target.closest(".itemwrap");
+  const j=li? w.acts.findIndex(a=>a.id===li.dataset.id) : -1;
+  if(j>=0) w.acts.splice(j,0,it); else w.acts.push(it);
+  save(); renderWeek();
+});
+
+$("#prev").onclick=()=>{ cur=shiftKey(cur,-1); render(); };
+$("#next").onclick=()=>{ cur=shiftKey(cur,1); render(); };
+$("#today").onclick=()=>{ cur=todayKey(); render(); };
+$("#carry").onclick=carryOver;
+$("#expmd").onclick=exportMD;
+$("#hideDone").onclick=()=>{ S.settings.hideDone=!S.settings.hideDone; save(); renderWeek(); };
+$("#foldAll").onclick=()=>{
+  const todasRecolhidas=S.areas.every(a=>S.settings.folded[a.id]);
+  S.areas.forEach(a=> S.settings.folded[a.id]=!todasRecolhidas);
+  save(); renderWeek();
+};
+$("#foldSubs").onclick=()=>{
+  const subs=allSubs(), todasRecolhidas=subs.every(s=>S.settings.foldedSubs[s.id]);
+  subs.forEach(s=> S.settings.foldedSubs[s.id]=!todasRecolhidas);
+  // recolher subcategoria com a área fechada não mostraria nada — abre as áreas junto
+  if(!todasRecolhidas) S.areas.forEach(a=> S.settings.folded[a.id]=false);
+  save(); renderWeek();
+};
+$("#addArea").onclick=()=>{ S.areas.push({id:uid(),name:"Nova área",tone:S.areas.length%2?"personal":"pro",subs:[{id:uid(),name:"Nova subcategoria"}]}); save(); renderSet(); };
+$("#addHabit").onclick=()=>{
+  const n=$("#hname").value.trim(); if(!n){ $("#hname").focus(); return; }
+  S.habits.push({id:uid(),name:n,sub:$("#hsub").value,target:Math.max(1,+$("#htarget").value||3),weight:2});
+  $("#hname").value=""; save(); renderSet(); toast("Hábito criado — aparece em todas as semanas.");
+};
+$("#expjson").onclick=()=> download(JSON.stringify(S,null,2),`painel-semanal-${todayKey()}.json`,"application/json");
+$("#impjson").onclick=()=> $("#file").click();
+$("#file").onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+      const p=JSON.parse(r.result);
+      if(!p||!p.areas||!p.weeks) throw 0;
+      const n=Object.keys(p.weeks).length;
+      ask("Restaurar este backup?",`Ele traz ${n} semana${n===1?"":"s"} e substitui tudo o que está neste navegador. Exporte antes se quiser guardar o estado atual.`,"Restaurar")
+      .then(ok=>{ if(!ok) return;
+        S=Object.assign(structuredClone(DEFAULT),p,{settings:Object.assign({},DEFAULT.settings,p.settings||{})});
+        S.settings.folded=S.settings.folded||{}; S.settings.foldedSubs=S.settings.foldedSubs||{};
+        save(); render(); toast("Backup restaurado."); });
+    }catch(err){ toast("Arquivo inválido — esperava um backup .json deste painel."); } };
+  r.readAsText(f); e.target.value="";
+};
+$("#reset").onclick=()=>{
+  const n=dataWeeks().length;
+  ask("Apagar tudo?",`${n} semana${n===1?"":"s"} registrada${n===1?"":"s"}, as categorias e os hábitos somem deste navegador. Não há como desfazer — exporte um backup antes se tiver dúvida.`,"Apagar tudo")
+  .then(ok=>{ if(!ok) return;
+    S=structuredClone(DEFAULT); save(); cur=todayKey(); render(); toast("Painel zerado."); });
+};
+/* ---------- sincronização via Gist ---------- */
+/* O token mora numa chave separada do estado: assim ele não viaja no backup
+   exportado nem sobe para o Gist junto com os dados. */
+const SKEY="painel-semanal-sync", GFILE="painel-semanal.json";
+let cfg=loadCfg();
+function loadCfg(){
+  try{ const c=JSON.parse(localStorage.getItem(SKEY)||"{}");
+       return {token:c.token||"",gist:c.gist||"",auto:!!c.auto,seen:c.seen||0}; }
+  catch(e){ return {token:"",gist:"",auto:false,seen:0}; }
+}
+function saveCfg(){ try{ localStorage.setItem(SKEY,JSON.stringify(cfg)); }catch(e){} }
+
+let busy=false, statusMsg="", statusKind="";
+function setStatus(m,k){ statusMsg=m||""; statusKind=k||""; paintStatus(); }
+function paintStatus(){
+  const el=$("#ghstatus"); if(!el) return;
+  el.textContent=statusMsg;
+  el.style.color= statusKind==="err"?"var(--crit)" : statusKind==="ok"?"var(--ok)" : "var(--ink-3)";
+}
+function lastSyncLabel(){
+  if(!cfg.seen) return "Nunca sincronizado.";
+  const d=new Date(cfg.seen);
+  const p=n=>String(n).padStart(2,"0");
+  return `Última sincronização: ${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}.`;
+}
+function renderSync(){
+  const t=$("#ghtoken"); if(!t) return;
+  t.value=cfg.token?"••••••••••••••••":"";
+  t.dataset.masked=cfg.token?"1":"";
+  $("#ghgist").value=cfg.gist;
+  $$("#ghauto button").forEach(b=> b.setAttribute("aria-pressed", (b.dataset.a==="1")===cfg.auto));
+  if(!statusMsg) setStatus(cfg.token?lastSyncLabel():"Sem token — a sincronização está desligada.");
+  else paintStatus();
+}
+
+async function gh(path,opts){
+  let r;
+  try{
+    r=await fetch("https://api.github.com"+path,Object.assign({},opts,{headers:{
+      "Authorization":"Bearer "+cfg.token,
+      "Accept":"application/vnd.github+json",
+      "X-GitHub-Api-Version":"2022-11-28",
+      "Content-Type":"application/json"
+    }}));
+  }catch(e){ throw new Error("Sem conexão com o GitHub."); }
+  if(r.status===401) throw new Error("Token inválido ou expirado.");
+  if(r.status===403) throw new Error("Sem permissão — o token precisa de Gists: read and write.");
+  if(r.status===404) throw new Error("Gist não encontrado — confira o ID ou deixe o campo vazio para criar um novo.");
+  if(!r.ok) throw new Error("GitHub respondeu "+r.status+".");
+  return r.json();
+}
+function envelope(){ return JSON.stringify({app:"painel-semanal",version:1,savedAt:Date.now(),data:S},null,2); }
+function unwrap(txt){
+  const p=JSON.parse(txt);
+  const d=p&&p.data?p.data:p;              // aceita envelope novo ou backup cru
+  if(!d||!d.areas||!d.weeks) throw new Error("O Gist não tem um backup deste painel.");
+  return {data:d,savedAt:(p&&p.savedAt)||0};
+}
+function adopt(d){
+  S=Object.assign(structuredClone(DEFAULT),d,{settings:Object.assign({},DEFAULT.settings,d.settings||{})});
+  S.settings.folded=S.settings.folded||{}; S.settings.foldedSubs=S.settings.foldedSubs||{};
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+}
+
+async function remoteState(){
+  const g=await gh("/gists/"+encodeURIComponent(cfg.gist));
+  const f=g.files&&g.files[GFILE];
+  if(!f) throw new Error("O Gist não tem o arquivo "+GFILE+".");
+  // arquivos grandes vêm truncados; nesse caso o conteúdo real está no raw_url
+  let txt=f.content;
+  if(f.truncated||txt==null){
+    const r=await fetch(f.raw_url);
+    if(!r.ok) throw new Error("Não foi possível ler o conteúdo do Gist.");
+    txt=await r.text();
+  }
+  return unwrap(txt);
+}
+
+async function push(manual){
+  if(busy) return;
+  if(!cfg.token){ setStatus("Salve um token antes de sincronizar.","err"); if(manual) toast("Falta o token de acesso."); return; }
+  busy=true; setStatus("Enviando…");
+  try{
+    if(cfg.gist){
+      // conflito: alguém gravou depois da última vez que este navegador viu o Gist
+      let rem=null;
+      try{ rem=await remoteState(); }catch(e){ if(/não tem/.test(e.message)) rem=null; else throw e; }
+      if(rem&&rem.savedAt&&cfg.seen&&rem.savedAt>cfg.seen){
+        busy=false;
+        const ok=await ask("O GitHub tem uma versão mais recente",
+          "Outro dispositivo gravou depois da última sincronização deste aqui. Enviar agora substitui aquela versão pelos dados deste navegador.",
+          "Enviar mesmo assim");
+        if(!ok){ setStatus("Envio cancelado — use \"Puxar\" para trazer a versão do GitHub.","err"); return; }
+        busy=true;
+      }
+    }
+    const body=JSON.stringify({
+      description:"Painel Semanal — registro de progresso",
+      public:false,
+      files:{[GFILE]:{content:envelope()}}
+    });
+    const g=cfg.gist
+      ? await gh("/gists/"+encodeURIComponent(cfg.gist),{method:"PATCH",body})
+      : await gh("/gists",{method:"POST",body});
+    cfg.gist=g.id; cfg.seen=Date.now(); saveCfg();
+    setStatus(lastSyncLabel(),"ok");
+    if($("#ghgist")) $("#ghgist").value=cfg.gist;
+    if(manual) toast("Painel enviado para o GitHub.");
+  }catch(e){
+    setStatus(e.message,"err");
+    if(manual) toast(e.message);
+  }finally{ busy=false; }
+}
+
+async function pull(manual){
+  if(busy) return;
+  if(!cfg.token||!cfg.gist){ setStatus("Informe o token e o Gist para puxar.","err"); if(manual) toast("Falta token ou Gist."); return; }
+  busy=true; setStatus("Puxando…");
+  try{
+    const rem=await remoteState();
+    if(!manual&&rem.savedAt&&cfg.seen&&rem.savedAt<=cfg.seen){ setStatus(lastSyncLabel()); return; }
+    if(manual){
+      busy=false;
+      const n=Object.keys(rem.data.weeks||{}).length;
+      const ok=await ask("Trazer os dados do GitHub?",
+        `O Gist traz ${n} semana${n===1?"":"s"} e substitui tudo o que está neste navegador.`,"Trazer");
+      if(!ok){ setStatus(lastSyncLabel()); return; }
+      busy=true;
+    }
+    adopt(rem.data);
+    cfg.seen=rem.savedAt||Date.now(); saveCfg();
+    cur=todayKey(); render();
+    setStatus(lastSyncLabel(),"ok");
+    if(manual) toast("Dados trazidos do GitHub.");
+  }catch(e){
+    setStatus(e.message,"err");
+    if(manual) toast(e.message);
+  }finally{ busy=false; }
+}
+
+let autoT;
+function syncTouch(){
+  if(!cfg.auto||!cfg.token) return;
+  clearTimeout(autoT);
+  autoT=setTimeout(()=>push(false),8000);
+}
+
+$("#ghsavetok").onclick=()=>{
+  const el=$("#ghtoken"), v=el.value.trim();
+  if(el.dataset.masked==="1"&&v.startsWith("•")){ setStatus("Token já salvo. Cole um novo por cima para trocar."); return; }
+  if(!v){ cfg.token=""; saveCfg(); renderSync(); setStatus("Token removido.","err"); return; }
+  cfg.token=v; saveCfg(); renderSync(); setStatus("Token salvo neste navegador.","ok"); toast("Token salvo.");
+};
+$("#ghtoken").onfocus=e=>{ if(e.target.dataset.masked==="1"){ e.target.value=""; e.target.dataset.masked=""; } };
+$("#ghgist").onchange=e=>{
+  // aceita o ID puro ou a URL inteira do Gist
+  const m=e.target.value.trim().match(/([0-9a-f]{20,})/i);
+  cfg.gist=m?m[1]:""; cfg.seen=0; saveCfg(); e.target.value=cfg.gist;
+  setStatus(cfg.gist?"Gist definido — puxe para trazer os dados.":"Gist limpo — o próximo envio cria um novo.");
+};
+$$("#ghauto button").forEach(b=> b.onclick=()=>{
+  cfg.auto=b.dataset.a==="1"; saveCfg(); renderSync();
+  setStatus(cfg.auto?"Sincronização automática ligada.":"Sincronização automática desligada.");
+});
+$("#ghpush").onclick=()=>push(true);
+$("#ghpull").onclick=()=>pull(true);
+
+render();
+if(cfg.auto&&cfg.token&&cfg.gist) pull(false);
+})();
+</script>
+
+</body></html>
