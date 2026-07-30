@@ -24,6 +24,24 @@ A página fica em `https://<usuario>.github.io/<repositorio>/`.
 Com **Sincronizar automaticamente** ligado, o painel envia sozinho 8 segundos depois de
 cada alteração e puxa a versão remota ao abrir, quando ela é mais recente.
 
+## Rotinas
+
+O que se repete toda semana vive em **Ajustes → Rotinas**, em duas naturezas:
+
+- **Frequência** — meta de quantidade na semana (treinar 4×). Fica no cartão da
+  subcategoria, com contador.
+- **Diária** — acontece em dias determinados, com horário e período opcionais.
+  Aparece na agenda e na visão do dia, e pode ser dividida em **etapas** que se
+  repetem todo dia (café da manhã, lanche).
+
+O período com data de fim serve para o que é temporário — um tratamento de dez
+dias. Terminado o período, a rotina some da agenda, sai do cálculo da semana e
+não aparece no relatório exportado, sem precisar excluir nada.
+
+Na grade da semana as rotinas aparecem compactadas numa pastilha por dia
+(`rotinas 2/4`); o detalhe fica na visão do dia. Rotinas pesam como uma
+atividade comum no percentual.
+
 ## Segurança
 
 O token fica em `localStorage`, na chave `painel-semanal-sync` — separada dos dados

@@ -400,6 +400,50 @@ main{padding:24px 0 80px}
 .dots i{width:7px;height:7px;border-radius:99px;background:var(--line);display:block}
 .dots i.on{background:var(--c)}
 
+/* ---------- rotinas ---------- */
+.habit.rot .hn{flex:1}
+.rotdays{display:flex;gap:3px;flex:none}
+.rd{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-3);display:grid;place-items:center;transition:.12s}
+.rd:hover:not(:disabled){border-color:var(--c);color:var(--ink)}
+.rd.on{background:var(--c);border-color:var(--c);color:#fff}
+:root[data-theme="dark"] .rd.on{color:#0E1418}
+@media (prefers-color-scheme:dark){.rd.on{color:#0E1418}}
+:root[data-theme="light"] .rd.on{color:#fff}
+.rd.meio{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 18%,transparent)}
+.rd.off,.rd:disabled{opacity:.3;cursor:default}
+.habit.rot .v{flex:none;font-size:12px;color:var(--ink-3);min-width:34px;text-align:right}
+.habit.rot .v.full{color:var(--ok);font-weight:600}
+.ai.rot .atxt em{opacity:.9}
+.rotsum{display:flex;align-items:center;gap:6px;width:100%;margin-top:3px;padding:4px 8px;border:1px dashed var(--line-2);border-radius:7px;font-size:11.5px;color:var(--ink-3);text-align:left}
+.rotsum:hover{border-style:solid;border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.rotsum i{width:6px;height:6px;border-radius:99px;background:var(--ink-3);flex:none}
+.rotsum b{margin-left:auto;font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.rotsum.full{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.rotsum.full i{background:var(--ok)}
+.dv-chip.rotina{color:var(--ink-3);border-color:var(--line);background:var(--surface-2)}
+
+.rotedit{border:1px solid var(--line);border-left:3px solid var(--c);border-radius:9px;padding:4px 12px 6px;margin-bottom:10px;background:var(--surface)}
+.rotedit .setrow{border-bottom:none}
+.rotedit .chip{flex:none;color:var(--c);border-color:color-mix(in srgb,var(--c) 35%,transparent);background:color-mix(in srgb,var(--c) 10%,transparent)}
+.rotdot{width:8px;height:8px;border-radius:99px;background:var(--c);flex:none}
+.rotcfg{border-top:1px solid var(--line);padding:9px 0 4px;display:flex;flex-direction:column;gap:9px}
+.rotline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rotline.top{align-items:flex-start}
+.rotline>label{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);width:58px;flex:none;padding-top:4px}
+.dtin{font-family:var(--mono);font-size:11.5px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-3)}
+.dtin.set{color:var(--ink);border-color:var(--line-2)}
+.dtin:focus{border-color:var(--accent);outline:none;background:var(--surface)}
+.lnk{font-size:11.5px;color:var(--ink-3);text-decoration:underline;text-underline-offset:2px}
+.lnk:hover{color:var(--accent)}
+.rotitems{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.rotitem{display:flex;align-items:center;gap:6px}
+.rotitem input[type=text]{flex:1;min-width:0;border:1px solid transparent;background:var(--surface-2);border-radius:6px;padding:4px 8px;font-size:13px}
+.rotitem input[type=text]:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.rotadd{border:1px dashed var(--line-2);background:none;border-radius:6px;padding:4px 8px;font-size:12.5px}
+.rotadd:focus{border-style:solid;border-color:var(--accent);background:var(--surface);outline:none}
+.rotadd::placeholder{color:var(--ink-3)}
+@media (max-width:620px){.rotline>label{width:100%;padding-top:0}}
+
 .sep{height:1px;background:var(--line);margin:2px 15px 2px 17px}
 .subhead{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:8px 15px 3px 17px}
 .add{display:flex;align-items:center;gap:8px;padding:8px 15px 11px 17px;border-top:1px solid var(--line)}
@@ -624,15 +668,16 @@ table.hist tr:last-child td{border-bottom:none}
       <div style="margin-top:14px"><button class="btn" id="addArea">+ Nova área</button></div>
     </div>
     <div class="panel">
-      <h2>Hábitos recorrentes</h2>
-      <p class="hint">Metas de frequência que se repetem toda semana — treinar 4×, ler 3×. Entram no cálculo junto com as atividades.</p>
+      <h2>Rotinas</h2>
+      <p class="hint">O que se repete sozinho toda semana, sem você recriar. <b>Frequência</b> é meta de quantidade — treinar 4×, ler 3×. <b>Diária</b> acontece em dias determinados, com horário e período opcionais, e aparece na agenda e na visão do dia; pode ser dividida em etapas que se repetem todo dia.</p>
       <div id="habits"></div>
       <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <input id="hname" type="text" placeholder="Nome do hábito" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:13.5px;flex:1;min-width:160px">
+        <input id="hname" type="text" placeholder="Nome da rotina" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:13.5px;flex:1;min-width:160px">
         <select id="hsub" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:13.5px"></select>
         <input id="htarget" class="num" type="number" min="1" max="21" value="3" style="border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-family:var(--mono);width:64px;text-align:center">
         <span style="font-size:13px;color:var(--ink-3)">× por semana</span>
-        <button class="btn pri" id="addHabit">Adicionar</button>
+        <button class="btn" id="addHabit">+ Frequência</button>
+        <button class="btn pri" id="addDaily">+ Diária</button>
       </div>
     </div>
     <div class="panel">
@@ -804,6 +849,48 @@ function ensureColors(){
 }
 const subVar=id=>{ const s=findSub(id); return "var(--k"+((s&&s.color)||1)+")"; };
 
+/* ---------- rotinas ---------- */
+// Duas naturezas no mesmo lugar: "freq" é a meta de frequência de sempre (treinar 4×),
+// "daily" é a rotina que acontece em dias determinados, com horário e período opcionais.
+// A rotina diária existe na agenda; a de frequência continua só no cartão.
+function migraRotinas(){
+  let mudou=false;
+  (S.habits||[]).forEach(h=>{
+    if(!h.mode){ h.mode="freq"; mudou=true; }
+    if(h.weight!==1){ h.weight=1; mudou=true; }   // rotina pesa como uma atividade comum
+    if(h.mode==="daily"&&!Array.isArray(h.days)){ h.days=[0,1,2,3,4,5,6]; mudou=true; }
+  });
+  return mudou;
+}
+const iso=d=> d.toISOString().slice(0,10);
+// dias da semana k em que a rotina está ativa — [] quando o período já acabou ou não começou
+function rotDias(h,k){
+  if(h.mode!=="daily") return null;
+  const mon=keyMonday(k), base=(h.days&&h.days.length)?h.days:[0,1,2,3,4,5,6];
+  return base.filter(i=>{
+    const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+i);
+    const s=iso(d);
+    if(h.from && s<h.from) return false;
+    if(h.to && s>h.to) return false;
+    return true;
+  });
+}
+function rotEstado(k,id,make){
+  const w=week(k,make);
+  let v=w.habits[id];
+  if(typeof v!=="object" || v===null){ v={d:{},i:{}}; if(make) w.habits[id]=v; }
+  v.d=v.d||{}; v.i=v.i||{};
+  return v;
+}
+const rotItens=h=> (h.items&&h.items.length)?h.items:null;
+// quanto do dia foi cumprido: sem itens é 0 ou 1; com itens, a fração deles
+function rotFator(h,st,i){
+  const its=rotItens(h);
+  if(!its) return st.d[i]?1:0;
+  return its.filter(it=> (st.i[it.id]||{})[i]).length/its.length;
+}
+const rotDiaFeito=(h,st,i)=> rotFator(h,st,i)>=1;
+
 /* ---------- cálculo ---------- */
 // Uma atividade com subetapas vale a fração de subetapas concluídas — mais fiel
 // que "em andamento" genérico. Marcada como concluída à mão, vale 1 de qualquer jeito.
@@ -819,8 +906,16 @@ function subScore(subId,k){
   let num=0,den=0;
   acts.forEach(a=>{ const wt=a.weight||1; den+=wt; num+=wt*actFactor(a); });
   S.habits.filter(h=> h.sub===subId).forEach(h=>{
-    const c=(w.habits[h.id]||0), wt=h.weight||2;
-    den+=wt; num+=wt*Math.min(c/Math.max(1,h.target),1);
+    const wt=h.weight||1;
+    if(h.mode==="daily"){
+      const dias=rotDias(h,k);
+      if(!dias.length) return;                    // fora do período: não entra na conta
+      const st=rotEstado(k,h.id);
+      den+=wt; num+=wt*(dias.reduce((s,i)=> s+rotFator(h,st,i),0)/dias.length);
+    }else{
+      const v=w.habits[h.id], c=typeof v==="number"?v:0;
+      den+=wt; num+=wt*Math.min(c/Math.max(1,h.target),1);
+    }
   });
   const total=w.acts.filter(a=> a.sub===subId).length;
   return {num,den,pct:den?Math.round(num/den*100):null,
@@ -836,7 +931,9 @@ function weekScore(k){
   S.areas.forEach(a=>{ const r=areaScore(a,k); num+=r.num; den+=r.den; });
   return {num,den,pct:den?Math.round(num/den*100):null};
 }
-const hasData=k=>{ const w=S.weeks[k]; return !!w && (w.acts.length>0 || Object.values(w.habits||{}).some(v=>v>0) || Object.values(w.goals||{}).some(v=>v&&v.trim())); };
+const marcouRotina=v=> typeof v==="number" ? v>0
+  : !!v && (Object.keys(v.d||{}).length>0 || Object.values(v.i||{}).some(m=> Object.keys(m||{}).length>0));
+const hasData=k=>{ const w=S.weeks[k]; return !!w && (w.acts.length>0 || Object.values(w.habits||{}).some(marcouRotina) || Object.values(w.goals||{}).some(v=>v&&v.trim())); };
 const dataWeeks=()=> Object.keys(S.weeks).filter(hasData).sort();
 
 /* ---------- ícones ---------- */
@@ -908,8 +1005,26 @@ function renderWeek(){
           <label for="g-${sub.id}">Objetivo da semana</label>
           <textarea id="g-${sub.id}" data-goal="${sub.id}" rows="1" placeholder="O que essa frente precisa entregar até domingo?">${esc(w.goals[sub.id]||"")}</textarea>
         </div>
-        ${hs.length?`<div class="subhead">Hábitos</div>`+hs.map(h=>{
-          const c=w.habits[h.id]||0, full=c>=h.target;
+        ${hs.length?`<div class="subhead">Rotinas</div>`+hs.map(h=>{
+          if(h.mode==="daily"){
+            const dias=rotDias(h,cur), st=rotEstado(cur,h.id), its=rotItens(h);
+            const feitos=dias.filter(i=> rotDiaFeito(h,st,i)).length;
+            const fim=h.to?` · até ${h.to.slice(8,10)}/${h.to.slice(5,7)}`:"";
+            const resumo=dias.length
+              ? `${dias.length===7?"todo dia":dias.map(i=>DIAS[i]).join(" ")}${h.at?` · ${h.at}`:""}${its?` · ${its.length} etapas`:""}${fim}`
+              : (h.to?"período encerrado":"fora do período");
+            return `<div class="habit rot" style="--c:${subVar(sub.id)}">
+              <div class="hn">${esc(h.name)}<small>${esc(resumo)}</small></div>
+              <div class="rotdays">${[0,1,2,3,4,5,6].map(i=>{
+                const ativo=dias.includes(i), f=ativo?rotFator(h,st,i):0;
+                const cls=!ativo?"off":(f>=1?"on":(f>0?"meio":""));
+                return `<button class="rd ${cls}" ${ativo?`data-rot="${h.id}::${i}"`:"disabled"}
+                  title="${DIAS[i]}${ativo?(f>=1?" — feito":" — pendente"):" — fora da rotina"}" aria-label="${DIAS[i]}">${DIAS[i][0].toUpperCase()}</button>`;
+              }).join("")}</div>
+              <span class="v mono ${dias.length&&feitos>=dias.length?"full":""}">${feitos}/${dias.length||"—"}</span>
+            </div>`;
+          }
+          const v=w.habits[h.id], c=typeof v==="number"?v:0, full=c>=h.target;
           return `<div class="habit" style="--c:${subVar(sub.id)}">
             <div class="dots">${Array.from({length:Math.min(h.target,10)},(_,i)=>`<i class="${i<c?"on":""}"></i>`).join("")}</div>
             <div class="hn">${esc(h.name)}<small>meta ${h.target}× · ${full?"cumprido":(h.target-c)+" restante"+(h.target-c>1?"s":"")}</small></div>
@@ -1002,19 +1117,37 @@ function renderAgenda(w){
     else if(!steps.some(s=> s.due!=null)) semDia.push(e);
   });
 
+  // rotinas diárias entram na agenda como qualquer outra linha do dia
+  S.habits.forEach(h=>{
+    if(h.mode!=="daily") return;
+    const dias=rotDias(h,cur); if(!dias.length) return;
+    const st=rotEstado(cur,h.id), its=rotItens(h);
+    dias.forEach(i=>{
+      (its||[null]).forEach(it=>{
+        const done=it ? !!(st.i[it.id]||{})[i] : !!st.d[i];
+        const txt=it?it.name:h.name;
+        if(hd && done) return;
+        if(!(casa(txt)||casa(h.name))) return;
+        porSub[h.sub]=(porSub[h.sub]||0)+(done?0:1);
+        if(fs && h.sub!==fs) return;
+        cols[i].push({h,it,dia:i,pend:!done,at:(it&&it.at)||h.at||null});
+      });
+    });
+  });
+
   const cnt=arr=> arr.filter(e=>e.pend).length;
   const hoje=today>=0?cnt(cols[today]):0;
   const atrasadas=today>0?cnt(cols.slice(0,today).flat()):0;
   const restoSemana=today>=0?cnt(cols.slice(today+1).flat()):cnt(cols.flat());
 
   // pendentes primeiro; dentro disso, por horário — os sem horário vão para o fim do bloco
-  const hora=e=> (e.s?e.s.at:e.a.at)||null;
+  const hora=e=> (e.h ? e.at : (e.s?e.s.at:e.a.at))||null;
   const ordena=(x,y)=>{
     if(y.pend-x.pend) return y.pend-x.pend;
     const hx=hora(x), hy=hora(y);
     if(hx&&hy) return hx.localeCompare(hy);
     if(hx) return -1; if(hy) return 1;
-    return (x.a.created||0)-(y.a.created||0);
+    return ((x.a&&x.a.created)||0)-((y.a&&y.a.created)||0);
   };
   const foco=S.settings.agendaDay;   // null = semana inteira; 0..6 = um dia; "none" = sem dia
   const dayCol=(i)=>{
@@ -1022,9 +1155,16 @@ function renderAgenda(w){
     const list=cols[i].slice().sort(ordena);
     const n=cnt(list);
     const cls=[i===today?"today":(today>=0&&i<today?"past":""), i>=5?"wknd":""].filter(Boolean).join(" ");
+    // na grade semanal a rotina vira uma pastilha: sete dias de café da manhã afogariam as tarefas.
+    // o detalhe fica na visão do dia, a um clique de distância.
+    const rots=list.filter(e=>e.h), tarefas=list.filter(e=>!e.h);
+    const feitasR=rots.filter(e=>!e.pend).length;
     return `<div class="day ${cls}">
       <div class="dayhead"><span>${DIAS[i]}</span><b>${d.getUTCDate()}</b>${n?`<span class="n mono">${n}</span>`:""}</div>
-      ${list.length?list.map(e=> agendaItem(e, today>=0 && i<today && e.pend)).join(""):`<span class="none-txt">—</span>`}
+      ${tarefas.length?tarefas.map(e=> agendaItem(e, today>=0 && i<today && e.pend)).join(""):(rots.length?"":`<span class="none-txt">—</span>`)}
+      ${rots.length?`<button class="rotsum ${feitasR>=rots.length?"full":""}" data-agday="${i}"
+        title="${rots.length} rotina${rots.length>1?"s":""} neste dia, ${feitasR} concluída${feitasR===1?"":"s"} — clique para abrir o dia">
+        <i></i>rotinas <b>${feitasR}/${rots.length}</b></button>`:""}
     </div>`;
   };
   const dias=foco==null?[0,1,2,3,4,5,6]:(foco==="none"?[]:[Number(foco)]);
@@ -1078,16 +1218,16 @@ const MESLONGO=["janeiro","fevereiro","março","abril","maio","junho","julho","a
 function dayView(i,lista,today,mon){
   const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+i);
   // aqui a ordem é a do relógio, não a de pendência: é a leitura do dia como ele acontece
-  const hr=e=> (e.s?e.s.at:e.a.at)||null;
+  const hr=e=> (e.h ? e.at : (e.s?e.s.at:e.a.at))||null;
   const list=lista.slice().sort((x,y)=>{
     const hx=hr(x), hy=hr(y);
     if(hx&&hy&&hx!==hy) return hx.localeCompare(hy);
     if(hx&&!hy) return -1;
     if(!hx&&hy) return 1;
-    return (x.a.created||0)-(y.a.created||0);
+    return ((x.a&&x.a.created)||0)-((y.a&&y.a.created)||0);
   });
   const eh=i===today, passou=today>=0&&i<today;
-  const stOf=e=> e.s ? (e.s.done?"done":"todo") : e.a.status;
+  const stOf=e=> e.h ? (e.pend?"todo":"done") : (e.s ? (e.s.done?"done":"todo") : e.a.status);
   const feitos=list.filter(e=> stOf(e)==="done").length;
   const andando=list.filter(e=> stOf(e)==="doing").length;
   const adiadas=list.filter(e=> stOf(e)==="skip").length;
@@ -1134,6 +1274,17 @@ function dayView(i,lista,today,mon){
   </div>`;
 }
 function dayItem(e,late){
+  if(e.h){
+    const h=e.h, it=e.it, sub=findSub(h.sub), feito=!e.pend;
+    return `<div class="dvi rot ${late?"late":""}" data-s="${feito?"done":"todo"}" style="--c:${subVar(h.sub)}">
+      <button class="dvbox" data-rot="${h.id}:${it?it.id:""}:${e.dia}" title="${feito?"Feito":"Pendente"} — clique para marcar" aria-label="Rotina ${feito?"feita":"pendente"}">${feito?IC.check:""}</button>
+      <button class="dvtxt" data-gorot="${h.id}" title="Ver a rotina na categoria">
+        <span class="t">${esc(it?it.name:h.name)}</span>
+        <span class="m"><i></i>${esc(sub?sub.name:"")}${it?` · ${esc(h.name)}`:""}</span>
+      </button>
+      <span class="dv-chip rotina">rotina</span>
+    </div>`;
+  }
   const a=e.a, s=e.s, sub=findSub(a.sub);
   const st=s?(s.done?"done":"todo"):a.status;
   const chave=!s&&(a.weight||1)>1;                      // peso 2 ou 3 = tarefa principal do dia
@@ -1149,6 +1300,16 @@ function dayItem(e,late){
   </div>`;
 }
 function agendaItem(e,late){
+  if(e.h){
+    const h=e.h, it=e.it, sub=findSub(h.sub), feito=!e.pend;
+    return `<div class="ai rot" data-s="${feito?"done":"todo"}" style="--c:${subVar(h.sub)}">
+      <button class="abox" data-rot="${h.id}:${it?it.id:""}:${e.dia}" title="${feito?"Feito":"Pendente"} — clique para marcar" aria-label="Rotina ${feito?"feita":"pendente"}">${feito?IC.check:""}</button>
+      <button class="atxt" data-gorot="${h.id}" title="Ver a rotina na categoria">
+        <span>${e.at?`<time>${esc(e.at)}</time> `:""}${esc(it?it.name:h.name)}</span>
+        <em>${esc(it?h.name:(sub?sub.name:""))} · rotina</em>
+      </button>
+    </div>`;
+  }
   const a=e.a, s=e.s;
   const sub=findSub(a.sub);
   const cor=`--c:${subVar(a.sub)}`;
@@ -1375,15 +1536,54 @@ function renderSet(){
     </div>`).join("");
 
   $("#habits").innerHTML=S.habits.length?S.habits.map(h=>{
-    const s=findSub(h.sub), ar=subArea(h.sub);
-    return `<div class="setrow">
-      <div class="grow"><input type="text" value="${esc(h.name)}" data-hname="${h.id}"></div>
-      <span class="chip" style="color:var(--${ar?ar.tone:"ink-3"})">${esc(s?s.name:"sem categoria")}</span>
-      <input class="num" type="number" min="1" max="21" value="${h.target}" data-htarget="${h.id}">
-      <span style="font-size:12px;color:var(--ink-3)">×/sem</span>
-      <button class="ib" data-hdel="${h.id}" title="Excluir">${IC.x}</button>
+    const s=findSub(h.sub), diaria=h.mode==="daily";
+    const its=h.items||[];
+    return `<div class="rotedit" style="--c:${subVar(h.sub)}">
+      <div class="setrow">
+        <span class="rotdot"></span>
+        <div class="grow"><input type="text" value="${esc(h.name)}" data-hname="${h.id}"></div>
+        <span class="chip">${esc(s?s.name:"sem categoria")}</span>
+        <div class="seg">
+          <button data-hmode="${h.id}:freq" aria-pressed="${!diaria}">Frequência</button>
+          <button data-hmode="${h.id}:daily" aria-pressed="${diaria}">Diária</button>
+        </div>
+        ${diaria?"":`<input class="num" type="number" min="1" max="21" value="${h.target}" data-htarget="${h.id}" title="Vezes por semana">
+        <span style="font-size:12px;color:var(--ink-3)">×/sem</span>`}
+        <button class="ib" data-hdel="${h.id}" title="Excluir rotina">${IC.x}</button>
+      </div>
+      ${diaria?`
+      <div class="rotcfg">
+        <div class="rotline">
+          <label>Dias</label>
+          <div class="rotdays">${[0,1,2,3,4,5,6].map(i=>{
+            const on=(h.days||[]).includes(i);
+            return `<button class="rd ${on?"on":""}" data-hday="${h.id}:${i}" aria-pressed="${on}" title="${DIAS[i]}">${DIAS[i][0].toUpperCase()}</button>`;
+          }).join("")}</div>
+          <button class="lnk" data-hdays="${h.id}:all">todos</button>
+          <button class="lnk" data-hdays="${h.id}:week">úteis</button>
+        </div>
+        <div class="rotline">
+          <label for="hat-${h.id}">Horário</label>
+          <input id="hat-${h.id}" class="timein ${h.at?"set":""}" type="time" value="${esc(h.at||"")}" data-hat="${h.id}">
+          <label style="margin-left:10px">Período</label>
+          <input type="date" class="dtin ${h.from?"set":""}" value="${esc(h.from||"")}" data-hfrom="${h.id}" title="Início — vazio começa já">
+          <span style="color:var(--ink-3)">até</span>
+          <input type="date" class="dtin ${h.to?"set":""}" value="${esc(h.to||"")}" data-hto="${h.id}" title="Fim — vazio não termina">
+        </div>
+        <div class="rotline top">
+          <label>Etapas</label>
+          <div class="rotitems">
+            ${its.map(it=>`<div class="rotitem">
+              <input type="text" value="${esc(it.name)}" data-hiname="${h.id}:${it.id}" aria-label="Nome da etapa">
+              <input class="timein ${it.at?"set":""}" type="time" value="${esc(it.at||"")}" data-hiat="${h.id}:${it.id}" title="Horário da etapa">
+              <button class="ib" data-hidel="${h.id}:${it.id}" title="Excluir etapa">${IC.x}</button>
+            </div>`).join("")}
+            <input class="rotadd" type="text" placeholder="${its.length?"Outra etapa":"Dividir em etapas — ex: café da manhã"} — Enter para salvar" data-hiadd="${h.id}" autocomplete="off">
+          </div>
+        </div>
+      </div>`:""}
     </div>`;
-  }).join(""):`<p style="color:var(--ink-3);font-style:italic;font-size:13.5px;margin:0">Nenhum hábito ainda.</p>`;
+  }).join(""):`<p style="color:var(--ink-3);font-style:italic;font-size:13.5px;margin:0">Nenhuma rotina ainda.</p>`;
 
   $("#hsub").innerHTML=S.areas.map(a=>`<optgroup label="${esc(a.name)}">${a.subs.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
   $("#goalpct").value=S.settings.goal;
@@ -1393,7 +1593,7 @@ function renderSet(){
 }
 
 function render(){
-  if(ensureColors()) save();   // subcategorias novas ou vindas de backup antigo ganham slot aqui
+  if(ensureColors()|migraRotinas()) save();   // slots de cor e campos novos de rotina, inclusive vindos de backup antigo
   $$(".tab").forEach(t=> t.setAttribute("aria-selected", t.dataset.view===view));
   $("#view-week").classList.toggle("hidden",view!=="week");
   $("#view-hist").classList.toggle("hidden",view!=="hist");
@@ -1522,7 +1722,17 @@ function exportMD(){
         out+=`- [${x.status==="done"?"x":x.status==="doing"?"~":x.status==="skip"?">":" "}] ${x.text}${quando(x)}${(x.weight||1)>1?` (peso ${x.weight})`:""}\n`;
         (x.steps||[]).forEach(s=> out+=`  - [${s.done?"x":" "}] ${s.text}${quando(s)}\n`);
       });
-      hs.forEach(h=> out+=`- ${h.name}: ${(w.habits[h.id]||0)}/${h.target}\n`);
+      hs.forEach(h=>{
+        if(h.mode==="daily"){
+          const dias=rotDias(h,cur), st=rotEstado(cur,h.id);
+          if(!dias.length) return;                 // fora do período: não vai para o relatório
+          const f=dias.filter(i=> rotDiaFeito(h,st,i)).length;
+          out+=`- ${h.name} (rotina diária): ${f}/${dias.length} dias\n`;
+        }else{
+          const v=w.habits[h.id];
+          out+=`- ${h.name}: ${typeof v==="number"?v:0}/${h.target}\n`;
+        }
+      });
     });
   });
   const r=w.retro||{};
@@ -1544,7 +1754,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1568,6 +1778,31 @@ document.addEventListener("click",e=>{
   if(d.agfold){ S.settings.agendaFold=!S.settings.agendaFold; save(); renderAgenda(week(cur)); return; }
   if(d.scolor){ const [sid,n]=d.scolor.split(":"); const s=findSub(sid); if(s){ s.color=Number(n); save(); renderSet(); } return; }
   if(d.hidesub){ const h=S.settings.hideDoneSubs; if(h[d.hidesub]) delete h[d.hidesub]; else h[d.hidesub]=true; save(); renderWeek(); return; }
+  if(d.rot){
+    const [hid,iid,di]=d.rot.split(":"); const h=S.habits.find(x=>x.id===hid); if(!h) return;
+    const st=rotEstado(cur,hid,true), i=Number(di), its=rotItens(h);
+    if(iid){ const m=st.i[iid]=st.i[iid]||{}; if(m[i]) delete m[i]; else m[i]=true; }
+    else if(its){ // no cartão, o dia inteiro: marca ou desmarca todas as etapas de uma vez
+      const feito=rotDiaFeito(h,st,i);
+      its.forEach(it=>{ const m=st.i[it.id]=st.i[it.id]||{}; if(feito) delete m[i]; else m[i]=true; });
+    }
+    else { if(st.d[i]) delete st.d[i]; else st.d[i]=true; }
+    save(); renderWeek(); return;
+  }
+  if(d.gorot){ const h=S.habits.find(x=>x.id===d.gorot); const ar=h&&subArea(h.sub); if(ar) openSub(ar.id+":"+h.sub); return; }
+  if(d.hmode){ const [hid,m]=d.hmode.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
+      h.mode=m; if(m==="daily"&&!Array.isArray(h.days)) h.days=[0,1,2,3,4,5,6];
+      save(); render(); } return; }
+  if(d.hday){ const [hid,i]=d.hday.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
+      const n=Number(i); h.days=h.days||[];
+      h.days = h.days.includes(n) ? h.days.filter(x=>x!==n) : h.days.concat(n).sort();
+      save(); render(); } return; }
+  if(d.hdays){ const [hid,q]=d.hdays.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
+      h.days = q==="week"?[0,1,2,3,4]:[0,1,2,3,4,5,6]; save(); render(); } return; }
+  if(d.hidel){ const [hid,iid]=d.hidel.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
+      h.items=(h.items||[]).filter(x=>x.id!==iid);
+      Object.values(S.weeks).forEach(w=>{ const v=w.habits&&w.habits[hid]; if(v&&typeof v==="object"&&v.i) delete v.i[iid]; });
+      save(); render(); } return; }
   if(d.fold){ S.settings.folded[d.fold]=!S.settings.folded[d.fold]; save(); renderWeek(); return; }
   if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
   if(d.open){ openSub(d.open); return; }
@@ -1576,7 +1811,8 @@ document.addEventListener("click",e=>{
   if(d.weight){ const a=act(d.weight); if(a){ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); } return; }
   if(d.due){ const a=act(d.due); if(a){ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); } return; }
   if(d.hab){ const w=week(cur,true); const h=S.habits.find(x=>x.id===d.hab);
-    w.habits[d.hab]=Math.max(0,Math.min((h?h.target*2:99),(w.habits[d.hab]||0)+ +d.d)); save(); renderWeek(); return; }
+    const atual=typeof w.habits[d.hab]==="number"?w.habits[d.hab]:0;
+    w.habits[d.hab]=Math.max(0,Math.min((h?h.target*2:99),atual+ +d.d)); save(); renderWeek(); return; }
   if(d.scale){ const w=week(cur,true); w.retro[d.scale]= w.retro[d.scale]===+d.v?null:+d.v; save(); renderWeek(); return; }
   if(d.go){ cur=d.go; view="week"; render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
   if(d.t){ S.settings.theme=d.t; save(); render(); return; }
@@ -1623,6 +1859,12 @@ document.addEventListener("keydown",e=>{
   }
   const el=e.target, typing=/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
   if(e.key==="Enter" && el.dataset && el.dataset.add){ addAct(el.dataset.add, el.value); el.value=""; setTimeout(()=>{ const n=document.querySelector(`[data-add="${CSS.escape(el.dataset.add)}"]`); if(n) n.focus(); },0); return; }
+  if(e.key==="Enter" && el.dataset && el.dataset.hiadd){
+    const h=S.habits.find(x=>x.id===el.dataset.hiadd), t=el.value.trim();
+    if(h&&t){ (h.items=h.items||[]).push({id:uid(),name:t,at:null}); el.value=""; save(); render();
+      setTimeout(()=>{ const n=document.querySelector(`[data-hiadd="${CSS.escape(h.id)}"]`); if(n) n.focus(); },0); }
+    return;
+  }
   if(e.key==="Enter" && el.dataset && el.dataset.stepadd){ const id=el.dataset.stepadd; addStep(id, el.value); el.value="";
     setTimeout(()=>{ const n=document.querySelector(`[data-stepadd="${CSS.escape(id)}"]`); if(n) n.focus(); },0); return; }
   // Enter confirma o texto em vez de inserir quebra de linha
@@ -1658,6 +1900,22 @@ document.addEventListener("change",e=>{
   if(d.sname){ const s=findSub(d.sname); if(s){ s.name=e.target.value.trim()||"Subcategoria"; save(); render(); } return; }
   if(d.hname){ const h=S.habits.find(x=>x.id===d.hname); if(h){ h.name=e.target.value.trim()||"Hábito"; save(); } return; }
   if(d.htarget){ const h=S.habits.find(x=>x.id===d.htarget); if(h){ h.target=Math.max(1,Math.min(21,+e.target.value||1)); save(); } return; }
+  if(d.hat){ const h=S.habits.find(x=>x.id===d.hat); if(h){ h.at=e.target.value||null; save(); render(); } return; }
+  if(d.hfrom||d.hto){
+    const hid=d.hfrom||d.hto, h=S.habits.find(x=>x.id===hid);
+    if(h){
+      if(d.hfrom) h.from=e.target.value||null; else h.to=e.target.value||null;
+      if(h.from&&h.to&&h.to<h.from){ toast("O fim vem antes do início — o período ficou vazio."); }
+      save(); render();
+    }
+    return;
+  }
+  if(d.hiname){ const [hid,iid]=d.hiname.split(":"); const h=S.habits.find(x=>x.id===hid);
+    const it=h&&(h.items||[]).find(x=>x.id===iid);
+    if(it){ it.name=e.target.value.trim()||"Etapa"; save(); renderWeek(); } return; }
+  if(d.hiat){ const [hid,iid]=d.hiat.split(":"); const h=S.habits.find(x=>x.id===hid);
+    const it=h&&(h.items||[]).find(x=>x.id===iid);
+    if(it){ it.at=e.target.value||null; save(); render(); } return; }
   if(id==="goalpct"){ S.settings.goal=Math.max(10,Math.min(100,+e.target.value||75)); save(); return; }
   if(id==="partial"){ S.settings.partial=Math.max(0,Math.min(100,+e.target.value||50)); save(); return; }
 });
@@ -1742,11 +2000,16 @@ $("#foldSubs").onclick=()=>{
   save(); renderWeek();
 };
 $("#addArea").onclick=()=>{ S.areas.push({id:uid(),name:"Nova área",tone:S.areas.length%2?"personal":"pro",subs:[{id:uid(),name:"Nova subcategoria"}]}); save(); renderSet(); };
-$("#addHabit").onclick=()=>{
+function novaRotina(diaria){
   const n=$("#hname").value.trim(); if(!n){ $("#hname").focus(); return; }
-  S.habits.push({id:uid(),name:n,sub:$("#hsub").value,target:Math.max(1,+$("#htarget").value||3),weight:2});
-  $("#hname").value=""; save(); renderSet(); toast("Hábito criado — aparece em todas as semanas.");
-};
+  const h={id:uid(),name:n,sub:$("#hsub").value,target:Math.max(1,+$("#htarget").value||3),weight:1,mode:diaria?"daily":"freq"};
+  if(diaria){ h.days=[0,1,2,3,4,5,6]; h.at=null; h.from=null; h.to=null; h.items=[]; }
+  S.habits.push(h);
+  $("#hname").value=""; save(); render();
+  toast(diaria?"Rotina diária criada — já aparece na agenda.":"Rotina de frequência criada.");
+}
+$("#addHabit").onclick=()=>novaRotina(false);
+$("#addDaily").onclick=()=>novaRotina(true);
 $("#expjson").onclick=()=> download(JSON.stringify(S,null,2),`painel-semanal-${todayKey()}.json`,"application/json");
 $("#impjson").onclick=()=> $("#file").click();
 $("#file").onchange=e=>{
