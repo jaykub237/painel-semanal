@@ -39,8 +39,12 @@ dias. Terminado o período, a rotina some da agenda, sai do cálculo da semana e
 não aparece no relatório exportado, sem precisar excluir nada.
 
 Na grade da semana as rotinas aparecem compactadas numa pastilha por dia
-(`rotinas 2/4`); o detalhe fica na visão do dia. Rotinas pesam como uma
-atividade comum no percentual.
+(`rotinas 2/4`); o detalhe fica na visão do dia.
+
+Cada rotina tem **peso de 1 a 3**, escolhido no editor. Peso 1 vale como uma
+atividade comum; 2 e 3 pesam mais no percentual e marcam a rotina como
+prioridade na visão do dia — mesma régua das atividades, onde a subetapa
+herda a prioridade da atividade a que pertence.
 
 ## Links
 

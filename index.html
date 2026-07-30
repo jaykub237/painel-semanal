@@ -417,6 +417,8 @@ main{padding:24px 0 80px}
 
 /* ---------- rotinas ---------- */
 .habit.rot .hn{flex:1}
+.habit .hn .chip.w{margin-left:7px;vertical-align:1px}
+.wseg button{padding:5px 9px;font-family:var(--mono);font-size:12px}
 .rotdays{display:flex;gap:3px;flex:none}
 .rd{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-3);display:grid;place-items:center;transition:.12s}
 .rd:hover:not(:disabled){border-color:var(--c);color:var(--ink)}
@@ -893,7 +895,8 @@ function migraRotinas(){
   let mudou=false;
   (S.habits||[]).forEach(h=>{
     if(!h.mode){ h.mode="freq"; mudou=true; }
-    if(h.weight!==1){ h.weight=1; mudou=true; }   // rotina pesa como uma atividade comum
+    // peso 1 é só o ponto de partida — depois é escolha de quem usa, então não sobrescreve
+    if(typeof h.weight!=="number"||h.weight<1||h.weight>3){ h.weight=1; mudou=true; }
     if(h.mode==="daily"&&!Array.isArray(h.days)){ h.days=[0,1,2,3,4,5,6]; mudou=true; }
   });
   return mudou;
@@ -1051,7 +1054,7 @@ function renderWeek(){
               ? `${dias.length===7?"todo dia":dias.map(i=>DIAS[i]).join(" ")}${h.at?` · ${h.at}`:""}${its?` · ${its.length} etapas`:""}${fim}`
               : (h.to?"período encerrado":"fora do período");
             return `<div class="habit rot" style="--c:${subVar(sub.id)}">
-              <div class="hn">${esc(h.name)}<small>${esc(resumo)}</small></div>
+              <div class="hn">${esc(h.name)}${(h.weight||1)>1?`<span class="chip w">peso ${h.weight}</span>`:""}<small>${esc(resumo)}</small></div>
               <div class="rotdays">${[0,1,2,3,4,5,6].map(i=>{
                 const ativo=dias.includes(i), f=ativo?rotFator(h,st,i):0;
                 const cls=!ativo?"off":(f>=1?"on":(f>0?"meio":""));
@@ -1064,7 +1067,7 @@ function renderWeek(){
           const v=w.habits[h.id], c=typeof v==="number"?v:0, full=c>=h.target;
           return `<div class="habit" style="--c:${subVar(sub.id)}">
             <div class="dots">${Array.from({length:Math.min(h.target,10)},(_,i)=>`<i class="${i<c?"on":""}"></i>`).join("")}</div>
-            <div class="hn">${esc(h.name)}<small>meta ${h.target}× · ${full?"cumprido":(h.target-c)+" restante"+(h.target-c>1?"s":"")}</small></div>
+            <div class="hn">${esc(h.name)}${(h.weight||1)>1?`<span class="chip w">peso ${h.weight}</span>`:""}<small>meta ${h.target}× · ${full?"cumprido":(h.target-c)+" restante"+(h.target-c>1?"s":"")}</small></div>
             <div class="counter">
               <button data-hab="${h.id}" data-d="-1" aria-label="Diminuir">−</button>
               <span class="v mono ${full?"full":""}">${c} / ${h.target}</span>
@@ -1323,18 +1326,21 @@ function dayView(i,lista,today,mon){
 function dayItem(e,late){
   if(e.h){
     const h=e.h, it=e.it, sub=findSub(h.sub), feito=!e.pend;
-    return `<div class="dvi rot ${late?"late":""}" data-s="${feito?"done":"todo"}" style="--c:${subVar(h.sub)}">
+    const chaveRot=(h.weight||1)>1;
+    return `<div class="dvi rot ${chaveRot?"chave":""} ${late?"late":""}" data-s="${feito?"done":"todo"}" style="--c:${subVar(h.sub)}">
       <button class="dvbox" data-rot="${h.id}:${it?it.id:""}:${e.dia}" title="${feito?"Feito":"Pendente"} — clique para marcar" aria-label="Rotina ${feito?"feita":"pendente"}">${feito?IC.check:""}</button>
       <button class="dvtxt" data-gorot="${h.id}" title="Ver a rotina na categoria">
         <span class="t">${esc(it?it.name:h.name)}</span>
         <span class="m"><i></i>${esc(sub?sub.name:"")}${it?` · ${esc(h.name)}`:""}</span>
       </button>
-      <span class="dv-chip rotina">rotina</span>
+      <span class="dv-chip ${chaveRot?"":"rotina"}">${chaveRot?"prioridade":"rotina"}</span>
     </div>`;
   }
   const a=e.a, s=e.s, sub=findSub(a.sub);
   const st=s?(s.done?"done":"todo"):a.status;
-  const chave=!s&&(a.weight||1)>1;                      // peso 2 ou 3 = tarefa principal do dia
+  // a subetapa herda a prioridade da atividade: se o capítulo é peso 3, reescrever
+  // a conclusão dele também é o que importa naquele dia
+  const chave=(a.weight||1)>1;
   const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
   const alvo=s?`data-steptoggle="${a.id}:${s.id}"`:`data-cycle="${a.id}"`;
   return `<div class="dvi ${chave?"chave":""} ${late?"late":""}" data-s="${st}" style="--c:${subVar(a.sub)}">
@@ -1617,6 +1623,9 @@ function renderSet(){
           <button data-hmode="${h.id}:freq" aria-pressed="${!diaria}">Frequência</button>
           <button data-hmode="${h.id}:daily" aria-pressed="${diaria}">Diária</button>
         </div>
+        <div class="seg wseg" title="Peso no cálculo — 2 e 3 também marcam a rotina como prioridade no dia">
+          ${[1,2,3].map(n=>`<button data-hweight="${h.id}:${n}" aria-pressed="${(h.weight||1)===n}" aria-label="Peso ${n}">${n}</button>`).join("")}
+        </div>
         ${diaria?"":`<input class="num" type="number" min="1" max="21" value="${h.target}" data-htarget="${h.id}" title="Vezes por semana">
         <span style="font-size:12px;color:var(--ink-3)">×/sem</span>`}
         <button class="ib" data-hdel="${h.id}" title="Excluir rotina">${IC.x}</button>
@@ -1824,7 +1833,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1875,6 +1884,8 @@ document.addEventListener("click",e=>{
       save(); render(); } return; }
   if(d.hdays){ const [hid,q]=d.hdays.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
       h.days = q==="week"?[0,1,2,3,4]:[0,1,2,3,4,5,6]; save(); render(); } return; }
+  if(d.hweight){ const [hid,n]=d.hweight.split(":"); const h=S.habits.find(x=>x.id===hid);
+      if(h){ h.weight=Math.max(1,Math.min(3,Number(n)||1)); save(); render(); } return; }
   if(d.hidel){ const [hid,iid]=d.hidel.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
       h.items=(h.items||[]).filter(x=>x.id!==iid);
       Object.values(S.weeks).forEach(w=>{ const v=w.habits&&w.habits[hid]; if(v&&typeof v==="object"&&v.i) delete v.i[iid]; });
