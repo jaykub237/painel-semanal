@@ -42,6 +42,16 @@ Na grade da semana as rotinas aparecem compactadas numa pastilha por dia
 (`rotinas 2/4`); o detalhe fica na visão do dia. Rotinas pesam como uma
 atividade comum no percentual.
 
+## Links
+
+Atividades e subetapas aceitam um link opcional — o lugar onde a tarefa se
+resolve (um documento, um formulário, um sistema). O botão de corrente na
+atividade ou na subetapa abre o campo; sem esquema, o endereço vira `https://`.
+Só `http` e `https` são aceitos.
+
+O link aparece como atalho na agenda e na visão do dia, abrindo em nova aba.
+Subetapa sem link próprio herda o link da atividade.
+
 ## Segurança
 
 O token fica em `localStorage`, na chave `painel-semanal-sync` — separada dos dados

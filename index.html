@@ -378,6 +378,21 @@ main{padding:24px 0 80px}
 .chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-3)}
 .chip.w{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
 .chip.carry{color:var(--warn);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.chip.lk{display:inline-flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:11px;color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft);text-decoration:none;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip.lk:hover{text-decoration:underline;text-underline-offset:2px}
+.chip.lk svg{width:11px;height:11px;flex:none}
+.linkrow{display:flex;align-items:center;gap:8px;padding:2px 15px 8px 43px}
+.linkrow.step{padding:0 0 6px 22px}
+.linkrow>svg{width:13px;height:13px;color:var(--ink-3);flex:none}
+.linkrow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:5px 9px;font-size:12.8px}
+.linkrow input:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.linkrow input::placeholder{color:var(--ink-3)}
+.go,.sgo{flex:none;display:grid;place-items:center;border-radius:5px;color:var(--ink-3);text-decoration:none}
+.go{width:20px;height:20px;margin-top:1px}
+.sgo{width:18px;height:18px;margin-top:3px}
+.go svg,.sgo svg{width:12px;height:12px}
+.go:hover,.sgo:hover{background:var(--accent-soft);color:var(--accent)}
+.sx.on{opacity:1;color:var(--accent)}
 .chip.due{color:var(--ink-2)}
 .chip.late{color:var(--crit);background:color-mix(in srgb,var(--crit) 12%,transparent);border-color:transparent}
 .irow{display:flex;gap:2px;flex:none;opacity:0;transition:.15s}
@@ -765,6 +780,27 @@ const $=(s,r)=> (r||document).querySelector(s);
 const $$=(s,r)=> Array.from((r||document).querySelectorAll(s));
 const esc=s=> String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
+/* ---------- links ---------- */
+// Só http e https entram: um "javascript:" colado aqui viraria código rodando no clique.
+// Sem esquema, assume https — ninguém digita o prefixo à mão.
+function normUrl(v){
+  v=(v||"").trim();
+  if(!v) return null;
+  if(!/^[a-z][a-z0-9+.-]*:/i.test(v)) v="https://"+v;
+  try{
+    const u=new URL(v);
+    if(u.protocol!=="http:"&&u.protocol!=="https:") return false;
+    return u.href;
+  }catch(e){ return false; }
+}
+function urlLabel(u){
+  try{
+    const x=new URL(u);
+    const h=x.hostname.replace(/^www\./,"");
+    return h+((x.pathname&&x.pathname!=="/")||x.search?" ›":"");
+  }catch(e){ return u; }
+}
+
 /* ---------- semanas ISO ---------- */
 function isoKey(d){
   const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
@@ -947,6 +983,7 @@ const IC={
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4.5 4.5 0 0 0 6.36 0l2.4-2.4a4.5 4.5 0 0 0-6.36-6.36l-1.2 1.2"/><path d="M13.5 10.5a4.5 4.5 0 0 0-6.36 0l-2.4 2.4a4.5 4.5 0 0 0 6.36 6.36l1.2-1.2"/></svg>',
   eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>',
   eyeoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 6.1A9.7 9.7 0 0 1 12 5.5c6.4 0 10 6.5 10 6.5a17 17 0 0 1-3.3 4M6.2 7.9A16.4 16.4 0 0 0 2 12s3.6 6.5 10 6.5a9.9 9.9 0 0 0 4.1-.86"/><path d="M4 4l16 16"/></svg>'
 };
@@ -1099,10 +1136,20 @@ function renderAgenda(w){
   w.acts.forEach(a=>{
     const steps=a.steps||[];
     const bateNaAtividade=casa(a.text)||steps.some(s=>casa(s.text));
+    const temStepComDia=steps.some(x=> x.due!=null && x.due>=0 && x.due<=6);
     steps.forEach(s=>{
-      if(s.due==null || s.due<0 || s.due>6) return;
+      const semDiaPropria=(s.due==null || s.due<0 || s.due>6);
       if(hd && s.done) return;
       if(!(casa(s.text)||casa(a.text))) return;
+      // subetapa sem dia numa atividade cujo cronograma está nas etapas: sem isto ela
+      // não aparecia em lugar nenhum — a atividade-mãe não vai para "sem dia" nesse caso
+      if(semDiaPropria){
+        if(!(a.due==null && temStepComDia)) return;
+        porSub[a.sub]=(porSub[a.sub]||0)+(s.done?0:1);
+        if(fs && a.sub!==fs) return;
+        semDia.push({a,s,pend:!s.done});
+        return;
+      }
       porSub[a.sub]=(porSub[a.sub]||0)+(s.done?0:1);
       if(fs && a.sub!==fs) return;
       cols[s.due].push({a,s,pend:!s.done});
@@ -1296,6 +1343,7 @@ function dayItem(e,late){
       <span class="t">${esc(s?s.text:a.text)}</span>
       <span class="m"><i></i>${esc(sub?sub.name:"")}${s?` · ${esc(a.text)}`:""}${!s&&steps.length?` · ${sdone}/${steps.length} subetapas`:""}${late?" · atrasada":""}</span>
     </button>
+    ${linkBtn(s?(s.url||a.url):a.url)}
     ${chave?`<span class="dv-chip">prioridade</span>`:""}
   </div>`;
 }
@@ -1321,6 +1369,7 @@ function agendaItem(e,late){
         <span>${s.at?`<time>${esc(s.at)}</time> `:""}${esc(s.text)}</span>
         <em>${esc(a.text)}${late?" · atrasada":""}</em>
       </button>
+      ${linkBtn(s.url||a.url)}
     </div>`;
   }
   const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
@@ -1330,7 +1379,12 @@ function agendaItem(e,late){
       <span>${a.at?`<time>${esc(a.at)}</time> `:""}${esc(a.text)}</span>
       <em>${esc(sub?sub.name:"")}${steps.length?` · <s>${sdone}/${steps.length}</s>`:""}${late?" · atrasada":""}</em>
     </button>
+    ${linkBtn(a.url)}
   </div>`;
+}
+// atalho para abrir o lugar onde a tarefa se resolve, sem passar pelo cartão
+function linkBtn(u){
+  return u?`<a class="go" href="${esc(u)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(u)}" aria-label="Abrir o link">${IC.link}</a>`:"";
 }
 
 function itemHTML(a){
@@ -1342,6 +1396,7 @@ function itemHTML(a){
   if(a.due!=null) chips.push(`<span class="chip due ${late?"late":""}">${DIAS[a.due]}</span>`);
   if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
   if(a.status==="skip") chips.push(`<span class="chip">adiada</span>`);
+  if(a.url) chips.push(`<a class="chip lk" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(a.url)}">${IC.link}${esc(urlLabel(a.url))}</a>`);
   // o horário só faz sentido depois que há um dia — por isso o campo aparece junto do chip do dia
   if(a.due!=null) chips.push(`<input class="timein ${a.at?"set":""}" type="time" value="${esc(a.at||"")}" data-attime="${a.id}" title="Horário desejado" aria-label="Horário da atividade">`);
   const open=!!a.open;
@@ -1355,11 +1410,18 @@ function itemHTML(a){
       </div>
       <div class="irow">
         <button class="ib ${open?"open":""}" data-steps="${a.id}" data-on="${steps.length?1:0}" aria-expanded="${open}" title="${steps.length?"Mostrar subetapas":"Dividir em subetapas"}">${IC.chev}</button>
+        <button class="ib" data-link="${a.id}" data-on="${a.url?1:0}" aria-expanded="${!!a.linkOpen}" title="${a.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
         <button class="ib" data-weight="${a.id}" title="Alternar peso (1 → 2 → 3)">${IC.up}</button>
         <button class="ib" data-due="${a.id}" title="Definir dia-alvo">${IC.more}</button>
         <button class="ib" data-del="${a.id}" title="Excluir">${IC.x}</button>
       </div>
     </div>
+    ${a.linkOpen?`<div class="linkrow">
+      ${IC.link}
+      <input type="url" inputmode="url" data-linkval="${a.id}" value="${esc(a.url||"")}"
+        placeholder="Cole o endereço — ex: drive.google.com/… · Enter para salvar" autocomplete="off" aria-label="Link da atividade">
+      ${a.url?`<button class="ib" data-linkdel="${a.id}" title="Remover o link">${IC.x}</button>`:""}
+    </div>`:""}
     ${open?`<div class="steps">
       ${steps.map(s=>{
         const slate=s.due!=null && !s.done && cur===todayKey() && s.due < ((new Date().getDay()||7)-1);
@@ -1367,10 +1429,18 @@ function itemHTML(a){
         <span class="sgrip" data-stepgrip="${a.id}:${s.id}" draggable="true" title="Arrastar para reordenar">${IC.grip}</span>
         <button class="sbox" data-steptoggle="${a.id}:${s.id}" aria-label="${s.done?"Concluída":"Pendente"}">${IC.check}</button>
         <textarea class="stx" rows="1" data-steptext="${a.id}:${s.id}" aria-label="Descrição da subetapa">${esc(s.text)}</textarea>
+        ${s.url?`<a class="sgo" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(s.url)}">${IC.link}</a>`:""}
         ${s.due!=null?`<input class="timein ${s.at?"set":""}" type="time" value="${esc(s.at||"")}" data-attime="${a.id}:${s.id}" title="Horário desejado" aria-label="Horário da subetapa">`:""}
         <button class="sday ${s.due!=null?"set":""} ${slate?"late":""}" data-stepdue="${a.id}:${s.id}" title="Dia-alvo da subetapa">${s.due!=null?DIAS[s.due]:"dia"}</button>
+        <button class="sx ${s.url?"on":""}" data-slink="${a.id}:${s.id}" title="${s.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
         <button class="sx" data-stepdel="${a.id}:${s.id}" title="Excluir subetapa">${IC.x}</button>
-      </div>`;}).join("")}
+      </div>
+      ${s.linkOpen?`<div class="linkrow step">
+        ${IC.link}
+        <input type="url" inputmode="url" data-slinkval="${a.id}:${s.id}" value="${esc(s.url||"")}"
+          placeholder="Endereço desta subetapa — Enter para salvar" autocomplete="off" aria-label="Link da subetapa">
+        ${s.url?`<button class="ib" data-slinkdel="${a.id}:${s.id}" title="Remover o link">${IC.x}</button>`:""}
+      </div>`:""}`;}).join("")}
       <div class="stepadd"><input type="text" data-stepadd="${a.id}" placeholder="Nova subetapa — Enter para salvar" autocomplete="off"></div>
     </div>`:""}
   </li>`;
@@ -1698,8 +1768,8 @@ function carryOver(){
   (p.acts||[]).filter(a=> a.status==="todo"||a.status==="doing"||a.status==="skip").forEach(a=>{
     if(w.acts.some(x=> x.text===a.text && x.sub===a.sub)) return;
     // só as subetapas que ficaram pendentes vêm junto — o que já foi feito, foi
-    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null}));
-    w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,steps,carried:true,created:Date.now()});
+    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null}));
+    w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,steps,carried:true,created:Date.now()});
     c++;
   });
   save(); renderWeek();
@@ -1754,7 +1824,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1773,6 +1843,12 @@ document.addEventListener("click",e=>{
   if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){ s.done=!s.done; syncFromSteps(a); save(); renderWeek(); } return; }
   if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){ a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek(); } return; }
   if(d.stepdue){ const {s}=step(d.stepdue); if(s){ s.due = s.due==null?0 : (s.due>=6? null : s.due+1); save(); renderWeek(); } return; }
+  if(d.link){ const a=act(d.link); if(a){ a.linkOpen=!a.linkOpen; save(); renderWeek();
+      if(a.linkOpen) setTimeout(()=>{ const i=document.querySelector(`[data-linkval="${CSS.escape(d.link)}"]`); if(i){ i.focus(); i.select(); } },0); } return; }
+  if(d.slink){ const {s}=step(d.slink); if(s){ s.linkOpen=!s.linkOpen; save(); renderWeek();
+      if(s.linkOpen) setTimeout(()=>{ const i=document.querySelector(`[data-slinkval="${CSS.escape(d.slink)}"]`); if(i){ i.focus(); i.select(); } },0); } return; }
+  if(d.linkdel){ const a=act(d.linkdel); if(a){ a.url=null; a.linkOpen=false; save(); renderWeek(); toast("Link removido."); } return; }
+  if(d.slinkdel){ const {s}=step(d.slinkdel); if(s){ s.url=null; s.linkOpen=false; save(); renderWeek(); toast("Link removido."); } return; }
   if(d.agday!=null && "agday" in d){ S.settings.agendaDay = d.agday===""?null:(d.agday==="none"?"none":Number(d.agday)); save(); renderAgenda(week(cur)); return; }
   if("agsub" in d){ S.settings.agendaSub = d.agsub||null; save(); renderAgenda(week(cur)); return; }
   if(d.agfold){ S.settings.agendaFold=!S.settings.agendaFold; save(); renderAgenda(week(cur)); return; }
@@ -1859,6 +1935,13 @@ document.addEventListener("keydown",e=>{
   }
   const el=e.target, typing=/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
   if(e.key==="Enter" && el.dataset && el.dataset.add){ addAct(el.dataset.add, el.value); el.value=""; setTimeout(()=>{ const n=document.querySelector(`[data-add="${CSS.escape(el.dataset.add)}"]`); if(n) n.focus(); },0); return; }
+  if(e.key==="Enter" && el.dataset && (el.dataset.linkval||el.dataset.slinkval)){ e.preventDefault(); el.blur(); return; }
+  if(e.key==="Escape" && el.dataset && (el.dataset.linkval||el.dataset.slinkval)){
+    const ehStep=!!el.dataset.slinkval, ref=el.dataset.linkval||el.dataset.slinkval;
+    const alvo=ehStep? step(ref).s : act(ref);
+    if(alvo){ alvo.linkOpen=false; save(); renderWeek(); }
+    return;
+  }
   if(e.key==="Enter" && el.dataset && el.dataset.hiadd){
     const h=S.habits.find(x=>x.id===el.dataset.hiadd), t=el.value.trim();
     if(h&&t){ (h.items=h.items||[]).push({id:uid(),name:t,at:null}); el.value=""; save(); render();
@@ -1916,6 +1999,17 @@ document.addEventListener("change",e=>{
   if(d.hiat){ const [hid,iid]=d.hiat.split(":"); const h=S.habits.find(x=>x.id===hid);
     const it=h&&(h.items||[]).find(x=>x.id===iid);
     if(it){ it.at=e.target.value||null; save(); render(); } return; }
+  if(d.linkval||d.slinkval){
+    const ehStep=!!d.slinkval, ref=d.linkval||d.slinkval;
+    const alvo=ehStep? step(ref).s : act(ref);
+    if(!alvo) return;
+    const u=normUrl(e.target.value);
+    if(u===false){ toast("Endereço inválido — use um link http ou https."); e.target.focus(); return; }
+    alvo.url=u; alvo.linkOpen=false;
+    save(); renderWeek();
+    toast(u?"Link salvo.":"Link removido.");
+    return;
+  }
   if(id==="goalpct"){ S.settings.goal=Math.max(10,Math.min(100,+e.target.value||75)); save(); return; }
   if(id==="partial"){ S.settings.partial=Math.max(0,Math.min(100,+e.target.value||50)); save(); return; }
 });
