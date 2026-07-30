@@ -44,6 +44,28 @@
   --shadow:0 1px 2px rgba(16,24,32,.06), 0 4px 16px rgba(16,24,32,.05);
 }
 
+/* Paleta categórica das subcategorias. A ordem dos slots é o mecanismo de segurança
+   para daltonismo — foi validada par a par nos dois modos, não escolhida por gosto.
+   Trocar a ordem exige revalidar. */
+:root{
+  --k1:#2a78d6; --k2:#eb6834; --k3:#1baf7a; --k4:#eda100;
+  --k5:#e87ba4; --k6:#008300; --k7:#4a3aa7; --k8:#e34948;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --k1:#3987e5; --k2:#d95926; --k3:#199e70; --k4:#c98500;
+    --k5:#d55181; --k6:#008300; --k7:#9085e9; --k8:#e66767;
+  }
+}
+:root[data-theme="dark"]{
+  --k1:#3987e5; --k2:#d95926; --k3:#199e70; --k4:#c98500;
+  --k5:#d55181; --k6:#008300; --k7:#9085e9; --k8:#e66767;
+}
+:root[data-theme="light"]{
+  --k1:#2a78d6; --k2:#eb6834; --k3:#1baf7a; --k4:#eda100;
+  --k5:#e87ba4; --k6:#008300; --k7:#4a3aa7; --k8:#e34948;
+}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 button,input,textarea,select{font:inherit;color:inherit}
@@ -145,6 +167,51 @@ main{padding:24px 0 80px}
 .days.solo .ai.substep .atxt{font-size:12.8px}
 .flash{animation:flash 1.4s ease}
 @keyframes flash{0%,60%{background:var(--accent-soft)}100%{background:transparent}}
+
+/* ---------- agenda: refinamento visual ---------- */
+/* A cor identifica a subcategoria e nunca carrega sentido sozinha: sempre há
+   o nome ao lado (no item, na legenda). Estado — feito, em andamento, atrasado —
+   continua nas cores de status, que não se misturam com as de categoria. */
+.agtoggle{display:flex;align-items:center;gap:9px;padding:3px 7px;margin:-3px -7px;border-radius:7px}
+.agtoggle:hover{background:var(--surface-2)}
+.agtoggle svg{width:14px;height:14px;color:var(--ink-3);transition:transform .18s;flex:none}
+.agtoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.agenda.fold .days,.agenda.fold .agleg{display:none}
+.agenda.fold .agenda-head{padding-bottom:12px}
+
+.agleg{display:flex;flex-wrap:wrap;gap:6px;padding:0 15px 12px;border-top:1px solid var(--line);padding-top:11px;margin-top:-1px}
+.agleg .lg{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);border:1px solid var(--line);border-radius:99px;padding:2px 10px 2px 8px;background:var(--surface-2)}
+.agleg .lg:hover{border-color:var(--c);color:var(--ink)}
+.agleg .lg i{width:8px;height:8px;border-radius:99px;background:var(--c);flex:none}
+.agleg .lg b{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.agleg .lg[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);color:var(--ink)}
+/* no telefone, oito chips empilhados comiam meia tela — viram uma fita rolável */
+@media (max-width:620px){
+  .agleg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:11px}
+  .agleg .lg{flex:none}
+}
+
+.day{gap:4px;padding:10px 11px 13px}
+.day.wknd{background:color-mix(in srgb,var(--ink-3) 6%,transparent)}
+.day.today{background:color-mix(in srgb,var(--accent) 9%,transparent);box-shadow:inset 0 2px 0 var(--accent)}
+.day.past .dayhead{opacity:.72}
+.dayhead .n{font-family:var(--mono);background:var(--line);color:var(--ink-2);border-radius:99px;padding:0 5px;font-size:9.5px;line-height:15px}
+.day.today .dayhead .n{background:var(--accent);color:var(--surface)}
+
+/* trilho colorido: a identidade da subcategoria fica na borda, não no texto */
+.ai{border-radius:7px;padding:4px 6px 4px 9px;position:relative;transition:background .12s}
+.ai::before{content:"";position:absolute;left:1px;top:5px;bottom:5px;width:2.5px;border-radius:2px;background:var(--c);opacity:.9}
+.ai:hover{background:color-mix(in srgb,var(--c) 10%,transparent)}
+.ai:hover .atxt{color:var(--ink)}
+.ai[data-s="done"]::before,.ai[data-s="skip"]::before{opacity:.3}
+.ai.substep{padding-left:16px}
+.ai.substep::before{left:8px;opacity:.55}
+.ai.substep::after{content:"";position:absolute;left:2px;top:11px;width:4px;height:1.5px;border-radius:2px;background:var(--c);opacity:.5}
+.ai .atxt em{display:flex;align-items:center;gap:5px;color:var(--ink-3)}
+.ai .atxt em::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--c);flex:none}
+.ai.substep .atxt em::before{border-radius:2px}
+.ai.late .atxt em{color:var(--crit)}
+.ai.late .atxt em::before{background:var(--crit)}
 
 /* align-items:start — sem isso o cartão recolhido estica até a altura do vizinho aberto */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
@@ -346,6 +413,11 @@ table.hist tr:last-child td{border-bottom:none}
 .setrow input[type=text]:focus{border-color:var(--accent);background:var(--surface);outline:none}
 .setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
 .indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
+.swatches{display:flex;gap:3px;flex:none}
+.sw{width:14px;height:14px;border-radius:4px;background:var(--c);border:2px solid transparent;opacity:.45;transition:.12s}
+.sw:hover{opacity:.85;transform:scale(1.12)}
+.sw[aria-pressed="true"]{opacity:1;border-color:var(--surface);box-shadow:0 0 0 1.5px var(--c)}
+@media (max-width:620px){.swatches{display:none}}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{padding:5px 12px;font-size:12.5px;color:var(--ink-2);border-right:1px solid var(--line)}
 .seg button:last-child{border-right:none}
@@ -616,7 +688,7 @@ const todayKey=()=> isoKey(new Date());
 /* ---------- estado ---------- */
 const DEFAULT={
   version:1,
-  settings:{theme:"auto",goal:75,partial:50,hideDone:false,folded:{},foldedSubs:{},agendaDay:null},
+  settings:{theme:"auto",goal:75,partial:50,hideDone:false,folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
   areas:[
     {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
       {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
@@ -653,6 +725,23 @@ const allSubs=()=> S.areas.flatMap(a=> a.subs.map(s=> ({...s,area:a})));
 // devolve o objeto vivo do estado — nunca uma cópia, senão renomear não persiste
 function findSub(id){ for(const a of S.areas){ const s=a.subs.find(x=>x.id===id); if(s) return s; } return null; }
 const subArea=id=> S.areas.find(a=> a.subs.some(s=>s.id===id))||null;
+
+/* ---------- cores das subcategorias ---------- */
+// Oito slots de uma paleta validada para daltonismo nos dois temas. O slot fica
+// gravado na subcategoria, então a cor não dança quando outra é criada ou removida.
+const KN=8;
+function ensureColors(){
+  const uso=new Array(KN+1).fill(0);
+  allSubs().forEach(s=>{ if(s.color>=1&&s.color<=KN) uso[s.color]++; });
+  let mudou=false;
+  S.areas.forEach(a=> a.subs.forEach(s=>{
+    if(s.color>=1&&s.color<=KN) return;
+    let slot=1; for(let i=2;i<=KN;i++) if(uso[i]<uso[slot]) slot=i;   // o menos usado
+    s.color=slot; uso[slot]++; mudou=true;
+  }));
+  return mudou;
+}
+const subVar=id=>{ const s=findSub(id); return "var(--k"+((s&&s.color)||1)+")"; };
 
 /* ---------- cálculo ---------- */
 // Uma atividade com subetapas vale a fração de subetapas concluídas — mais fiel
@@ -735,7 +824,7 @@ function renderWeek(){
       const sopen=!S.settings.foldedSubs[sub.id];
       const pendentes=w.acts.filter(a=> a.sub===sub.id && a.status!=="done" && a.status!=="skip").length;
       const temObj=(w.goals[sub.id]||"").trim().length>0;
-      return `<article class="card ${sopen?"":"fold"}" style="--c:var(--${area.tone})" data-sub="${sub.id}">
+      return `<article class="card ${sopen?"":"fold"}" style="--c:${subVar(sub.id)}" data-sub="${sub.id}">
         <div class="card-head">
           <div class="card-title">
             <button class="ctoggle" data-foldsub="${sub.id}" aria-expanded="${sopen}" aria-controls="body-${sub.id}" title="${sopen?"Recolher":"Expandir"} ${esc(sub.name)}">${IC.chev}</button>
@@ -743,7 +832,7 @@ function renderWeek(){
             <button class="kill" data-sdel="${sub.id}" title="Excluir subcategoria">${IC.x}</button>
             <span class="pct mono" style="color:${r.pct==null?"var(--ink-3)":r.pct>=100?"var(--ok)":"var(--ink)"}">${pctTxt}</span>
           </div>
-          <div class="bar"><i style="width:${r.pct||0}%;background:var(--${area.tone})"></i></div>
+          <div class="bar"><i style="width:${r.pct||0}%;background:${subVar(sub.id)}"></i></div>
           <div class="meta"><span>${r.done}/${r.count} atividades</span>${hs.length?`<span>${hs.length} hábito${hs.length>1?"s":""}</span>`:""}${
             sopen?"":`${pendentes?`<span>${pendentes} pendente${pendentes>1?"s":""}</span>`:""}${temObj?`<span>com objetivo</span>`:""}`}</div>
         </div>
@@ -754,7 +843,7 @@ function renderWeek(){
         </div>
         ${hs.length?`<div class="subhead">Hábitos</div>`+hs.map(h=>{
           const c=w.habits[h.id]||0, full=c>=h.target;
-          return `<div class="habit" style="--c:var(--${area.tone})">
+          return `<div class="habit" style="--c:${subVar(sub.id)}">
             <div class="dots">${Array.from({length:Math.min(h.target,10)},(_,i)=>`<i class="${i<c?"on":""}"></i>`).join("")}</div>
             <div class="hn">${esc(h.name)}<small>meta ${h.target}× · ${full?"cumprido":(h.target-c)+" restante"+(h.target-c>1?"s":"")}</small></div>
             <div class="counter">
@@ -776,7 +865,7 @@ function renderWeek(){
     // recolhida, a área vira uma fita de chips — o percentual de cada frente continua à vista
     const folded=area.subs.map(sub=>{
       const r=subScore(sub.id,cur);
-      return `<button class="fold-chip" data-open="${area.id}:${sub.id}" style="--c:var(--${area.tone})" title="Abrir ${esc(area.name)} nesta subcategoria">
+      return `<button class="fold-chip" data-open="${area.id}:${sub.id}" style="--c:${subVar(sub.id)}" title="Abrir ${esc(area.name)} nesta subcategoria">
         <span class="fb"><i style="width:${r.pct||0}%"></i></span>${esc(sub.name)} <b>${r.pct==null?"—":r.pct+"%"}</b>
       </button>`;
     }).join("");
@@ -819,6 +908,9 @@ function renderAgenda(w){
   // Duas fontes de entrada: a atividade (pelo dia dela) e cada subetapa que tenha dia próprio.
   // Uma atividade sem dia cujas subetapas já estão distribuídas não vai para "sem dia" —
   // o cronograma dela está expresso nas etapas.
+  // porSub alimenta a legenda e é contado ANTES do filtro por subcategoria,
+  // senão o chip que tira o filtro sumiria junto com os itens.
+  const porSub={}, fs=S.settings.agendaSub||null;
   w.acts.forEach(a=>{
     const steps=a.steps||[];
     const bateNaAtividade=casa(a.text)||steps.some(s=>casa(s.text));
@@ -826,11 +918,16 @@ function renderAgenda(w){
       if(s.due==null || s.due<0 || s.due>6) return;
       if(hd && s.done) return;
       if(!(casa(s.text)||casa(a.text))) return;
+      porSub[a.sub]=(porSub[a.sub]||0)+(s.done?0:1);
+      if(fs && a.sub!==fs) return;
       cols[s.due].push({a,s,pend:!s.done});
     });
     if(hd && a.status==="done") return;
     if(!bateNaAtividade) return;
     const e={a,pend:a.status!=="done"&&a.status!=="skip"};
+    if(a.due!=null && a.due>=0 && a.due<=6) porSub[a.sub]=(porSub[a.sub]||0)+(e.pend?1:0);
+    else if(!steps.some(s=> s.due!=null)) porSub[a.sub]=(porSub[a.sub]||0)+(e.pend?1:0);
+    if(fs && a.sub!==fs) return;
     if(a.due!=null && a.due>=0 && a.due<=6) cols[a.due].push(e);
     else if(!steps.some(s=> s.due!=null)) semDia.push(e);
   });
@@ -854,7 +951,7 @@ function renderAgenda(w){
     const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+i);
     const list=cols[i].slice().sort(ordena);
     const n=cnt(list);
-    const cls=i===today?"today":(today>=0&&i<today?"past":"");
+    const cls=[i===today?"today":(today>=0&&i<today?"past":""), i>=5?"wknd":""].filter(Boolean).join(" ");
     return `<div class="day ${cls}">
       <div class="dayhead"><span>${DIAS[i]}</span><b>${d.getUTCDate()}</b>${n?`<span class="n mono">${n}</span>`:""}</div>
       ${list.length?list.map(e=> agendaItem(e, today>=0 && i<today && e.pend)).join(""):`<span class="none-txt">—</span>`}
@@ -869,15 +966,29 @@ function renderAgenda(w){
       return `<button data-agday="${v}" aria-pressed="${ativo}" class="${v!==""&&Number(v)===today?"hoje":""}">${r}${qtd?`<i>${qtd}</i>`:""}</button>`;
     }).join("");
 
-  $("#agenda").innerHTML=`<div class="agenda">
+  // legenda: só as subcategorias que aparecem na agenda desta semana
+  const legenda=allSubs().filter(s=> porSub[s.id]!=null).map(s=>{
+    const n=porSub[s.id]||0, on=fs===s.id;
+    return `<button class="lg" data-agsub="${s.id}" aria-pressed="${on}" style="--c:${subVar(s.id)}"
+      title="${on?"Mostrar todas as subcategorias":"Ver só "+esc(s.name)+" na agenda"}">
+      <i></i>${esc(s.name)}${n?`<b>${n}</b>`:""}
+    </button>`;
+  }).join("");
+  const min=!!S.settings.agendaFold;
+
+  $("#agenda").innerHTML=`<div class="agenda ${min?"fold":""}">
     <div class="agenda-head">
-      <h2>Agenda da semana</h2>
+      <button class="agtoggle" data-agfold="1" aria-expanded="${!min}" aria-controls="agenda-corpo"
+        title="${min?"Expandir":"Minimizar"} a agenda">
+        ${IC.chev}<h2>Agenda da semana</h2>
+      </button>
       <span class="sum">${isNow
         ? `<b>${hoje}</b> para hoje · <b>${restoSemana}</b> no resto da semana${atrasadas?` · <span class="od">${atrasadas} em atraso</span>`:""}`
         : `<b>${cnt(cols.flat())}</b> com dia marcado · <b>${cnt(semDia)}</b> sem dia`}</span>
-      <div class="dayfilter">${filtro}</div>
+      ${min?"":`<div class="dayfilter">${filtro}</div>`}
     </div>
-    <div class="days ${foco!=null?"solo":""}">
+    ${min||!legenda?"":`<div class="agleg">${legenda}${fs?`<button class="lg" data-agsub="" title="Mostrar todas as subcategorias" style="--c:var(--ink-3)"><i></i>todas</button>`:""}</div>`}
+    <div class="days ${foco!=null?"solo":""}" id="agenda-corpo">
       ${dias.map(dayCol).join("")}
       ${mostraSemDia?`<div class="day none">
         <div class="dayhead"><span>sem dia</span>${cnt(semDia)?`<span class="n mono">${cnt(semDia)}</span>`:""}</div>
@@ -888,8 +999,8 @@ function renderAgenda(w){
 }
 function agendaItem(e,late){
   const a=e.a, s=e.s;
-  const ar=subArea(a.sub), sub=findSub(a.sub);
-  const cor=`--c:var(--${ar?ar.tone:"ink-3"})`;
+  const sub=findSub(a.sub);
+  const cor=`--c:${subVar(a.sub)}`;
   if(s){
     // subetapa com dia próprio: o contexto é a atividade-mãe, não a subcategoria
     return `<div class="ai substep ${late?"late":""}" data-s="${s.done?"done":"todo"}" style="${cor}">
@@ -1102,6 +1213,7 @@ function renderSet(){
       </div>
       <div class="indent" style="--c:var(--${a.tone})">
         ${a.subs.map((s,si)=>`<div class="setrow">
+          <div class="swatches">${Array.from({length:KN},(_,i)=>`<button class="sw" data-scolor="${s.id}:${i+1}" aria-pressed="${s.color===i+1}" style="--c:var(--k${i+1})" title="Cor ${i+1} para ${esc(s.name)}"></button>`).join("")}</div>
           <div class="grow"><input type="text" value="${esc(s.name)}" data-sname="${s.id}"></div>
           <button class="ib" data-smove="${s.id}" data-d="-1" ${si===0?"disabled style=opacity:.3":""} title="Subir">${IC.up}</button>
           <button class="ib" data-smove="${s.id}" data-d="1" ${si===a.subs.length-1?"disabled style=opacity:.3":""} title="Descer">${IC.down}</button>
@@ -1130,6 +1242,7 @@ function renderSet(){
 }
 
 function render(){
+  if(ensureColors()) save();   // subcategorias novas ou vindas de backup antigo ganham slot aqui
   $$(".tab").forEach(t=> t.setAttribute("aria-selected", t.dataset.view===view));
   $("#view-week").classList.toggle("hidden",view!=="week");
   $("#view-hist").classList.toggle("hidden",view!=="hist");
@@ -1280,7 +1393,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1300,6 +1413,9 @@ document.addEventListener("click",e=>{
   if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){ a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek(); } return; }
   if(d.stepdue){ const {s}=step(d.stepdue); if(s){ s.due = s.due==null?0 : (s.due>=6? null : s.due+1); save(); renderWeek(); } return; }
   if(d.agday!=null && "agday" in d){ S.settings.agendaDay = d.agday===""?null:(d.agday==="none"?"none":Number(d.agday)); save(); renderAgenda(week(cur)); return; }
+  if("agsub" in d){ S.settings.agendaSub = d.agsub||null; save(); renderAgenda(week(cur)); return; }
+  if(d.agfold){ S.settings.agendaFold=!S.settings.agendaFold; save(); renderAgenda(week(cur)); return; }
+  if(d.scolor){ const [sid,n]=d.scolor.split(":"); const s=findSub(sid); if(s){ s.color=Number(n); save(); renderSet(); } return; }
   if(d.fold){ S.settings.folded[d.fold]=!S.settings.folded[d.fold]; save(); renderWeek(); return; }
   if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
   if(d.open){ openSub(d.open); return; }
