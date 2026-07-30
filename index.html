@@ -176,7 +176,7 @@ main{padding:24px 0 80px}
 .agtoggle:hover{background:var(--surface-2)}
 .agtoggle svg{width:14px;height:14px;color:var(--ink-3);transition:transform .18s;flex:none}
 .agtoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
-.agenda.fold .days,.agenda.fold .agleg{display:none}
+.agenda.fold .days,.agenda.fold .dayview,.agenda.fold .agleg{display:none}
 .agenda.fold .agenda-head{padding-bottom:12px}
 
 .agleg{display:flex;flex-wrap:wrap;gap:6px;padding:0 15px 12px;border-top:1px solid var(--line);padding-top:11px;margin-top:-1px}
@@ -213,6 +213,61 @@ main{padding:24px 0 80px}
 .ai.late .atxt em{color:var(--crit)}
 .ai.late .atxt em::before{background:var(--crit)}
 
+/* ---------- visão do dia ---------- */
+.dayview{border-top:1px solid var(--line);padding:16px 18px 20px}
+.dv-head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:11px}
+.dv-when{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-right:auto}
+.dv-when b{font-size:21px;font-weight:640;letter-spacing:-.02em;text-transform:capitalize}
+.dv-when span{font-size:13.5px;color:var(--ink-3)}
+.dv-when em{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 7px;border-radius:99px}
+.dv-stat{text-align:right}
+.dv-pct{font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.dv-leg{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.dv-bar{display:flex;height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:18px}
+.dv-bar i{display:block;height:100%;transition:width .3s ease}
+.dv-bar .feito{background:var(--ok)}
+.dv-bar .andando{background:repeating-linear-gradient(135deg,var(--warn) 0 4px,transparent 4px 8px);opacity:.85}
+.dayview.passou .dv-pct{color:var(--ink-2)}
+
+/* linha do tempo não precisa da largura toda da tela — passa de 900px vira leitura ruim */
+.dv-track{display:flex;flex-direction:column;gap:2px;max-width:880px}
+/* as sem horário não têm ordem entre si: cabem lado a lado e encurtam o dia */
+.dv-slot.livre .dv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:6px}
+.dv-slot{display:flex;gap:14px;padding:7px 0;border-top:1px solid var(--line)}
+.dv-slot:first-child{border-top:none}
+.dv-time{flex:none;width:62px;padding-top:7px;font-size:13px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.dv-slot.livre .dv-time{font-size:10px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.dv-slot.venceu .dv-time{color:var(--crit)}
+.dv-cards{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+
+.dvi{display:flex;align-items:flex-start;gap:11px;padding:10px 13px 10px 12px;border:1px solid var(--line);border-left:3px solid var(--c);border-radius:9px;background:var(--surface);transition:.14s}
+.dvi:hover{border-color:var(--line-2);border-left-color:var(--c);background:color-mix(in srgb,var(--c) 6%,var(--surface))}
+.dvi.chave{background:color-mix(in srgb,var(--c) 7%,var(--surface));border-left-width:5px}
+.dvi.chave .t{font-weight:600}
+.dvi[data-s="done"],.dvi[data-s="skip"]{background:var(--surface-2);border-left-color:color-mix(in srgb,var(--c) 45%,transparent)}
+.dvi .dvbox{flex:none;width:19px;height:19px;margin-top:1px;border-radius:6px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent;transition:.15s}
+.dvi .dvbox:hover{border-color:var(--ink-3)}
+.dvi[data-s="doing"] .dvbox{border-color:var(--warn);color:var(--warn)}
+.dvi[data-s="done"] .dvbox{border-color:var(--ok);background:var(--ok);color:#fff}
+.dvi[data-s="skip"] .dvbox{border-style:dashed;background:var(--line);color:var(--ink-3)}
+.dvi .dvbox svg{width:12px;height:12px}
+.dvi .dvtxt{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;gap:3px}
+.dvi .t{font-size:14.5px;line-height:1.35;overflow-wrap:anywhere}
+.dvi[data-s="done"] .t{color:var(--ink-3);text-decoration:line-through}
+.dvi[data-s="skip"] .t{color:var(--ink-3)}
+.dvi .m{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-3);overflow-wrap:anywhere}
+.dvi .m i{width:7px;height:7px;border-radius:99px;background:var(--c);flex:none}
+.dvi.late .m{color:var(--crit)}
+.dvi:hover .t{color:var(--ink)}
+.dv-chip{flex:none;align-self:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);background:color-mix(in srgb,var(--c) 10%,transparent);padding:2px 7px;border-radius:99px}
+.dv-vazio{margin:6px 0 0;font-size:13.5px;color:var(--ink-3);font-style:italic}
+@media (max-width:620px){
+  .dayview{padding:14px 15px 18px}
+  .dv-slot{gap:10px}
+  .dv-time{width:46px;font-size:12px}
+  .dv-when b{font-size:19px}
+}
+
 /* align-items:start — sem isso o cartão recolhido estica até a altura do vizinho aberto */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
 
@@ -237,6 +292,11 @@ main{padding:24px 0 80px}
 .addcard{display:flex;align-items:center;justify-content:center;gap:7px;min-height:104px;border:1.5px dashed var(--line-2);border-radius:var(--r);color:var(--ink-3);font-size:13.5px;background:none;width:100%}
 .addcard:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .addcard svg{width:15px;height:15px}
+.card-title .eye{flex:none;opacity:0;transition:.15s}
+.card:hover .eye,.card:focus-within .eye,.card-title .eye.on{opacity:1}
+.card-title .eye.on{color:var(--c)}
+.meta .hid{color:var(--ink-3);font-style:italic;text-transform:none;letter-spacing:.02em}
+@media (hover:none){.card-title .eye{opacity:1}}
 .card-title .pct{margin-left:auto;font-family:var(--mono);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
 .bar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:9px}
 .bar i{display:block;height:100%;border-radius:99px;transition:width .3s ease}
@@ -688,7 +748,7 @@ const todayKey=()=> isoKey(new Date());
 /* ---------- estado ---------- */
 const DEFAULT={
   version:1,
-  settings:{theme:"auto",goal:75,partial:50,hideDone:false,folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
+  settings:{theme:"auto",goal:75,partial:50,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
   areas:[
     {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
       {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
@@ -710,6 +770,7 @@ function load(){
     const s=Object.assign(structuredClone(DEFAULT),p,{settings:Object.assign({},DEFAULT.settings,p.settings||{})});
     s.settings.folded=s.settings.folded||{};
     s.settings.foldedSubs=s.settings.foldedSubs||{};
+    s.settings.hideDoneSubs=s.settings.hideDoneSubs||{};
     return s;
   }catch(e){ return structuredClone(DEFAULT); }
 }
@@ -788,7 +849,9 @@ const IC={
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
-  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>'
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  eyeoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 6.1A9.7 9.7 0 0 1 12 5.5c6.4 0 10 6.5 10 6.5a17 17 0 0 1-3.3 4M6.2 7.9A16.4 16.4 0 0 0 2 12s3.6 6.5 10 6.5a9.9 9.9 0 0 0 4.1-.86"/><path d="M4 4l16 16"/></svg>'
 };
 function stIcon(s){ return s==="done"?IC.check: s==="doing"?IC.half: s==="skip"?IC.skip:""; }
 const NEXT={todo:"doing",doing:"done",done:"skip",skip:"todo"};
@@ -817,8 +880,10 @@ function renderWeek(){
     const cards=area.subs.map(sub=>{
       const r=subScore(sub.id,cur);
       let acts=w.acts.filter(a=> a.sub===sub.id);
+      const feitas=acts.filter(a=> a.status==="done").length;
+      const soSub=!!S.settings.hideDoneSubs[sub.id];   // ocultar só nesta frente
       if(q) acts=acts.filter(a=> (a.text||"").toLowerCase().includes(q) || (a.steps||[]).some(s=> (s.text||"").toLowerCase().includes(q)));
-      if(hd) acts=acts.filter(a=> a.status!=="done");
+      if(hd||soSub) acts=acts.filter(a=> a.status!=="done");
       const hs=S.habits.filter(h=> h.sub===sub.id);
       const pctTxt=r.pct==null?"—":r.pct+"%";
       const sopen=!S.settings.foldedSubs[sub.id];
@@ -829,11 +894,13 @@ function renderWeek(){
           <div class="card-title">
             <button class="ctoggle" data-foldsub="${sub.id}" aria-expanded="${sopen}" aria-controls="body-${sub.id}" title="${sopen?"Recolher":"Expandir"} ${esc(sub.name)}">${IC.chev}</button>
             <input class="h3in" value="${esc(sub.name)}" data-sname="${sub.id}" aria-label="Nome da subcategoria" title="Clique para renomear">
+            ${feitas?`<button class="ib eye ${soSub?"on":""}" data-hidesub="${sub.id}" aria-pressed="${soSub}"
+              title="${soSub?`Mostrar as ${feitas} concluída${feitas>1?"s":""} desta frente`:`Ocultar as ${feitas} concluída${feitas>1?"s":""} desta frente`}">${soSub?IC.eyeoff:IC.eye}</button>`:""}
             <button class="kill" data-sdel="${sub.id}" title="Excluir subcategoria">${IC.x}</button>
             <span class="pct mono" style="color:${r.pct==null?"var(--ink-3)":r.pct>=100?"var(--ok)":"var(--ink)"}">${pctTxt}</span>
           </div>
           <div class="bar"><i style="width:${r.pct||0}%;background:${subVar(sub.id)}"></i></div>
-          <div class="meta"><span>${r.done}/${r.count} atividades</span>${hs.length?`<span>${hs.length} hábito${hs.length>1?"s":""}</span>`:""}${
+          <div class="meta"><span>${r.done}/${r.count} atividades</span>${(hd||soSub)&&feitas?`<span class="hid">${feitas} oculta${feitas>1?"s":""}</span>`:""}${hs.length?`<span>${hs.length} hábito${hs.length>1?"s":""}</span>`:""}${
             sopen?"":`${pendentes?`<span>${pendentes} pendente${pendentes>1?"s":""}</span>`:""}${temObj?`<span>com objetivo</span>`:""}`}</div>
         </div>
         ${sopen?`<div id="body-${sub.id}" style="display:contents">
@@ -853,7 +920,10 @@ function renderWeek(){
             </div>
           </div>`;
         }).join("")+`<div class="sep"></div>`:""}
-        <ul class="list">${acts.length?acts.map(a=>itemHTML(a)).join(""):`<li class="empty">${q?"Nada corresponde ao filtro.":"Nenhuma atividade ainda."}</li>`}</ul>
+        <ul class="list">${acts.length?acts.map(a=>itemHTML(a)).join(""):`<li class="empty">${
+          q?"Nada corresponde ao filtro."
+          :(hd||soSub)&&feitas?`Tudo concluído aqui — ${feitas} atividade${feitas>1?"s":""} oculta${feitas>1?"s":""}.`
+          :"Nenhuma atividade ainda."}</li>`}</ul>
         <div class="add">
           <input type="text" data-add="${sub.id}" placeholder="Nova atividade — Enter para salvar" autocomplete="off">
         </div>
@@ -958,6 +1028,7 @@ function renderAgenda(w){
     </div>`;
   };
   const dias=foco==null?[0,1,2,3,4,5,6]:(foco==="none"?[]:[Number(foco)]);
+  const diaUnico=(foco!=null&&foco!=="none")?Number(foco):null;
   const mostraSemDia=foco==null||foco==="none";
   const filtro=[["","Semana"],...DIAS.map((d,i)=>[String(i),d]),["none","sem dia"]]
     .map(([v,r])=>{
@@ -988,13 +1059,93 @@ function renderAgenda(w){
       ${min?"":`<div class="dayfilter">${filtro}</div>`}
     </div>
     ${min||!legenda?"":`<div class="agleg">${legenda}${fs?`<button class="lg" data-agsub="" title="Mostrar todas as subcategorias" style="--c:var(--ink-3)"><i></i>todas</button>`:""}</div>`}
-    <div class="days ${foco!=null?"solo":""}" id="agenda-corpo">
+    ${diaUnico!=null
+      ? dayView(diaUnico, cols[diaUnico], today, mon)
+      : `<div class="days" id="agenda-corpo">
       ${dias.map(dayCol).join("")}
       ${mostraSemDia?`<div class="day none">
         <div class="dayhead"><span>sem dia</span>${cnt(semDia)?`<span class="n mono">${cnt(semDia)}</span>`:""}</div>
         ${semDia.length?semDia.slice().sort(ordena).map(e=> agendaItem(e,false)).join(""):`<span class="none-txt">—</span>`}
       </div>`:""}
+    </div>`}
+  </div>`;
+}
+
+// Um dia sozinho não é uma coluna estreita com letra miúda: é o panorama do dia.
+// Horário à esquerda, tarefa em destaque, e uma barra que responde "estou seguindo
+// o que planejei?" — concluídas cheias, em andamento em meio-tom.
+const MESLONGO=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+function dayView(i,lista,today,mon){
+  const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+i);
+  // aqui a ordem é a do relógio, não a de pendência: é a leitura do dia como ele acontece
+  const hr=e=> (e.s?e.s.at:e.a.at)||null;
+  const list=lista.slice().sort((x,y)=>{
+    const hx=hr(x), hy=hr(y);
+    if(hx&&hy&&hx!==hy) return hx.localeCompare(hy);
+    if(hx&&!hy) return -1;
+    if(!hx&&hy) return 1;
+    return (x.a.created||0)-(y.a.created||0);
+  });
+  const eh=i===today, passou=today>=0&&i<today;
+  const stOf=e=> e.s ? (e.s.done?"done":"todo") : e.a.status;
+  const feitos=list.filter(e=> stOf(e)==="done").length;
+  const andando=list.filter(e=> stOf(e)==="doing").length;
+  const adiadas=list.filter(e=> stOf(e)==="skip").length;
+  const base=list.length-adiadas;                       // adiada sai da conta: não era mais o plano
+  const pct=base?Math.round(feitos*100/base):null;
+  const pctDoing=base?Math.round(andando*100/base):0;
+
+  // agrupa por horário; sem horário vira um bloco só, no fim
+  const comHora=list.filter(hr), semHora=list.filter(e=> !hr(e));
+  const blocos=[];
+  comHora.forEach(e=>{
+    const h=hr(e);
+    const ult=blocos[blocos.length-1];
+    if(ult&&ult.h===h) ult.itens.push(e); else blocos.push({h,itens:[e]});
+  });
+  if(semHora.length) blocos.push({h:null,itens:semHora});
+
+  const agora=eh? new Date().toTimeString().slice(0,5) : null;
+  const corpo=blocos.length? blocos.map(b=>{
+    const passada=agora&&b.h&&b.h<agora&&b.itens.some(e=> stOf(e)!=="done"&&stOf(e)!=="skip");
+    return `<div class="dv-slot ${b.h?"":"livre"} ${passada?"venceu":""}">
+      <div class="dv-time mono">${b.h?esc(b.h):"sem hora"}</div>
+      <div class="dv-cards">${b.itens.map(e=> dayItem(e, passou&&e.pend)).join("")}</div>
+    </div>`;
+  }).join("") : `<p class="dv-vazio">Nenhuma atividade marcada para este dia. Use o <span class="mono">›</span> de uma atividade para dar um dia a ela.</p>`;
+
+  return `<div class="dayview ${eh?"hoje":""} ${passou?"passou":""}" id="agenda-corpo">
+    <div class="dv-head">
+      <div class="dv-when">
+        <b>${DIAS[i]}</b>
+        <span>${d.getUTCDate()} de ${MESLONGO[d.getUTCMonth()]}</span>
+        ${eh?`<em>hoje</em>`:""}
+      </div>
+      <div class="dv-stat">
+        <div class="dv-pct mono">${pct==null?"—":pct+"%"}</div>
+        <div class="dv-leg">${base? `${feitos} de ${base} concluída${base>1?"s":""}`:"nada planejado"}${andando?` · ${andando} em andamento`:""}${adiadas?` · ${adiadas} adiada${adiadas>1?"s":""}`:""}</div>
+      </div>
     </div>
+    <div class="dv-bar" role="img" aria-label="${pct==null?"Sem atividades":pct+"% do dia concluído"}">
+      <i class="feito" style="width:${pct||0}%"></i>
+      <i class="andando" style="width:${pctDoing}%"></i>
+    </div>
+    <div class="dv-track">${corpo}</div>
+  </div>`;
+}
+function dayItem(e,late){
+  const a=e.a, s=e.s, sub=findSub(a.sub);
+  const st=s?(s.done?"done":"todo"):a.status;
+  const chave=!s&&(a.weight||1)>1;                      // peso 2 ou 3 = tarefa principal do dia
+  const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
+  const alvo=s?`data-steptoggle="${a.id}:${s.id}"`:`data-cycle="${a.id}"`;
+  return `<div class="dvi ${chave?"chave":""} ${late?"late":""}" data-s="${st}" style="--c:${subVar(a.sub)}">
+    <button class="dvbox" ${alvo} title="${STNAME[st]} — clique para avançar" aria-label="Estado: ${STNAME[st]}">${stIcon(st)}</button>
+    <button class="dvtxt" data-jump="${a.id}" title="Ir para a atividade">
+      <span class="t">${esc(s?s.text:a.text)}</span>
+      <span class="m"><i></i>${esc(sub?sub.name:"")}${s?` · ${esc(a.text)}`:""}${!s&&steps.length?` · ${sdone}/${steps.length} subetapas`:""}${late?" · atrasada":""}</span>
+    </button>
+    ${chave?`<span class="dv-chip">prioridade</span>`:""}
   </div>`;
 }
 function agendaItem(e,late){
@@ -1393,7 +1544,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1416,6 +1567,7 @@ document.addEventListener("click",e=>{
   if("agsub" in d){ S.settings.agendaSub = d.agsub||null; save(); renderAgenda(week(cur)); return; }
   if(d.agfold){ S.settings.agendaFold=!S.settings.agendaFold; save(); renderAgenda(week(cur)); return; }
   if(d.scolor){ const [sid,n]=d.scolor.split(":"); const s=findSub(sid); if(s){ s.color=Number(n); save(); renderSet(); } return; }
+  if(d.hidesub){ const h=S.settings.hideDoneSubs; if(h[d.hidesub]) delete h[d.hidesub]; else h[d.hidesub]=true; save(); renderWeek(); return; }
   if(d.fold){ S.settings.folded[d.fold]=!S.settings.folded[d.fold]; save(); renderWeek(); return; }
   if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
   if(d.open){ openSub(d.open); return; }
