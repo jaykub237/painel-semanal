@@ -46,6 +46,20 @@ atividade comum; 2 e 3 pesam mais no percentual e marcam a rotina como
 prioridade na visão do dia — mesma régua das atividades, onde a subetapa
 herda a prioridade da atividade a que pertence.
 
+## Lixeira e adiamento
+
+Excluir uma atividade ou subetapa mostra um aviso com **Desfazer** por alguns
+segundos. Passado isso, o item continua recuperável em **Ajustes → Lixeira**,
+que guarda os últimos 60 itens por até 60 dias e devolve cada um à semana de
+onde saiu. Se a subcategoria de origem tiver sido excluída, o painel pede que
+ela seja recriada antes.
+
+O botão `»` na atividade ou na subetapa **move** o item para a semana seguinte
+— ele sai da semana atual e do percentual dela. Adiar uma subetapa leva junto
+uma casca da atividade-mãe na semana de destino, ou anexa à que já existir lá.
+Uma atividade que fica sem nenhuma etapa depois disso volta a "pendente":
+manter "concluída" inflaria o percentual da semana.
+
 ## Links
 
 Atividades e subetapas aceitam um link opcional — o lugar onde a tarefa se

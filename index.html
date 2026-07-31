@@ -271,7 +271,14 @@ main{padding:24px 0 80px}
 /* align-items:start — sem isso o cartão recolhido estica até a altura do vizinho aberto */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden;display:flex;flex-direction:column;container-type:inline-size}
+/* quem aperta o texto é a largura do cartão, não a da janela: com seis botões na
+   fileira, um cartão estreito no desktop sofre igual ao telefone */
+@container (max-width:430px){
+  .item{flex-wrap:wrap}
+  .item .itxt{flex:1 1 100%;min-width:0}
+  .item .irow{width:100%;justify-content:flex-end;margin-top:2px}
+}
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
 .card-head{padding:13px 15px 11px 17px;border-bottom:1px solid var(--line)}
 .card-title{display:flex;align-items:center;gap:9px}
@@ -534,6 +541,10 @@ table.hist tr:last-child td{border-bottom:none}
 .setrow input[type=text]:focus{border-color:var(--accent);background:var(--surface);outline:none}
 .setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
 .indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
+.trashrow{border-left:3px solid var(--c);padding-left:10px;gap:10px}
+.trashrow .tname{font-size:13.8px;line-height:1.35;overflow-wrap:anywhere}
+.trashrow .tmeta{font-size:11.5px;color:var(--ink-3);margin-top:2px;overflow-wrap:anywhere}
+.trashrow .btn{flex:none;padding:4px 10px;font-size:12.5px}
 .swatches{display:flex;gap:3px;flex:none}
 .sw{width:14px;height:14px;border-radius:4px;background:var(--c);border:2px solid transparent;opacity:.45;transition:.12s}
 .sw:hover{opacity:.85;transform:scale(1.12)}
@@ -560,8 +571,19 @@ table.hist tr:last-child td{border-bottom:none}
 
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:60}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast{display:flex;align-items:center;gap:12px;max-width:min(92vw,520px)}
+.toast.acao{pointer-events:auto}
+.tbtn{flex:none;font-size:12.5px;font-weight:600;color:var(--bg);border:1px solid color-mix(in srgb,var(--bg) 45%,transparent);border-radius:99px;padding:3px 11px}
+.tbtn:hover{background:color-mix(in srgb,var(--bg) 18%,transparent)}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 @media (max-width:620px){
+  /* seis botões ao lado do texto sobravam 107px para o nome da atividade —
+     no telefone a fileira desce para a linha de baixo */
+  .item{flex-wrap:wrap}
+  .item .itxt{flex:1 1 100%;min-width:0}
+  .item .irow{width:100%;justify-content:flex-end;margin-top:2px}
+  .step{flex-wrap:wrap}
+  .step .stx{flex:1 1 60%}
   .topgrid{gap:12px}
   .brand{width:100%;margin-right:0}
   .wlabel{min-width:140px}
@@ -714,6 +736,12 @@ table.hist tr:last-child td{border-bottom:none}
       </div>
     </div>
     <div class="panel">
+      <h2>Lixeira</h2>
+      <p class="hint">Atividades e subetapas excluídas nos últimos 60 dias, no máximo 60 itens. Restaurar devolve cada uma à semana de onde saiu.</p>
+      <div id="trash"></div>
+      <div style="margin-top:14px"><button class="btn dgr" id="emptyTrash">Esvaziar lixeira</button></div>
+    </div>
+    <div class="panel">
       <h2>Sincronização</h2>
       <p class="hint">Guarda o painel num Gist privado do GitHub, para abrir em qualquer dispositivo. O token fica só neste navegador — nunca entra no Gist nem no backup exportado.</p>
 
@@ -841,7 +869,8 @@ const DEFAULT={
       {id:"s23",name:"Pesquisador"},{id:"s24",name:"Idiomas"}]}
   ],
   habits:[],
-  weeks:{}
+  weeks:{},
+  trash:[]
 };
 let S=load(), cur=todayKey(), view="week", query="";
 
@@ -930,6 +959,73 @@ function rotFator(h,st,i){
 }
 const rotDiaFeito=(h,st,i)=> rotFator(h,st,i)>=1;
 
+/* ---------- lixeira ---------- */
+// Excluir é o único gesto do painel sem volta, e o clique é a um pixel do "editar".
+// O item sai da semana mas fica guardado com o crachá de onde veio, por 60 dias.
+const LIXO_MAX=60, LIXO_DIAS=60;
+function podaLixo(){
+  if(!Array.isArray(S.trash)) S.trash=[];
+  const antes=S.trash.length, limite=Date.now()-LIXO_DIAS*864e5;
+  S.trash=S.trash.filter(t=> (t.at||0)>limite);
+  if(S.trash.length>LIXO_MAX) S.trash=S.trash.slice(-LIXO_MAX);
+  return S.trash.length!==antes;
+}
+function paraLixo(entrada){
+  S.trash=S.trash||[];
+  const t=Object.assign({id:uid(),at:Date.now()},entrada);
+  S.trash.push(t);
+  if(S.trash.length>LIXO_MAX) S.trash=S.trash.slice(-LIXO_MAX);
+  return t.id;
+}
+// devolve o item à semana de origem; se a atividade-mãe da subetapa sumiu, refaz a casca dela
+function restaurar(id){
+  const i=(S.trash||[]).findIndex(t=>t.id===id);
+  if(i<0) return null;
+  const t=S.trash[i], w=week(t.week,true);
+  if(t.kind==="act"){
+    if(!w.acts.some(a=>a.id===t.data.id)) w.acts.push(t.data);
+  }else{
+    let a=w.acts.find(x=>x.id===t.actId) || w.acts.find(x=>x.text===t.pai.text && x.sub===t.pai.sub);
+    if(!a){ a=Object.assign({},t.pai,{steps:[]}); w.acts.push(a); }
+    a.steps=a.steps||[];
+    if(!a.steps.some(s=>s.id===t.data.id)) a.steps.push(t.data);
+    syncFromSteps(a);
+  }
+  S.trash.splice(i,1);
+  return t;
+}
+const paiSnapshot=a=> ({id:a.id,sub:a.sub,text:a.text,status:a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,created:a.created||Date.now()});
+
+/* ---------- adiar para a semana seguinte ---------- */
+// Mover, não copiar: a tarefa sai desta semana e some do percentual dela.
+function empurrar(a,s){
+  const prox=shiftKey(cur,1), w=week(prox,true);
+  if(s){
+    let m=w.acts.find(x=> x.text===a.text && x.sub===a.sub);
+    if(!m){
+      m={id:uid(),sub:a.sub,text:a.text,status:"todo",weight:a.weight||1,due:null,at:null,url:a.url??null,steps:[],carried:true,created:Date.now()};
+      w.acts.push(m);
+    }
+    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null});
+    a.steps=(a.steps||[]).filter(x=>x.id!==s.id);
+    // esvaziada de etapas, a atividade não pode continuar "concluída": a prova da
+    // conclusão foi junto com as etapas, e ela seguiria inflando o percentual da semana
+    if(!a.steps.length && a.status==="done") a.status="todo";
+    syncFromSteps(a);
+  }else{
+    const atual=week(cur);
+    atual.acts=atual.acts.filter(x=>x.id!==a.id);
+    w.acts.push(Object.assign({},a,{
+      id:uid(), carried:true, created:Date.now(),
+      status:a.status==="skip"?"todo":a.status,
+      steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,due:x.due??null,at:x.at??null,url:x.url??null}))
+    }));
+  }
+  save(); renderWeek();
+  toast(`${s?"Subetapa":"Atividade"} movida para ${prox.replace("-W"," · semana ")}.`,
+        {label:"Ir para lá",fn:()=>{ cur=prox; render(); }});
+}
+
 /* ---------- cálculo ---------- */
 // Uma atividade com subetapas vale a fração de subetapas concluídas — mais fiel
 // que "em andamento" genérico. Marcada como concluída à mão, vale 1 de qualquer jeito.
@@ -986,6 +1082,8 @@ const IC={
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  push:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg>',
+  undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
   link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4.5 4.5 0 0 0 6.36 0l2.4-2.4a4.5 4.5 0 0 0-6.36-6.36l-1.2 1.2"/><path d="M13.5 10.5a4.5 4.5 0 0 0-6.36 0l-2.4 2.4a4.5 4.5 0 0 0 6.36 6.36l1.2-1.2"/></svg>',
   eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>',
   eyeoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 6.1A9.7 9.7 0 0 1 12 5.5c6.4 0 10 6.5 10 6.5a17 17 0 0 1-3.3 4M6.2 7.9A16.4 16.4 0 0 0 2 12s3.6 6.5 10 6.5a9.9 9.9 0 0 0 4.1-.86"/><path d="M4 4l16 16"/></svg>'
@@ -1419,6 +1517,7 @@ function itemHTML(a){
         <button class="ib" data-link="${a.id}" data-on="${a.url?1:0}" aria-expanded="${!!a.linkOpen}" title="${a.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
         <button class="ib" data-weight="${a.id}" title="Alternar peso (1 → 2 → 3)">${IC.up}</button>
         <button class="ib" data-due="${a.id}" title="Definir dia-alvo">${IC.more}</button>
+        <button class="ib" data-push="${a.id}" title="Adiar para a semana seguinte">${IC.push}</button>
         <button class="ib" data-del="${a.id}" title="Excluir">${IC.x}</button>
       </div>
     </div>
@@ -1439,6 +1538,7 @@ function itemHTML(a){
         ${s.due!=null?`<input class="timein ${s.at?"set":""}" type="time" value="${esc(s.at||"")}" data-attime="${a.id}:${s.id}" title="Horário desejado" aria-label="Horário da subetapa">`:""}
         <button class="sday ${s.due!=null?"set":""} ${slate?"late":""}" data-stepdue="${a.id}:${s.id}" title="Dia-alvo da subetapa">${s.due!=null?DIAS[s.due]:"dia"}</button>
         <button class="sx ${s.url?"on":""}" data-slink="${a.id}:${s.id}" title="${s.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
+        <button class="sx" data-spush="${a.id}:${s.id}" title="Adiar esta subetapa para a semana seguinte">${IC.push}</button>
         <button class="sx" data-stepdel="${a.id}:${s.id}" title="Excluir subetapa">${IC.x}</button>
       </div>
       ${s.linkOpen?`<div class="linkrow step">
@@ -1665,14 +1765,39 @@ function renderSet(){
   }).join(""):`<p style="color:var(--ink-3);font-style:italic;font-size:13.5px;margin:0">Nenhuma rotina ainda.</p>`;
 
   $("#hsub").innerHTML=S.areas.map(a=>`<optgroup label="${esc(a.name)}">${a.subs.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+  renderTrash();
   $("#goalpct").value=S.settings.goal;
   $("#partial").value=S.settings.partial;
   $$("#theme button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.t===S.settings.theme));
   renderSync();
 }
 
+function renderTrash(){
+  const el=$("#trash"); if(!el) return;
+  const lista=(S.trash||[]).slice().reverse();
+  if(!lista.length){ el.innerHTML=`<p style="color:var(--ink-3);font-style:italic;font-size:13.5px;margin:0">A lixeira está vazia.</p>`; return; }
+  const quando=t=>{
+    const dias=Math.floor((Date.now()-(t.at||0))/864e5);
+    if(dias<=0) return "hoje";
+    if(dias===1) return "ontem";
+    return `há ${dias} dias`;
+  };
+  el.innerHTML=lista.map(t=>{
+    const s=findSub(t.kind==="act"?t.sub:t.pai.sub);
+    return `<div class="setrow trashrow" style="--c:${subVar(t.kind==="act"?t.sub:t.pai.sub)}">
+      <span class="rotdot"></span>
+      <div class="grow">
+        <div class="tname">${esc(t.rotulo||"(sem nome)")}</div>
+        <div class="tmeta">${t.kind==="act"?"atividade":"subetapa"}${t.contexto?` de "${esc(t.contexto)}"`:""} · ${esc(s?s.name:"categoria excluída")} · ${esc(t.week.replace("-W"," · sem "))} · excluída ${quando(t)}</div>
+      </div>
+      <button class="btn" data-restore="${t.id}">Restaurar</button>
+      <button class="ib" data-trashdel="${t.id}" title="Descartar de vez">${IC.x}</button>
+    </div>`;
+  }).join("");
+}
+
 function render(){
-  if(ensureColors()|migraRotinas()) save();   // slots de cor e campos novos de rotina, inclusive vindos de backup antigo
+  if(ensureColors()|migraRotinas()|podaLixo()) save();   // slots de cor e campos novos de rotina, inclusive vindos de backup antigo
   $$(".tab").forEach(t=> t.setAttribute("aria-selected", t.dataset.view===view));
   $("#view-week").classList.toggle("hidden",view!=="week");
   $("#view-hist").classList.toggle("hidden",view!=="hist");
@@ -1707,7 +1832,22 @@ $("#dlg-no").onclick=()=>closeAsk(false);
 $("#mask").onclick=e=>{ if(e.target.id==="mask") closeAsk(false); };
 
 let toastT;
-function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),2600); }
+// com ação o aviso fica clicável e dura mais: é a janela do "desfazer"
+function toast(msg,acao){
+  const el=$("#toast");
+  el.textContent="";
+  const s=document.createElement("span"); s.textContent=msg; el.appendChild(s);
+  if(acao){
+    const b=document.createElement("button");
+    b.className="tbtn"; b.textContent=acao.label;
+    b.onclick=()=>{ el.classList.remove("on"); clearTimeout(toastT); acao.fn(); };
+    el.appendChild(b);
+  }
+  el.classList.toggle("acao",!!acao);
+  el.classList.add("on");
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>el.classList.remove("on"), acao?7000:2600);
+}
 
 /* ---------- ações ---------- */
 function addAct(subId,text){
@@ -1833,7 +1973,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1850,7 +1990,13 @@ document.addEventListener("click",e=>{
       const inp=document.querySelector(`[data-stepadd="${CSS.escape(d.steps)}"]`);
       if(inp && !(a.steps||[]).length) inp.focus(); } return; }
   if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){ s.done=!s.done; syncFromSteps(a); save(); renderWeek(); } return; }
-  if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){ a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek(); } return; }
+  if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){
+      const tid=paraLixo({kind:"step",week:cur,actId:a.id,pai:paiSnapshot(a),rotulo:s.text,contexto:a.text,data:structuredClone(s)});
+      a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek();
+      toast(`Subetapa "${s.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Subetapa restaurada."); }});
+    } return; }
+  if(d.push){ const a=act(d.push); if(a) empurrar(a,null); return; }
+  if(d.spush){ const {a,s}=step(d.spush); if(a&&s) empurrar(a,s); return; }
   if(d.stepdue){ const {s}=step(d.stepdue); if(s){ s.due = s.due==null?0 : (s.due>=6? null : s.due+1); save(); renderWeek(); } return; }
   if(d.link){ const a=act(d.link); if(a){ a.linkOpen=!a.linkOpen; save(); renderWeek();
       if(a.linkOpen) setTimeout(()=>{ const i=document.querySelector(`[data-linkval="${CSS.escape(d.link)}"]`); if(i){ i.focus(); i.select(); } },0); } return; }
@@ -1884,6 +2030,22 @@ document.addEventListener("click",e=>{
       save(); render(); } return; }
   if(d.hdays){ const [hid,q]=d.hdays.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
       h.days = q==="week"?[0,1,2,3,4]:[0,1,2,3,4,5,6]; save(); render(); } return; }
+  if(d.restore){
+    const alvo=(S.trash||[]).find(x=>x.id===d.restore);
+    // sem a subcategoria de origem a atividade voltaria para um cartão que não existe mais
+    if(alvo && !findSub(alvo.kind==="act"?alvo.sub:alvo.pai.sub)){
+      toast("A subcategoria dessa atividade foi excluída — recrie-a antes de restaurar.");
+      return;
+    }
+    const t=restaurar(d.restore);
+    if(!t){ toast("Este item já saiu da lixeira."); renderSet(); return; }
+    save(); render();
+    const volta=t.week!==cur;
+    toast(`"${t.rotulo}" restaurada em ${t.week.replace("-W"," · semana ")}.`,
+      volta?{label:"Ir para lá",fn:()=>{ cur=t.week; view="week"; render(); }}:null);
+    return;
+  }
+  if(d.trashdel){ S.trash=(S.trash||[]).filter(t=>t.id!==d.trashdel); save(); renderSet(); return; }
   if(d.hweight){ const [hid,n]=d.hweight.split(":"); const h=S.habits.find(x=>x.id===hid);
       if(h){ h.weight=Math.max(1,Math.min(3,Number(n)||1)); save(); render(); } return; }
   if(d.hidel){ const [hid,iid]=d.hidel.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
@@ -1894,7 +2056,11 @@ document.addEventListener("click",e=>{
   if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
   if(d.open){ openSub(d.open); return; }
   if(d.jump){ jumpToAct(d.jump); return; }
-  if(d.del){ const w=week(cur); w.acts=w.acts.filter(a=>a.id!==d.del); save(); renderWeek(); return; }
+  if(d.del){ const w=week(cur), a=w.acts.find(x=>x.id===d.del); if(!a) return;
+    const tid=paraLixo({kind:"act",week:cur,rotulo:a.text,sub:a.sub,data:structuredClone(a)});
+    w.acts=w.acts.filter(x=>x.id!==d.del); save(); renderWeek();
+    toast(`"${a.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Atividade restaurada."); }});
+    return; }
   if(d.weight){ const a=act(d.weight); if(a){ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); } return; }
   if(d.due){ const a=act(d.due); if(a){ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); } return; }
   if(d.hab){ const w=week(cur,true); const h=S.habits.find(x=>x.id===d.hab);
@@ -2115,6 +2281,12 @@ function novaRotina(diaria){
 }
 $("#addHabit").onclick=()=>novaRotina(false);
 $("#addDaily").onclick=()=>novaRotina(true);
+$("#emptyTrash").onclick=()=>{
+  const n=(S.trash||[]).length;
+  if(!n){ toast("A lixeira já está vazia."); return; }
+  ask("Esvaziar a lixeira?",`${n} ite${n===1?"m":"ns"} ${n===1?"será descartado":"serão descartados"} de vez. Aí não há mais como recuperar.`,"Esvaziar")
+  .then(ok=>{ if(!ok) return; S.trash=[]; save(); renderSet(); toast("Lixeira esvaziada."); });
+};
 $("#expjson").onclick=()=> download(JSON.stringify(S,null,2),`painel-semanal-${todayKey()}.json`,"application/json");
 $("#impjson").onclick=()=> $("#file").click();
 $("#file").onchange=e=>{
