@@ -269,15 +269,18 @@ main{padding:24px 0 80px}
 }
 
 /* align-items:start — sem isso o cartão recolhido estica até a altura do vizinho aberto */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+/* 330px davam três colunas e uma linha de atividade apertada demais para caber
+   nome, marcadores e menu lado a lado — a coluna larga é o que sustenta o alinhamento */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px;align-items:start}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden;display:flex;flex-direction:column;container-type:inline-size}
-/* quem aperta o texto é a largura do cartão, não a da janela: com seis botões na
-   fileira, um cartão estreito no desktop sofre igual ao telefone */
-@container (max-width:430px){
-  .item{flex-wrap:wrap}
-  .item .itxt{flex:1 1 100%;min-width:0}
-  .item .irow{width:100%;justify-content:flex-end;margin-top:2px}
+/* Só num cartão muito estreito os marcadores descem — e mesmo aí a caixa
+   continua ao lado do nome, nunca acima dele. */
+/* especificidade acima do bloco geral de .item, que vem depois no arquivo */
+@container (max-width:360px){
+  .card .item{flex-wrap:wrap}
+  .card .item .itxt{flex:1 1 auto}
+  .card .item .tags{flex:1 1 100%;max-width:none;justify-content:flex-start;margin-left:26px;padding-top:1px}
 }
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
 .card-head{padding:13px 15px 11px 17px;border-bottom:1px solid var(--line)}
@@ -318,7 +321,9 @@ main{padding:24px 0 80px}
 .itemwrap{position:relative}
 .itemwrap.dragging{opacity:.4}
 .itemwrap.over{box-shadow:inset 0 2px 0 var(--accent)}
-.item{display:flex;align-items:flex-start;gap:9px;padding:6px 15px 6px 17px}
+/* Uma linha só: caixa, nome, marcadores e menu. O nome é a coluna elástica —
+   quando ele é longo, cresce em altura sem empurrar ninguém para outra linha. */
+.item{display:flex;align-items:flex-start;gap:9px;padding:6px 15px 6px 17px;flex-wrap:nowrap}
 .itemwrap:hover .item{background:var(--surface-2)}
 .st{flex:none;width:17px;height:17px;margin-top:2px;border-radius:5px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent;transition:.15s}
 .st:hover{border-color:var(--ink-3)}
@@ -326,7 +331,7 @@ main{padding:24px 0 80px}
 .itemwrap[data-s="doing"] .st{border-color:var(--warn);background:transparent;color:var(--warn)}
 .itemwrap[data-s="done"] .st{border-color:var(--ok);background:var(--ok);color:#fff}
 .itemwrap[data-s="skip"] .st{border-color:var(--line-2);background:var(--line);color:var(--ink-3);border-style:dashed}
-.itxt{flex:1;min-width:0}
+.itxt{flex:1 1 52%;min-width:120px}
 /* textarea, não input: o nome quebra em várias linhas e o campo cresce junto */
 .itxt .t{display:block;font-family:inherit;font-size:13.8px;line-height:1.4;overflow-wrap:anywhere;border:1px solid transparent;background:none;width:100%;padding:1px 5px;margin:-1px -5px;border-radius:6px;resize:none;overflow:hidden;min-height:20px}
 .itxt .t:hover{background:var(--surface)}
@@ -381,7 +386,7 @@ main{padding:24px 0 80px}
 .chip.steps.full{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:transparent}
 .ib.open svg{transform:rotate(90deg)}
 .ib svg{transition:transform .15s}
-.tags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.tags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;flex:0 1 auto;min-width:0;max-width:48%;padding-top:3px}
 .chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-3)}
 .chip.w{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
 .chip.carry{color:var(--warn);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent)}
@@ -402,7 +407,7 @@ main{padding:24px 0 80px}
 .sx.on{opacity:1;color:var(--accent)}
 .chip.due{color:var(--ink-2)}
 .chip.late{color:var(--crit);background:color-mix(in srgb,var(--crit) 12%,transparent);border-color:transparent}
-.irow{display:flex;gap:2px;flex:none;opacity:0;transition:.15s}
+.irow{display:flex;gap:2px;flex:none;margin-left:auto;padding-top:1px;opacity:0;transition:.15s}
 .itemwrap:hover .irow,.itemwrap:focus-within .irow{opacity:1}
 .ib.open,.ib[data-on="1"]{opacity:1;color:var(--accent)}
 .ib{width:22px;height:22px;display:grid;place-items:center;border-radius:5px;color:var(--ink-3)}
@@ -531,6 +536,17 @@ main{padding:24px 0 80px}
 .esfbar i{display:block;height:100%;border-radius:99px;background:color-mix(in srgb,var(--c) 22%,transparent)}
 .esfbar b{display:block;height:100%;border-radius:99px;background:var(--c)}
 .esfv{flex:0 0 52px;text-align:right;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.an-two{display:grid;grid-template-columns:minmax(150px,auto) 1fr;gap:22px;align-items:start;margin-bottom:16px}
+.calib{border-top:1px solid var(--line);padding-top:12px}
+.calibhead{font-size:13px;font-weight:600;margin-bottom:10px}
+.calibhead span{display:block;font-weight:400;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.calibrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.calibv{flex:0 0 58px;font-size:12.5px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.calibp{flex:0 0 118px;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em}
+.calibp i{font-style:normal;opacity:.6;margin:0 2px}
+.calibp b{color:var(--accent)}
+.calibrow .btn{flex:none;padding:3px 9px;font-size:12px}
+@media (max-width:620px){.an-two{grid-template-columns:1fr}}
 .tagcloud{display:flex;flex-wrap:wrap;gap:7px}
 .tagcloud .chip{font-size:12px;padding:3px 9px}
 .tagcloud .chip b{font-family:var(--mono);font-weight:600;opacity:.75;margin-left:3px}
@@ -589,12 +605,20 @@ table.hist tr:last-child td{border-bottom:none}
 .menusep{height:1px;background:var(--line);margin:4px 2px}
 
 /* marcadores que também são controles */
+.chip.tempo{display:inline-flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;font-family:var(--mono);font-size:10px;color:var(--ink-2)}
+.chip.tempo svg{width:10px;height:10px;flex:none}
+.chip.tempo:hover{border-color:var(--line-2);color:var(--ink)}
+.chip.tempo.mini{font-size:9.5px;padding:1px 5px}
+.chip.sug{color:var(--warn);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent);cursor:pointer;text-transform:none;letter-spacing:0}
+.chip.sug:hover{background:color-mix(in srgb,var(--warn) 22%,transparent)}
+.timerow .quick{display:flex;gap:4px;flex:none}
+.qb{font-family:var(--mono);font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+.qb:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.qb.zero:hover{border-color:var(--crit);color:var(--crit);background:color-mix(in srgb,var(--crit) 10%,transparent)}
 .chip.tag{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft);text-transform:none;letter-spacing:.01em}
 .chip.tag:hover{filter:brightness(1.06);border-color:var(--accent)}
 .chip.tag.mini{font-size:9px;padding:1px 4px}
 .chip.w,.chip.due,.chip.steps,.chip.tag{cursor:pointer}
-.chip.off{color:var(--ink-3);background:none;border-style:dashed;opacity:0}
-.itemwrap:hover .chip.off,.itemwrap:focus-within .chip.off{opacity:1}
 .chip.w:hover,.chip.due:hover,.chip.steps:hover{border-color:var(--line-2);color:var(--ink)}
 .stags{display:flex;gap:3px;flex:none;align-items:center;margin-top:3px}
 .tagrow input{font-size:12.8px}
@@ -636,11 +660,6 @@ table.hist tr:last-child td{border-bottom:none}
 .tbtn:hover{background:color-mix(in srgb,var(--bg) 18%,transparent)}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 @media (max-width:620px){
-  /* seis botões ao lado do texto sobravam 107px para o nome da atividade —
-     no telefone a fileira desce para a linha de baixo */
-  .item{flex-wrap:wrap}
-  .item .itxt{flex:1 1 100%;min-width:0}
-  .item .irow{width:100%;justify-content:flex-end;margin-top:2px}
   .step{flex-wrap:wrap}
   .step .stx{flex:1 1 60%}
   .topgrid{gap:12px}
@@ -802,6 +821,12 @@ table.hist tr:last-child td{border-bottom:none}
       <div class="setrow"><div class="grow">Atividade em andamento vale <small style="color:var(--ink-3)">— crédito parcial no cálculo</small></div>
         <input class="num" id="partial" type="number" min="0" max="100" step="5">
       </div>
+      <div class="setrow"><div class="grow">Tempo que já pede peso 2 <small style="color:var(--ink-3)">— em minutos; abaixo disso a sugestão é peso 1</small></div>
+        <input class="num" id="tmedio" type="number" min="5" max="480" step="5">
+      </div>
+      <div class="setrow"><div class="grow">Tempo que já pede peso 3 <small style="color:var(--ink-3)">— em minutos</small></div>
+        <input class="num" id="talto" type="number" min="10" max="960" step="10">
+      </div>
     </div>
     <div class="panel">
       <h2>Lixeira</h2>
@@ -929,7 +954,7 @@ const todayKey=()=> isoKey(new Date());
 /* ---------- estado ---------- */
 const DEFAULT={
   version:1,
-  settings:{theme:"auto",goal:75,partial:50,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
+  settings:{theme:"auto",goal:75,partial:50,tempoMedio:30,tempoAlto:120,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
   areas:[
     {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
       {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
@@ -1060,6 +1085,31 @@ function combina(o,q){
   return (o.text||"").toLowerCase().includes(q) || tagsDe(o).some(t=> t.includes(alvo));
 }
 
+/* ---------- tempo dedicado ---------- */
+// Aceita como se fala: "90", "90m", "1h30", "1:30", "1,5h". Devolve minutos, ou NaN
+// quando está escrito de um jeito que não dá para ler.
+function parseMin(v){
+  const s=String(v==null?"":v).trim().toLowerCase().replace(",",".");
+  if(!s) return null;
+  let m;
+  if((m=s.match(/^(\d+)\s*[:h]\s*(\d{1,2})\s*(min|m)?$/))) return (+m[1])*60+(+m[2]);
+  if((m=s.match(/^(\d+(?:\.\d+)?)\s*h(oras?)?$/))) return Math.round(parseFloat(m[1])*60);
+  if((m=s.match(/^(\d+)\s*(min|m)?$/))) return +m[1];
+  return NaN;
+}
+function fmtMin(n){
+  n=Math.max(0,Math.round(n||0));
+  if(!n) return "0min";
+  const h=Math.floor(n/60), r=n%60;
+  return h? (r? `${h}h${String(r).padStart(2,"0")}` : `${h}h`) : `${r}min`;
+}
+const limiteMedio=()=> S.settings.tempoMedio||30;
+const limiteAlto=()=> S.settings.tempoAlto||120;
+const pesoSugerido=min=> (min==null||!min)?null : (min>=limiteAlto()?3 : min>=limiteMedio()?2 : 1);
+const tempoDe=o=> Math.max(0,+(o&&o.mins)||0);
+// o tempo da atividade inclui o que foi anotado nas subetapas
+const tempoTotal=a=> tempoDe(a)+(a.steps||[]).reduce((n,s)=>n+tempoDe(s),0);
+
 /* ---------- menu suspenso ---------- */
 // Vai no <body> porque o cartão tem overflow:hidden — dentro dele o menu seria cortado.
 let menuFechar=null;
@@ -1149,7 +1199,7 @@ function empurrar(a,s){
       m={id:uid(),sub:a.sub,text:a.text,status:"todo",weight:a.weight||1,due:null,at:null,url:a.url??null,steps:[],carried:true,created:Date.now()};
       w.acts.push(m);
     }
-    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()});
+    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice(),mins:tempoDe(s)||undefined});
     a.steps=(a.steps||[]).filter(x=>x.id!==s.id);
     // esvaziada de etapas, a atividade não pode continuar "concluída": a prova da
     // conclusão foi junto com as etapas, e ela seguiria inflando o percentual da semana
@@ -1225,6 +1275,7 @@ const IC={
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/></svg>',
   tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5V4a1 1 0 0 1 1-1h8.5a1 1 0 0 1 .7.3l7.5 7.5a1 1 0 0 1 0 1.4l-8.5 8.5a1 1 0 0 1-1.4 0L3.3 13.2a1 1 0 0 1-.3-.7z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></svg>',
   push:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg>',
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
@@ -1643,9 +1694,15 @@ function itemHTML(a){
   // Os marcadores viraram os próprios controles: clicar no de dia troca o dia, no de
   // peso troca o peso. O resto foi para o menu — seis botões fixos desalinhavam a linha.
   const chips=[];
-  if(steps.length) chips.push(`<button class="chip steps ${sdone===steps.length?"full":""}" data-steps="${a.id}" title="${a.open?"Recolher":"Mostrar"} as subetapas">${sdone}/${steps.length} subetapas</button>`);
-  chips.push(`<button class="chip w ${(a.weight||1)>1?"":"off"}" data-weight="${a.id}" title="Peso no cálculo — clique para alternar 1 › 2 › 3">peso ${a.weight||1}</button>`);
-  chips.push(`<button class="chip due ${a.due!=null?"":"off"} ${late?"late":""}" data-due="${a.id}" title="Dia-alvo — clique para avançar">${a.due!=null?DIAS[a.due]:"sem dia"}</button>`);
+  if(steps.length) chips.push(`<button class="chip steps ${sdone===steps.length?"full":""}" data-steps="${a.id}" title="${sdone} de ${steps.length} subetapas concluídas — clique para ${a.open?"recolher":"mostrar"}">${sdone}/${steps.length}</button>`);
+  // só entra na linha o marcador que diz alguma coisa; o resto vive no menu,
+  // que mostra o valor atual ao lado de cada opção
+  if((a.weight||1)>1) chips.push(`<button class="chip w" data-weight="${a.id}" title="Peso no cálculo — clique para alternar 1 › 2 › 3">peso ${a.weight}</button>`);
+  if(a.due!=null) chips.push(`<button class="chip due ${late?"late":""}" data-due="${a.id}" title="Dia-alvo — clique para avançar">${DIAS[a.due]}</button>`);
+  const tt=tempoTotal(a), sug=pesoSugerido(tt);
+  if(tt) chips.push(`<button class="chip tempo" data-time="${a.id}" title="Tempo dedicado${(a.steps||[]).some(s=>tempoDe(s))?" (com as subetapas)":""} — clique para ajustar">${IC.clock}${fmtMin(tt)}</button>`);
+  if(sug && sug!==(a.weight||1))
+    chips.push(`<button class="chip sug" data-sugw="${a.id}:${sug}" title="${fmtMin(tt)} de trabalho sugere peso ${sug} em vez de ${a.weight||1} — clique para aplicar">› peso ${sug}</button>`);
   if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
   if(a.status==="skip") chips.push(`<span class="chip">adiada</span>`);
   tagsDe(a).forEach(t=> chips.push(`<button class="chip tag" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`));
@@ -1659,8 +1716,8 @@ function itemHTML(a){
       <button class="st" data-cycle="${a.id}" title="${STNAME[a.status]} — clique para avançar" aria-label="Estado: ${STNAME[a.status]}">${stIcon(a.status)}</button>
       <div class="itxt">
         <textarea class="t" rows="1" data-text="${a.id}" aria-label="Descrição da atividade">${esc(a.text)}</textarea>
-        ${chips.length?`<div class="tags">${chips.join("")}</div>`:""}
       </div>
+      ${chips.length?`<div class="tags">${chips.join("")}</div>`:""}
       <div class="irow">
         <button class="ib ${open?"open":""}" data-steps="${a.id}" data-on="${steps.length?1:0}" aria-expanded="${open}" title="${steps.length?"Mostrar subetapas":"Dividir em subetapas"}">${IC.chev}</button>
         <button class="ib" data-menu="${a.id}" data-menu-id="act-${a.id}" title="Mais opções" aria-haspopup="menu">${IC.more}</button>
@@ -1671,6 +1728,17 @@ function itemHTML(a){
       <input type="url" inputmode="url" data-linkval="${a.id}" value="${esc(a.url||"")}"
         placeholder="Cole o endereço — ex: drive.google.com/… · Enter para salvar" autocomplete="off" aria-label="Link da atividade">
       ${a.url?`<button class="ib" data-linkdel="${a.id}" title="Remover o link">${IC.x}</button>`:""}
+    </div>`:""}
+    ${a.timeOpen?`<div class="linkrow timerow">
+      ${IC.clock}
+      <input type="text" inputmode="numeric" data-timeval="${a.id}" value="${tempoDe(a)?esc(fmtMin(tempoDe(a))):""}"
+        placeholder="Tempo nesta atividade — 45, 1h30, 90m · Enter para salvar" autocomplete="off" aria-label="Tempo dedicado">
+      <span class="quick">
+        <button class="qb" data-timeadd="${a.id}:15" title="Somar 15 minutos">+15</button>
+        <button class="qb" data-timeadd="${a.id}:30" title="Somar 30 minutos">+30</button>
+        <button class="qb" data-timeadd="${a.id}:60" title="Somar 1 hora">+1h</button>
+        ${tempoDe(a)?`<button class="qb zero" data-timeadd="${a.id}:0" title="Zerar">zerar</button>`:""}
+      </span>
     </div>`:""}
     ${a.tagOpen?`<div class="linkrow tagrow">
       ${IC.tag}
@@ -1685,6 +1753,7 @@ function itemHTML(a){
         <span class="sgrip" data-stepgrip="${a.id}:${s.id}" draggable="true" title="Arrastar para reordenar">${IC.grip}</span>
         <button class="sbox" data-steptoggle="${a.id}:${s.id}" aria-label="${s.done?"Concluída":"Pendente"}">${IC.check}</button>
         <textarea class="stx" rows="1" data-steptext="${a.id}:${s.id}" aria-label="Descrição da subetapa">${esc(s.text)}</textarea>
+        ${tempoDe(s)?`<button class="chip tempo mini" data-stime="${a.id}:${s.id}" title="Tempo dedicado — clique para ajustar">${fmtMin(tempoDe(s))}</button>`:""}
         ${tagsDe(s).length?`<span class="stags">${tagsDe(s).map(t=>`<button class="chip tag mini" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`).join("")}</span>`:""}
         ${s.url?`<a class="sgo" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(s.url)}">${IC.link}</a>`:""}
         ${s.due!=null?`<input class="timein ${s.at?"set":""}" type="time" value="${esc(s.at||"")}" data-attime="${a.id}:${s.id}" title="Horário desejado" aria-label="Horário da subetapa">`:""}
@@ -1696,6 +1765,17 @@ function itemHTML(a){
         <input type="url" inputmode="url" data-slinkval="${a.id}:${s.id}" value="${esc(s.url||"")}"
           placeholder="Endereço desta subetapa — Enter para salvar" autocomplete="off" aria-label="Link da subetapa">
         ${s.url?`<button class="ib" data-slinkdel="${a.id}:${s.id}" title="Remover o link">${IC.x}</button>`:""}
+      </div>`:""}
+      ${s.timeOpen?`<div class="linkrow step timerow">
+        ${IC.clock}
+        <input type="text" inputmode="numeric" data-stimeval="${a.id}:${s.id}" value="${tempoDe(s)?esc(fmtMin(tempoDe(s))):""}"
+          placeholder="Tempo nesta subetapa — 45, 1h30 · Enter para salvar" autocomplete="off" aria-label="Tempo dedicado">
+        <span class="quick">
+          <button class="qb" data-stimeadd="${a.id}:${s.id}:15">+15</button>
+          <button class="qb" data-stimeadd="${a.id}:${s.id}:30">+30</button>
+          <button class="qb" data-stimeadd="${a.id}:${s.id}:60">+1h</button>
+          ${tempoDe(s)?`<button class="qb zero" data-stimeadd="${a.id}:${s.id}:0">zerar</button>`:""}
+        </span>
       </div>`:""}
       ${s.tagOpen?`<div class="linkrow step tagrow">
         ${IC.tag}
@@ -1777,12 +1857,24 @@ function analiseSemana(k){
     (a.steps||[]).forEach(s=> tagsDe(s).forEach(t=> reg(t,s.done)));
   });
 
+  // tempo: total, por frente, e onde o peso escolhido destoa do que o relógio diz
+  const comTempo=acts.filter(a=> tempoTotal(a)>0);
+  const minTotal=acts.reduce((n,a)=> n+tempoTotal(a),0);
+  const tempoSub=new Map();
+  acts.forEach(a=>{ const t=tempoTotal(a); if(t) tempoSub.set(a.sub,(tempoSub.get(a.sub)||0)+t); });
+  const calib=comTempo.map(a=>({a,min:tempoTotal(a),sug:pesoSugerido(tempoTotal(a))}))
+    .filter(x=> x.sug!=null);
+  const batem=calib.filter(x=> x.sug===(x.a.weight||1)).length;
+  const desalinhadas=calib.filter(x=> x.sug!==(x.a.weight||1))
+    .sort((x,y)=> Math.abs(y.sug-(y.a.weight||1))-Math.abs(x.sug-(x.a.weight||1))||y.min-x.min);
+
   const anterior=weekScore(shiftKey(k,-1)).pct;
   const atual=weekScore(k).pct;
   const ult=dataWeeks().filter(x=>x<k).slice(-4).map(x=>weekScore(x).pct).filter(v=>v!=null);
 
   return {acts,adiadas,feitas,steps:steps.length,stepsFeitas,dias,
     noPrazo,atrasadas,semCarimbo,aindaAbertas,porSub,rotinas,
+    minTotal,comTempo:comTempo.length,tempoSub,calib:calib.length,batem,desalinhadas,
     tags:[...tags.entries()].sort((a,b)=> b[1].n-a[1].n),
     atual,anterior,delta:(atual!=null&&anterior!=null)?atual-anterior:null,media4:avg(ult),
     retro:w.retro||{}};
@@ -1864,6 +1956,40 @@ function renderAnalise(){
           <span class="esfbar"><i style="width:${Math.round(x.den/maxSub*100)}%"><b style="width:${x.den?Math.round(x.num/x.den*100):0}%"></b></i></span>
           <span class="esfv mono">${x.pct==null?"—":x.pct+"%"}</span>
         </div>`).join("")}</div>`:`<p class="vazio">Nada planejado nesta semana.</p>`}
+    </div>
+
+    <div class="panel an">
+      <h2>Tempo dedicado</h2>
+      <p class="hint">Some o que você anotou em cada atividade e subetapa. Serve de contraprova do peso: o peso é a sua estimativa de importância, o relógio é o custo real.</p>
+      ${A.minTotal?`
+        <div class="an-two">
+          <div>
+            <div class="pontnum mono">${fmtMin(A.minTotal)}</div>
+            <div class="pontleg">em ${A.comTempo} de ${A.acts.length} atividade${A.acts.length>1?"s":""} · média de ${fmtMin(Math.round(A.minTotal/Math.max(1,A.comTempo)))} por atividade anotada</div>
+          </div>
+          <div class="esf">${[...A.tempoSub.entries()].sort((a,b)=>b[1]-a[1]).map(([sid,min])=>{
+            const s=findSub(sid), maxT=Math.max(...A.tempoSub.values());
+            return `<div class="esfrow" style="--c:${subVar(sid)}">
+              <span class="esfn">${esc(s?s.name:"—")}</span>
+              <span class="esfbar"><i style="width:${Math.round(min/maxT*100)}%"><b style="width:100%"></b></i></span>
+              <span class="esfv mono">${fmtMin(min)}</span>
+            </div>`;}).join("")}</div>
+        </div>
+        <div class="calib">
+          <div class="calibhead">Peso × relógio
+            <span>${A.batem} de ${A.calib} com o peso que o tempo sugere · faixas atuais: até ${fmtMin(limiteMedio())} peso 1, até ${fmtMin(limiteAlto())} peso 2, acima disso peso 3</span>
+          </div>
+          ${A.desalinhadas.length?`<div class="esf">${A.desalinhadas.slice(0,6).map(x=>`
+            <div class="calibrow">
+              <span class="esfn">${esc(x.a.text)}</span>
+              <span class="calibv mono">${fmtMin(x.min)}</span>
+              <span class="calibp">peso ${x.a.weight||1} <i>›</i> <b>${x.sug}</b></span>
+              <button class="btn" data-sugw="${x.a.id}:${x.sug}">Aplicar</button>
+            </div>`).join("")}</div>
+            ${A.desalinhadas.length>6?`<p class="obs">e mais ${A.desalinhadas.length-6}.</p>`:""}`
+          :`<p class="obs">Nenhum descompasso: onde há tempo anotado, o peso combina com o relógio.</p>`}
+        </div>
+      `:`<p class="vazio">Nenhum tempo anotado nesta semana. O marcador de relógio em cada atividade abre o campo — dá para digitar "45", "1h30" ou somar de 15 em 15.</p>`}
     </div>
 
     ${A.rotinas.length?`<div class="panel an">
@@ -2101,6 +2227,8 @@ function renderSet(){
   renderTrash();
   $("#goalpct").value=S.settings.goal;
   $("#partial").value=S.settings.partial;
+  $("#tmedio").value=limiteMedio();
+  $("#talto").value=limiteAlto();
   $$("#theme button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.t===S.settings.theme));
   renderSync();
 }
@@ -2269,6 +2397,7 @@ function carryOver(){
   (p.acts||[]).filter(a=> a.status==="todo"||a.status==="doing"||a.status==="skip").forEach(a=>{
     if(w.acts.some(x=> x.text===a.text && x.sub===a.sub)) return;
     // só as subetapas que ficaram pendentes vêm junto — o que já foi feito, foi
+    // o tempo não vem junto: ele é o registro do que foi gasto naquela semana
     const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()}));
     w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,tags:tagsDe(a).slice(),steps,carried:true,created:Date.now()});
     c++;
@@ -2325,7 +2454,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -2345,6 +2474,22 @@ document.addEventListener("click",e=>{
   if(d.stepdel){ excluirSubetapa(d.stepdel); return; }
   if(d.push){ const a=act(d.push); if(a) empurrar(a,null); return; }
   if(d.spush){ const {a,s}=step(d.spush); if(a&&s) empurrar(a,s); return; }
+  if(d.time){ const a=act(d.time); if(a){ a.timeOpen=!a.timeOpen; save(); renderWeek(); foco(`[data-timeval="${CSS.escape(d.time)}"]`); } return; }
+  if(d.stime){ const {s}=step(d.stime); if(s){ s.timeOpen=!s.timeOpen; save(); renderWeek(); foco(`[data-stimeval="${CSS.escape(d.stime)}"]`); } return; }
+  if(d.timeadd){
+    const i=d.timeadd.lastIndexOf(":"), a=act(d.timeadd.slice(0,i)), n=+d.timeadd.slice(i+1);
+    if(a){ a.mins = n===0 ? 0 : tempoDe(a)+n; save(); renderWeek(); }
+    return;
+  }
+  if(d.stimeadd){
+    const i=d.stimeadd.lastIndexOf(":"), ref=d.stimeadd.slice(0,i), n=+d.stimeadd.slice(i+1);
+    const {s}=step(ref);
+    if(s){ s.mins = n===0 ? 0 : tempoDe(s)+n; save(); renderWeek(); }
+    return;
+  }
+  if(d.sugw){ const [id,n]=d.sugw.split(":"); const a=act(id);
+    if(a){ a.weight=Math.max(1,Math.min(3,+n||1)); save(); render();   // pode ter vindo do histórico
+      toast(`Peso ${a.weight} aplicado a partir do tempo registrado.`); } return; }
   if(d.tagq){
     const alvo="#"+d.tagq;
     query=(query.trim()===alvo)?"":alvo;
@@ -2361,6 +2506,8 @@ document.addEventListener("click",e=>{
        fn:()=>{ a.tagOpen=!a.tagOpen; save(); renderWeek(); foco(`[data-tagval="${CSS.escape(a.id)}"]`); }},
       {label:a.url?"Editar link":"Anexar link",icon:IC.link,hint:a.url?urlLabel(a.url):"",
        fn:()=>{ a.linkOpen=!a.linkOpen; save(); renderWeek(); foco(`[data-linkval="${CSS.escape(a.id)}"]`); }},
+      {label:"Tempo dedicado",icon:IC.clock,hint:tempoTotal(a)?fmtMin(tempoTotal(a)):"",
+       fn:()=>{ a.timeOpen=!a.timeOpen; save(); renderWeek(); foco(`[data-timeval="${CSS.escape(a.id)}"]`); }},
       {sep:true},
       {label:"Peso",icon:IC.up,hint:"agora "+(a.weight||1),
        fn:()=>{ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); }},
@@ -2380,6 +2527,8 @@ document.addEventListener("click",e=>{
        fn:()=>{ s.tagOpen=!s.tagOpen; save(); renderWeek(); foco(`[data-stagval="${CSS.escape(ref)}"]`); }},
       {label:s.url?"Editar link":"Anexar link",icon:IC.link,hint:s.url?urlLabel(s.url):"",
        fn:()=>{ s.linkOpen=!s.linkOpen; save(); renderWeek(); foco(`[data-slinkval="${CSS.escape(ref)}"]`); }},
+      {label:"Tempo dedicado",icon:IC.clock,hint:tempoDe(s)?fmtMin(tempoDe(s)):"",
+       fn:()=>{ s.timeOpen=!s.timeOpen; save(); renderWeek(); foco(`[data-stimeval="${CSS.escape(ref)}"]`); }},
       {label:"Adiar para a semana seguinte",icon:IC.push,fn:()=>empurrar(a,s)},
       {sep:true},
       {label:"Excluir subetapa",icon:IC.x,danger:true,fn:()=>excluirSubetapa(ref)}
@@ -2497,12 +2646,12 @@ document.addEventListener("keydown",e=>{
   }
   const el=e.target, typing=/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
   if(e.key==="Enter" && el.dataset && el.dataset.add){ addAct(el.dataset.add, el.value); el.value=""; setTimeout(()=>{ const n=document.querySelector(`[data-add="${CSS.escape(el.dataset.add)}"]`); if(n) n.focus(); },0); return; }
-  if(e.key==="Enter" && el.dataset && (el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval)){ e.preventDefault(); el.blur(); return; }
-  if(e.key==="Escape" && el.dataset && (el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval)){
-    const ref=el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval;
-    const ehStep=!!(el.dataset.slinkval||el.dataset.stagval);
-    const alvo=ehStep? step(ref).s : act(ref);
-    if(alvo){ alvo.linkOpen=false; alvo.tagOpen=false; save(); renderWeek(); }
+  const campoInline=el.dataset&&(el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval||el.dataset.timeval||el.dataset.stimeval);
+  if(e.key==="Enter" && campoInline){ e.preventDefault(); el.blur(); return; }
+  if(e.key==="Escape" && campoInline){
+    const ehStep=!!(el.dataset.slinkval||el.dataset.stagval||el.dataset.stimeval);
+    const alvo=ehStep? step(campoInline).s : act(campoInline);
+    if(alvo){ alvo.linkOpen=false; alvo.tagOpen=false; alvo.timeOpen=false; save(); renderWeek(); }
     return;
   }
   if(e.key==="Enter" && el.dataset && el.dataset.hiadd){
@@ -2562,6 +2711,18 @@ document.addEventListener("change",e=>{
   if(d.hiat){ const [hid,iid]=d.hiat.split(":"); const h=S.habits.find(x=>x.id===hid);
     const it=h&&(h.items||[]).find(x=>x.id===iid);
     if(it){ it.at=e.target.value||null; save(); render(); } return; }
+  if(d.timeval||d.stimeval){
+    const ehStep=!!d.stimeval, ref=d.timeval||d.stimeval;
+    const alvo=ehStep? step(ref).s : act(ref);
+    if(!alvo) return;
+    const min=parseMin(e.target.value);
+    if(Number.isNaN(min)){ toast('Não entendi o tempo — use "45", "1h30" ou "90m".'); e.target.focus(); return; }
+    alvo.mins=min==null?0:Math.min(24*60,min);
+    alvo.timeOpen=false;
+    save(); renderWeek();
+    toast(alvo.mins?`Tempo registrado: ${fmtMin(alvo.mins)}.`:"Tempo zerado.");
+    return;
+  }
   if(d.tagval||d.stagval){
     const ehStep=!!d.stagval, ref=d.tagval||d.stagval;
     const alvo=ehStep? step(ref).s : act(ref);
@@ -2585,6 +2746,10 @@ document.addEventListener("change",e=>{
   }
   if(id==="goalpct"){ S.settings.goal=Math.max(10,Math.min(100,+e.target.value||75)); save(); return; }
   if(id==="partial"){ S.settings.partial=Math.max(0,Math.min(100,+e.target.value||50)); save(); return; }
+  if(id==="tmedio"){ S.settings.tempoMedio=Math.max(5,Math.min(480,+e.target.value||30));
+    if(limiteAlto()<=S.settings.tempoMedio) S.settings.tempoAlto=S.settings.tempoMedio*2;   // o alto tem de ficar acima do médio
+    save(); renderSet(); return; }
+  if(id==="talto"){ S.settings.tempoAlto=Math.max(limiteMedio()+5,Math.min(960,+e.target.value||120)); save(); renderSet(); return; }
 });
 
 /* arrastar para reordenar/mover entre cartões */

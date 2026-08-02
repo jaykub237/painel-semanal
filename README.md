@@ -56,11 +56,31 @@ Clicar num marcador `#tag` filtra a semana por ele; clicar de novo limpa. O camp
 de busca também entende `#tag`, e sem `#` procura em texto e etiquetas ao mesmo
 tempo.
 
-## Menu do item
+## Linha da atividade
 
-Cada atividade tem dois botões fixos — subetapas e `⋯`. O resto (etiquetas, link,
-peso, dia-alvo, adiar, excluir) fica no menu, e os marcadores abaixo do texto são
-atalhos: clicar no de peso alterna 1 › 2 › 3, no de dia avança o dia-alvo.
+Caixa, nome, marcadores e menu ficam na mesma linha; o nome é a coluna elástica e
+cresce em altura quando é longo, sem empurrar nada para outra linha. Só num cartão
+muito estreito os marcadores descem — e mesmo aí a caixa continua ao lado do nome.
+
+Aparece como marcador apenas o que carrega informação: peso acima de 1, dia-alvo
+definido, tempo anotado, etiquetas, link. O resto vive no menu `⋯`, que mostra o
+valor atual ao lado de cada opção. Os marcadores também são atalhos — clicar no de
+peso alterna 1 › 2 › 3, no de dia avança o dia-alvo.
+
+## Tempo dedicado
+
+Cada atividade e subetapa aceita o tempo gasto, pelo menu ou pelo marcador de
+relógio. O campo entende `45`, `90m`, `1h30`, `1:30` e `1,5h`, e há botões de
++15, +30 e +1h para somar sem digitar. O tempo da atividade inclui o das suas
+subetapas.
+
+A partir do tempo o painel sugere um peso — até 30 min peso 1, até 2h peso 2,
+acima disso peso 3, com as duas faixas ajustáveis em **Ajustes → Preferências**.
+Quando a sugestão diverge do peso escolhido, aparece um marcador `› peso N` que
+aplica a mudança num clique. O histórico traz o mesmo confronto em lista, com o
+total da semana e o tempo por frente.
+
+O tempo é o registro daquela semana: não é levado pelo "puxar semana anterior".
 
 ## Lixeira e adiamento
 
