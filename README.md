@@ -46,6 +46,22 @@ atividade comum; 2 e 3 pesam mais no percentual e marcam a rotina como
 prioridade na visão do dia — mesma régua das atividades, onde a subetapa
 herda a prioridade da atividade a que pertence.
 
+## Etiquetas
+
+Atividades e subetapas aceitam etiquetas livres. Escreva `#casa` no meio do texto
+ao criar — a etiqueta sai do texto e vira marcador —, ou use **Etiquetas** no menu
+do item para editá-las separadas por vírgula.
+
+Clicar num marcador `#tag` filtra a semana por ele; clicar de novo limpa. O campo
+de busca também entende `#tag`, e sem `#` procura em texto e etiquetas ao mesmo
+tempo.
+
+## Menu do item
+
+Cada atividade tem dois botões fixos — subetapas e `⋯`. O resto (etiquetas, link,
+peso, dia-alvo, adiar, excluir) fica no menu, e os marcadores abaixo do texto são
+atalhos: clicar no de peso alterna 1 › 2 › 3, no de dia avança o dia-alvo.
+
 ## Lixeira e adiamento
 
 Excluir uma atividade ou subetapa mostra um aviso com **Desfazer** por alguns
@@ -69,6 +85,19 @@ Só `http` e `https` são aceitos.
 
 O link aparece como atalho na agenda e na visão do dia, abrindo em nova aba.
 Subetapa sem link próprio herda o link da atividade.
+
+## Histórico
+
+A aba abre com **Como foi a semana**, a leitura da semana aberta: percentual com a
+variação sobre a semana anterior e sobre a média das quatro anteriores, contagem
+de atividades e subetapas, distribuição do planejado e do concluído por dia,
+pontualidade (dia planejado × dia da conclusão), esforço por frente com peso,
+aderência de cada rotina, etiquetas e a retrospectiva registrada.
+
+Abaixo vem **Ao longo do tempo**, com a evolução entre semanas que já existia.
+
+A pontualidade só conta atividades com dia-alvo e com carimbo de conclusão —
+atividades marcadas antes dessa versão não têm o carimbo e ficam de fora.
 
 ## Segurança
 

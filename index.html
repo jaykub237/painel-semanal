@@ -507,6 +507,39 @@ main{padding:24px 0 80px}
 @media (prefers-color-scheme:dark){.scale button[aria-pressed="true"]{color:#0E1418}}
 :root[data-theme="light"] .scale button[aria-pressed="true"]{color:#fff}
 
+/* ---------- análise da semana ---------- */
+.anhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.anhead.segunda{margin-top:30px}
+.anhead h2{margin:0;font-size:13px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
+.anhead span{font-size:12px;color:var(--ink-3)}
+.an-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.panel.an h2{font-size:12px}
+.pontnum{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.pontleg{font-size:12.5px;color:var(--ink-3);margin:5px 0 10px}
+.pontbar{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--line)}
+.pontbar i{display:block;height:100%}
+.pontbar .ok{background:var(--ok)}
+.pontbar .late{background:color-mix(in srgb,var(--crit) 55%,transparent)}
+.panel.an .obs{margin:10px 0 0;font-size:12px;color:var(--ink-3)}
+.panel.an .vazio{margin:0;font-size:13px;color:var(--ink-3);font-style:italic}
+
+.esf{display:flex;flex-direction:column;gap:9px}
+.esfrow{display:flex;align-items:center;gap:11px}
+.esfn{flex:0 0 34%;min-width:0;font-size:13.2px;overflow-wrap:anywhere}
+.esfn .pesoinl{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase}
+.esfbar{flex:1;min-width:0;height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;display:block}
+.esfbar i{display:block;height:100%;border-radius:99px;background:color-mix(in srgb,var(--c) 22%,transparent)}
+.esfbar b{display:block;height:100%;border-radius:99px;background:var(--c)}
+.esfv{flex:0 0 52px;text-align:right;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tagcloud{display:flex;flex-wrap:wrap;gap:7px}
+.tagcloud .chip{font-size:12px;padding:3px 9px}
+.tagcloud .chip b{font-family:var(--mono);font-weight:600;opacity:.75;margin-left:3px}
+.retroline{display:flex;gap:12px;padding:7px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.retroline:first-of-type{border-top:none}
+.retroline span{flex:0 0 128px;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);padding-top:3px}
+.retroline p{margin:0;flex:1;min-width:200px;font-size:13.5px;line-height:1.5;white-space:pre-wrap}
+@media (max-width:620px){.esfn{flex-basis:42%}.retroline span{flex-basis:100%}}
+
 /* ---------- histórico ---------- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;box-shadow:var(--shadow)}
@@ -541,6 +574,32 @@ table.hist tr:last-child td{border-bottom:none}
 .setrow input[type=text]:focus{border-color:var(--accent);background:var(--surface);outline:none}
 .setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
 .indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
+/* ---------- menu suspenso ---------- */
+.menu{position:fixed;z-index:90;min-width:212px;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 10px 34px rgba(8,14,20,.22),0 2px 6px rgba(8,14,20,.1);padding:5px;display:flex;flex-direction:column;gap:1px}
+.menuitem{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border-radius:7px;font-size:13.3px;color:var(--ink);text-align:left}
+.menuitem:hover,.menuitem:focus-visible{background:var(--surface-2)}
+.menuitem i{flex:none;width:15px;height:15px;display:grid;place-items:center;color:var(--ink-3)}
+.menuitem i svg{width:14px;height:14px}
+.menuitem span{flex:1;min-width:0}
+.menuitem em{flex:none;font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menuitem.danger{color:var(--crit)}
+.menuitem.danger i{color:var(--crit)}
+.menuitem.danger:hover{background:color-mix(in srgb,var(--crit) 12%,transparent)}
+.menusep{height:1px;background:var(--line);margin:4px 2px}
+
+/* marcadores que também são controles */
+.chip.tag{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft);text-transform:none;letter-spacing:.01em}
+.chip.tag:hover{filter:brightness(1.06);border-color:var(--accent)}
+.chip.tag.mini{font-size:9px;padding:1px 4px}
+.chip.w,.chip.due,.chip.steps,.chip.tag{cursor:pointer}
+.chip.off{color:var(--ink-3);background:none;border-style:dashed;opacity:0}
+.itemwrap:hover .chip.off,.itemwrap:focus-within .chip.off{opacity:1}
+.chip.w:hover,.chip.due:hover,.chip.steps:hover{border-color:var(--line-2);color:var(--ink)}
+.stags{display:flex;gap:3px;flex:none;align-items:center;margin-top:3px}
+.tagrow input{font-size:12.8px}
+@media (hover:none){.chip.off{opacity:1}}
+
 .trashrow{border-left:3px solid var(--c);padding-left:10px;gap:10px}
 .trashrow .tname{font-size:13.8px;line-height:1.35;overflow-wrap:anywhere}
 .trashrow .tmeta{font-size:11.5px;color:var(--ink-3);margin-top:2px;overflow-wrap:anywhere}
@@ -672,6 +731,15 @@ table.hist tr:last-child td{border-bottom:none}
   </section>
 
   <section id="view-hist" class="hidden">
+    <div class="anhead">
+      <h2>Como foi a semana</h2>
+      <span id="anweek" class="mono"></span>
+    </div>
+    <div id="analise"></div>
+
+    <div class="anhead segunda">
+      <h2>Ao longo do tempo</h2>
+    </div>
     <div class="stats" id="stats"></div>
     <div class="panel">
       <h2>Evolução</h2>
@@ -798,6 +866,8 @@ table.hist tr:last-child td{border-bottom:none}
     </div>
   </div>
 </div>
+
+<datalist id="taglist"></datalist>
 
 <div class="toast" id="toast"></div>
 
@@ -959,6 +1029,79 @@ function rotFator(h,st,i){
 }
 const rotDiaFeito=(h,st,i)=> rotFator(h,st,i)>=1;
 
+/* ---------- tags ---------- */
+// Etiqueta livre, minúscula, sem "#" guardado — o "#" é só como se escreve e se procura.
+const normTag=t=> String(t||"").trim().replace(/^#+/,"").toLowerCase().replace(/\s+/g," ").slice(0,24);
+function parseTags(txt){
+  const fora=[], dentro=[];
+  String(txt||"").split(/[,;]+|\s{2,}/).forEach(p=>{ const t=normTag(p); if(t&&!dentro.includes(t)){ dentro.push(t); fora.push(t); } });
+  return fora;
+}
+// tira "#tag" do meio do texto na criação, do mesmo jeito que "!2" define o peso
+function extraiTags(texto){
+  const tags=[];
+  const limpo=String(texto||"").replace(/(^|\s)#([^\s#]{1,24})/g,(m,pre,t)=>{ const n=normTag(t); if(n&&!tags.includes(n)) tags.push(n); return pre; }).replace(/\s{2,}/g," ").trim();
+  return {texto:limpo,tags};
+}
+const tagsDe=o=> Array.isArray(o&&o.tags)?o.tags:[];
+function todasTags(k){
+  const w=week(k||cur), m=new Map();
+  (w.acts||[]).forEach(a=>{
+    tagsDe(a).forEach(t=> m.set(t,(m.get(t)||0)+1));
+    (a.steps||[]).forEach(s=> tagsDe(s).forEach(t=> m.set(t,(m.get(t)||0)+1)));
+  });
+  return [...m.entries()].sort((x,y)=> y[1]-x[1]||x[0].localeCompare(y[0]));
+}
+// a busca vale para texto e etiqueta; "#casa" procura só na etiqueta
+function combina(o,q){
+  if(!q) return true;
+  const alvo=q.startsWith("#")?normTag(q):q;
+  if(q.startsWith("#")) return tagsDe(o).some(t=> t.includes(alvo));
+  return (o.text||"").toLowerCase().includes(q) || tagsDe(o).some(t=> t.includes(alvo));
+}
+
+/* ---------- menu suspenso ---------- */
+// Vai no <body> porque o cartão tem overflow:hidden — dentro dele o menu seria cortado.
+let menuFechar=null;
+function fecharMenu(){
+  const m=document.getElementById("menu");
+  if(m) m.remove();
+  if(menuFechar){ menuFechar(); menuFechar=null; }
+}
+function abrirMenu(btn,itens){
+  const jaEra=document.getElementById("menu")?.dataset.dono===btn.dataset.menuId;
+  fecharMenu();
+  if(jaEra) return;                       // clicar de novo no mesmo botão fecha
+  const m=document.createElement("div");
+  m.className="menu"; m.id="menu"; m.dataset.dono=btn.dataset.menuId||"";
+  m.setAttribute("role","menu");
+  m.innerHTML=itens.map((it,i)=> it.sep
+    ? `<div class="menusep"></div>`
+    : `<button class="menuitem ${it.danger?"danger":""}" data-mi="${i}" role="menuitem">
+         <i>${it.icon||""}</i><span>${esc(it.label)}</span>${it.hint?`<em>${esc(it.hint)}</em>`:""}
+       </button>`).join("");
+  document.body.appendChild(m);
+  const r=btn.getBoundingClientRect(), mr=m.getBoundingClientRect();
+  let left=Math.max(8,Math.min(r.right-mr.width, innerWidth-mr.width-8));
+  let top=r.bottom+6;
+  if(top+mr.height>innerHeight-8) top=Math.max(8,r.top-mr.height-6);
+  m.style.left=left+"px"; m.style.top=top+"px";
+  m.addEventListener("click",e=>{
+    const b=e.target.closest("[data-mi]"); if(!b) return;
+    const it=itens[+b.dataset.mi];
+    fecharMenu();
+    if(it&&it.fn) it.fn();
+  });
+  const forra=e=>{ if(!e.target.closest("#menu")) fecharMenu(); };
+  const tecla=e=>{ if(e.key==="Escape"){ e.stopPropagation(); fecharMenu(); } };
+  setTimeout(()=>document.addEventListener("mousedown",forra),0);
+  document.addEventListener("keydown",tecla,true);
+  addEventListener("scroll",fecharMenu,{capture:true,once:true});
+  addEventListener("resize",fecharMenu,{once:true});
+  menuFechar=()=>{ document.removeEventListener("mousedown",forra); document.removeEventListener("keydown",tecla,true); };
+  m.querySelector(".menuitem")?.focus();
+}
+
 /* ---------- lixeira ---------- */
 // Excluir é o único gesto do painel sem volta, e o clique é a um pixel do "editar".
 // O item sai da semana mas fica guardado com o crachá de onde veio, por 60 dias.
@@ -1006,7 +1149,7 @@ function empurrar(a,s){
       m={id:uid(),sub:a.sub,text:a.text,status:"todo",weight:a.weight||1,due:null,at:null,url:a.url??null,steps:[],carried:true,created:Date.now()};
       w.acts.push(m);
     }
-    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null});
+    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()});
     a.steps=(a.steps||[]).filter(x=>x.id!==s.id);
     // esvaziada de etapas, a atividade não pode continuar "concluída": a prova da
     // conclusão foi junto com as etapas, e ela seguiria inflando o percentual da semana
@@ -1018,7 +1161,7 @@ function empurrar(a,s){
     w.acts.push(Object.assign({},a,{
       id:uid(), carried:true, created:Date.now(),
       status:a.status==="skip"?"todo":a.status,
-      steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,due:x.due??null,at:x.at??null,url:x.url??null}))
+      steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,due:x.due??null,at:x.at??null,url:x.url??null,tags:tagsDe(x).slice()}))
     }));
   }
   save(); renderWeek();
@@ -1082,6 +1225,7 @@ const IC={
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5V4a1 1 0 0 1 1-1h8.5a1 1 0 0 1 .7.3l7.5 7.5a1 1 0 0 1 0 1.4l-8.5 8.5a1 1 0 0 1-1.4 0L3.3 13.2a1 1 0 0 1-.3-.7z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></svg>',
   push:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg>',
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
   link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4.5 4.5 0 0 0 6.36 0l2.4-2.4a4.5 4.5 0 0 0-6.36-6.36l-1.2 1.2"/><path d="M13.5 10.5a4.5 4.5 0 0 0-6.36 0l-2.4 2.4a4.5 4.5 0 0 0 6.36 6.36l1.2-1.2"/></svg>',
@@ -1117,7 +1261,7 @@ function renderWeek(){
       let acts=w.acts.filter(a=> a.sub===sub.id);
       const feitas=acts.filter(a=> a.status==="done").length;
       const soSub=!!S.settings.hideDoneSubs[sub.id];   // ocultar só nesta frente
-      if(q) acts=acts.filter(a=> (a.text||"").toLowerCase().includes(q) || (a.steps||[]).some(s=> (s.text||"").toLowerCase().includes(q)));
+      if(q) acts=acts.filter(a=> combina(a,q) || (a.steps||[]).some(s=> combina(s,q)));
       if(hd||soSub) acts=acts.filter(a=> a.status!=="done");
       const hs=S.habits.filter(h=> h.sub===sub.id);
       const pctTxt=r.pct==null?"—":r.pct+"%";
@@ -1210,6 +1354,8 @@ function renderWeek(){
   $("#foldAll").textContent=S.areas.every(a=>S.settings.folded[a.id])?"Expandir áreas":"Recolher áreas";
   $("#foldSubs").textContent=allSubs().every(s=>S.settings.foldedSubs[s.id])?"Expandir subcategorias":"Recolher subcategorias";
 
+  const conhecidas=todasTags(cur);
+  $("#taglist").innerHTML=conhecidas.map(([t])=>`<option value="${esc(t)}">`).join("");
   $$("#areas textarea").forEach(autosize);
   const r=w.retro||{};
   $("#r-win").value=r.win||""; $("#r-block").value=r.block||""; $("#r-next").value=r.next||"";
@@ -1225,7 +1371,7 @@ function renderAgenda(w){
   const today=isNow ? ((new Date().getDay()||7)-1) : -1;
   const cols=[0,1,2,3,4,5,6].map(()=>[]), semDia=[];
   const q=query.trim().toLowerCase();
-  const casa=t=> !q || (t||"").toLowerCase().includes(q);
+  const casa=(t,o)=> !q || (o?combina(o,q):(t||"").toLowerCase().includes(q));
   const hd=S.settings.hideDone;
 
   // Duas fontes de entrada: a atividade (pelo dia dela) e cada subetapa que tenha dia próprio.
@@ -1236,12 +1382,12 @@ function renderAgenda(w){
   const porSub={}, fs=S.settings.agendaSub||null;
   w.acts.forEach(a=>{
     const steps=a.steps||[];
-    const bateNaAtividade=casa(a.text)||steps.some(s=>casa(s.text));
+    const bateNaAtividade=casa(null,a)||steps.some(s=>casa(null,s));
     const temStepComDia=steps.some(x=> x.due!=null && x.due>=0 && x.due<=6);
     steps.forEach(s=>{
       const semDiaPropria=(s.due==null || s.due<0 || s.due>6);
       if(hd && s.done) return;
-      if(!(casa(s.text)||casa(a.text))) return;
+      if(!(casa(null,s)||casa(null,a))) return;
       // subetapa sem dia numa atividade cujo cronograma está nas etapas: sem isto ela
       // não aparecia em lugar nenhum — a atividade-mãe não vai para "sem dia" nesse caso
       if(semDiaPropria){
@@ -1494,12 +1640,15 @@ function linkBtn(u){
 function itemHTML(a){
   const late=a.due!=null && a.status!=="done" && a.status!=="skip" && cur===todayKey() && a.due < ((new Date().getDay()||7)-1);
   const steps=a.steps||[], sdone=steps.filter(x=>x.done).length;
+  // Os marcadores viraram os próprios controles: clicar no de dia troca o dia, no de
+  // peso troca o peso. O resto foi para o menu — seis botões fixos desalinhavam a linha.
   const chips=[];
-  if(steps.length) chips.push(`<span class="chip steps ${sdone===steps.length?"full":""}">${sdone}/${steps.length} subetapas</span>`);
-  if((a.weight||1)>1) chips.push(`<span class="chip w">peso ${a.weight}</span>`);
-  if(a.due!=null) chips.push(`<span class="chip due ${late?"late":""}">${DIAS[a.due]}</span>`);
+  if(steps.length) chips.push(`<button class="chip steps ${sdone===steps.length?"full":""}" data-steps="${a.id}" title="${a.open?"Recolher":"Mostrar"} as subetapas">${sdone}/${steps.length} subetapas</button>`);
+  chips.push(`<button class="chip w ${(a.weight||1)>1?"":"off"}" data-weight="${a.id}" title="Peso no cálculo — clique para alternar 1 › 2 › 3">peso ${a.weight||1}</button>`);
+  chips.push(`<button class="chip due ${a.due!=null?"":"off"} ${late?"late":""}" data-due="${a.id}" title="Dia-alvo — clique para avançar">${a.due!=null?DIAS[a.due]:"sem dia"}</button>`);
   if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
   if(a.status==="skip") chips.push(`<span class="chip">adiada</span>`);
+  tagsDe(a).forEach(t=> chips.push(`<button class="chip tag" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`));
   if(a.url) chips.push(`<a class="chip lk" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(a.url)}">${IC.link}${esc(urlLabel(a.url))}</a>`);
   // o horário só faz sentido depois que há um dia — por isso o campo aparece junto do chip do dia
   if(a.due!=null) chips.push(`<input class="timein ${a.at?"set":""}" type="time" value="${esc(a.at||"")}" data-attime="${a.id}" title="Horário desejado" aria-label="Horário da atividade">`);
@@ -1514,11 +1663,7 @@ function itemHTML(a){
       </div>
       <div class="irow">
         <button class="ib ${open?"open":""}" data-steps="${a.id}" data-on="${steps.length?1:0}" aria-expanded="${open}" title="${steps.length?"Mostrar subetapas":"Dividir em subetapas"}">${IC.chev}</button>
-        <button class="ib" data-link="${a.id}" data-on="${a.url?1:0}" aria-expanded="${!!a.linkOpen}" title="${a.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
-        <button class="ib" data-weight="${a.id}" title="Alternar peso (1 → 2 → 3)">${IC.up}</button>
-        <button class="ib" data-due="${a.id}" title="Definir dia-alvo">${IC.more}</button>
-        <button class="ib" data-push="${a.id}" title="Adiar para a semana seguinte">${IC.push}</button>
-        <button class="ib" data-del="${a.id}" title="Excluir">${IC.x}</button>
+        <button class="ib" data-menu="${a.id}" data-menu-id="act-${a.id}" title="Mais opções" aria-haspopup="menu">${IC.more}</button>
       </div>
     </div>
     ${a.linkOpen?`<div class="linkrow">
@@ -1527,6 +1672,12 @@ function itemHTML(a){
         placeholder="Cole o endereço — ex: drive.google.com/… · Enter para salvar" autocomplete="off" aria-label="Link da atividade">
       ${a.url?`<button class="ib" data-linkdel="${a.id}" title="Remover o link">${IC.x}</button>`:""}
     </div>`:""}
+    ${a.tagOpen?`<div class="linkrow tagrow">
+      ${IC.tag}
+      <input type="text" data-tagval="${a.id}" value="${esc(tagsDe(a).join(", "))}"
+        placeholder="Etiquetas separadas por vírgula — ex: casa, urgente · Enter para salvar" autocomplete="off" aria-label="Etiquetas da atividade"
+        list="taglist">
+    </div>`:""}
     ${open?`<div class="steps">
       ${steps.map(s=>{
         const slate=s.due!=null && !s.done && cur===todayKey() && s.due < ((new Date().getDay()||7)-1);
@@ -1534,18 +1685,22 @@ function itemHTML(a){
         <span class="sgrip" data-stepgrip="${a.id}:${s.id}" draggable="true" title="Arrastar para reordenar">${IC.grip}</span>
         <button class="sbox" data-steptoggle="${a.id}:${s.id}" aria-label="${s.done?"Concluída":"Pendente"}">${IC.check}</button>
         <textarea class="stx" rows="1" data-steptext="${a.id}:${s.id}" aria-label="Descrição da subetapa">${esc(s.text)}</textarea>
+        ${tagsDe(s).length?`<span class="stags">${tagsDe(s).map(t=>`<button class="chip tag mini" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`).join("")}</span>`:""}
         ${s.url?`<a class="sgo" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(s.url)}">${IC.link}</a>`:""}
         ${s.due!=null?`<input class="timein ${s.at?"set":""}" type="time" value="${esc(s.at||"")}" data-attime="${a.id}:${s.id}" title="Horário desejado" aria-label="Horário da subetapa">`:""}
         <button class="sday ${s.due!=null?"set":""} ${slate?"late":""}" data-stepdue="${a.id}:${s.id}" title="Dia-alvo da subetapa">${s.due!=null?DIAS[s.due]:"dia"}</button>
-        <button class="sx ${s.url?"on":""}" data-slink="${a.id}:${s.id}" title="${s.url?"Editar o link":"Anexar um link"}">${IC.link}</button>
-        <button class="sx" data-spush="${a.id}:${s.id}" title="Adiar esta subetapa para a semana seguinte">${IC.push}</button>
-        <button class="sx" data-stepdel="${a.id}:${s.id}" title="Excluir subetapa">${IC.x}</button>
+        <button class="sx" data-smenu="${a.id}:${s.id}" data-menu-id="step-${s.id}" title="Mais opções" aria-haspopup="menu">${IC.more}</button>
       </div>
       ${s.linkOpen?`<div class="linkrow step">
         ${IC.link}
         <input type="url" inputmode="url" data-slinkval="${a.id}:${s.id}" value="${esc(s.url||"")}"
           placeholder="Endereço desta subetapa — Enter para salvar" autocomplete="off" aria-label="Link da subetapa">
         ${s.url?`<button class="ib" data-slinkdel="${a.id}:${s.id}" title="Remover o link">${IC.x}</button>`:""}
+      </div>`:""}
+      ${s.tagOpen?`<div class="linkrow step tagrow">
+        ${IC.tag}
+        <input type="text" data-stagval="${a.id}:${s.id}" value="${esc(tagsDe(s).join(", "))}"
+          placeholder="Etiquetas separadas por vírgula · Enter para salvar" autocomplete="off" aria-label="Etiquetas da subetapa" list="taglist">
       </div>`:""}`;}).join("")}
       <div class="stepadd"><input type="text" data-stepadd="${a.id}" placeholder="Nova subetapa — Enter para salvar" autocomplete="off"></div>
     </div>`:""}
@@ -1563,8 +1718,186 @@ function scale(sel,field,val){
   $(sel).innerHTML=[1,2,3,4,5].map(n=>`<button data-scale="${field}" data-v="${n}" aria-pressed="${val===n}">${n}</button>`).join("");
 }
 
+/* ---------- análise da semana ---------- */
+// Tudo é derivado do que já está gravado — nada de campo novo só para o relatório.
+function analiseSemana(k){
+  const w=week(k), mon=keyMonday(k);
+  const acts=(w.acts||[]).filter(a=> a.status!=="skip");
+  const adiadas=(w.acts||[]).filter(a=> a.status==="skip").length;
+  const feitas=acts.filter(a=>a.status==="done").length;
+
+  const steps=acts.flatMap(a=> (a.steps||[]).map(s=>({a,s})));
+  const stepsFeitas=steps.filter(x=>x.s.done).length;
+
+  // por dia: quantas linhas tinham aquele dia e quantas saíram
+  const dias=[0,1,2,3,4,5,6].map(()=>({plan:0,feito:0}));
+  acts.forEach(a=>{
+    if(a.due!=null&&a.due>=0&&a.due<=6){ dias[a.due].plan++; if(a.status==="done") dias[a.due].feito++; }
+    (a.steps||[]).forEach(s=>{ if(s.due!=null&&s.due>=0&&s.due<=6){ dias[s.due].plan++; if(s.done) dias[s.due].feito++; } });
+  });
+  S.habits.forEach(h=>{
+    if(h.mode!=="daily") return;
+    const at=rotDias(h,k); if(!at.length) return;
+    const st=rotEstado(k,h.id);
+    at.forEach(i=>{ dias[i].plan++; if(rotDiaFeito(h,st,i)) dias[i].feito++; });
+  });
+
+  // pontualidade: só atividades com dia-alvo e carimbo de conclusão
+  let noPrazo=0, atrasadas=0, semCarimbo=0, aindaAbertas=0;
+  acts.forEach(a=>{
+    if(a.due==null||a.due<0||a.due>6) return;
+    if(a.status!=="done"){ aindaAbertas++; return; }
+    if(!a.doneAt){ semCarimbo++; return; }
+    const f=new Date(a.doneAt);
+    const idx=Math.floor((Date.UTC(f.getFullYear(),f.getMonth(),f.getDate())-mon.getTime())/864e5);
+    if(idx<=a.due) noPrazo++; else atrasadas++;
+  });
+
+  // esforço por subcategoria, na mesma régua de peso do percentual
+  const porSub=allSubs().map(s=>{ const r=subScore(s.id,k); return {sub:s,pct:r.pct,num:r.num,den:r.den}; })
+    .filter(x=> x.den>0).sort((a,b)=> b.den-a.den);
+
+  // rotinas: aderência de cada uma
+  const rotinas=S.habits.map(h=>{
+    if(h.mode==="daily"){
+      const at=rotDias(h,k); if(!at.length) return null;
+      const st=rotEstado(k,h.id);
+      const f=at.filter(i=> rotDiaFeito(h,st,i)).length;
+      return {h,feito:f,total:at.length,pct:Math.round(f/at.length*100)};
+    }
+    const v=w.habits[h.id], c=typeof v==="number"?v:0;
+    return {h,feito:c,total:h.target,pct:Math.round(Math.min(c/Math.max(1,h.target),1)*100)};
+  }).filter(Boolean).sort((a,b)=> a.pct-b.pct);
+
+  // etiquetas: quantas linhas de cada e quanto saiu
+  const tags=new Map();
+  (w.acts||[]).forEach(a=>{
+    const reg=(t,ok)=>{ const o=tags.get(t)||{n:0,f:0}; o.n++; if(ok) o.f++; tags.set(t,o); };
+    tagsDe(a).forEach(t=> reg(t,a.status==="done"));
+    (a.steps||[]).forEach(s=> tagsDe(s).forEach(t=> reg(t,s.done)));
+  });
+
+  const anterior=weekScore(shiftKey(k,-1)).pct;
+  const atual=weekScore(k).pct;
+  const ult=dataWeeks().filter(x=>x<k).slice(-4).map(x=>weekScore(x).pct).filter(v=>v!=null);
+
+  return {acts,adiadas,feitas,steps:steps.length,stepsFeitas,dias,
+    noPrazo,atrasadas,semCarimbo,aindaAbertas,porSub,rotinas,
+    tags:[...tags.entries()].sort((a,b)=> b[1].n-a[1].n),
+    atual,anterior,delta:(atual!=null&&anterior!=null)?atual-anterior:null,media4:avg(ult),
+    retro:w.retro||{}};
+}
+
+function barrasDia(dias){
+  const max=Math.max(1,...dias.map(d=>d.plan));
+  const H=104, W=7*54;
+  return `<svg viewBox="0 0 ${W} ${H+30}" width="100%" height="${H+30}" role="img" aria-label="Planejado e concluído por dia">
+    ${dias.map((d,i)=>{
+      const x=i*54+9, larg=36;
+      const hp=d.plan? Math.max(4,Math.round(d.plan/max*H)) : 0;
+      const hf=d.feito? Math.max(4,Math.round(d.feito/max*H)) : 0;
+      return `<g>
+        ${hp?`<rect x="${x}" y="${H-hp}" width="${larg}" height="${hp}" rx="4" fill="var(--line)"/>`:""}
+        ${hf?`<rect x="${x}" y="${H-hf}" width="${larg}" height="${hf}" rx="4" fill="var(--ok)"/>`:""}
+        ${d.plan?`<text x="${x+larg/2}" y="${H-hp-5}" text-anchor="middle" font-size="10.5" font-family="var(--mono)" fill="var(--ink-2)">${d.feito}/${d.plan}</text>`:""}
+        <text x="${x+larg/2}" y="${H+16}" text-anchor="middle" font-size="10" font-family="var(--mono)" fill="var(--ink-3)">${DIAS[i]}</text>
+      </g>`;
+    }).join("")}
+    <line x1="0" x2="${W}" y1="${H+0.5}" y2="${H+0.5}" stroke="var(--line-2)" stroke-width="1"/>
+  </svg>`;
+}
+
+function renderAnalise(){
+  const el=$("#analise"); if(!el) return;
+  const A=analiseSemana(cur);
+  const pct=A.atual;
+  const seta=A.delta==null?"":(A.delta>0?"▲":A.delta<0?"▼":"=");
+  const corDelta=A.delta==null?"var(--ink-3)":(A.delta>0?"var(--ok)":A.delta<0?"var(--crit)":"var(--ink-3)");
+
+  const tiles=[
+    ["Percentual da semana", pct==null?"—":pct+"%",
+     A.delta==null?"sem semana anterior para comparar"
+       :A.delta===0?"igual à semana anterior"
+       :`${seta} ${Math.abs(A.delta)} ponto${Math.abs(A.delta)>1?"s":""} vs. a semana anterior`, corDelta],
+    ["Atividades", `${A.feitas}/${A.acts.length}`, A.adiadas?`${A.adiadas} adiada${A.adiadas>1?"s":""} fora da conta`:"nenhuma adiada"],
+    ["Subetapas", A.steps?`${A.stepsFeitas}/${A.steps}`:"—", A.steps?"":"nenhuma subetapa esta semana"],
+    ["Média das 4 anteriores", A.media4==null?"—":A.media4+"%", pct!=null&&A.media4!=null?(pct>=A.media4?"acima da sua média":"abaixo da sua média"):""]
+  ];
+
+  const totalPont=A.noPrazo+A.atrasadas;
+  const pontual=totalPont? Math.round(A.noPrazo/totalPont*100) : null;
+
+  const maxSub=Math.max(1,...A.porSub.map(x=>x.den));
+
+  el.innerHTML=`
+    <div class="stats">${tiles.map(([k,v,d,c])=>`<div class="stat">
+      <div class="k">${k}</div><div class="v">${esc(v)}</div>
+      <div class="d" ${c?`style="color:${c}"`:""}>${esc(d)}</div></div>`).join("")}</div>
+
+    <div class="an-grid">
+      <div class="panel an">
+        <h2>Distribuição pelos dias</h2>
+        <p class="hint">O que estava marcado para cada dia e quanto saiu — atividades, subetapas e rotinas juntas.</p>
+        <div class="chartwrap">${barrasDia(A.dias)}</div>
+        <div class="legend"><span><i style="background:var(--line)"></i>planejado</span><span><i style="background:var(--ok)"></i>concluído</span></div>
+      </div>
+
+      <div class="panel an">
+        <h2>Pontualidade</h2>
+        <p class="hint">Atividades com dia-alvo, comparando o dia planejado com o dia em que foram marcadas.</p>
+        ${totalPont?`
+          <div class="pontnum mono" style="color:${pontual>=70?"var(--ok)":pontual>=40?"var(--warn)":"var(--crit)"}">${pontual}%</div>
+          <div class="pontleg">${A.noPrazo} no dia planejado · ${A.atrasadas} depois do dia</div>
+          <div class="pontbar"><i class="ok" style="width:${pontual}%"></i><i class="late" style="width:${100-pontual}%"></i></div>
+        `:`<p class="vazio">Nenhuma atividade concluída com dia-alvo ainda nesta semana.</p>`}
+        ${A.aindaAbertas?`<p class="obs">${A.aindaAbertas} com dia marcado ${A.aindaAbertas>1?"seguem":"segue"} em aberto.</p>`:""}
+        ${A.semCarimbo?`<p class="obs">${A.semCarimbo} ${A.semCarimbo>1?"não têm":"não tem"} registro da data de conclusão e ${A.semCarimbo>1?"ficaram":"ficou"} fora desta conta.</p>`:""}
+      </div>
+    </div>
+
+    <div class="panel an">
+      <h2>Onde foi o esforço</h2>
+      <p class="hint">Peso total de cada frente nesta semana e quanto dele saiu do papel. A barra mais longa é a frente que mais ocupou o seu plano.</p>
+      ${A.porSub.length?`<div class="esf">${A.porSub.map(x=>`
+        <div class="esfrow" style="--c:${subVar(x.sub.id)}">
+          <span class="esfn">${esc(x.sub.name)}</span>
+          <span class="esfbar"><i style="width:${Math.round(x.den/maxSub*100)}%"><b style="width:${x.den?Math.round(x.num/x.den*100):0}%"></b></i></span>
+          <span class="esfv mono">${x.pct==null?"—":x.pct+"%"}</span>
+        </div>`).join("")}</div>`:`<p class="vazio">Nada planejado nesta semana.</p>`}
+    </div>
+
+    ${A.rotinas.length?`<div class="panel an">
+      <h2>Aderência das rotinas</h2>
+      <p class="hint">Da que menos saiu para a que mais saiu — o topo da lista é onde a semana escorregou.</p>
+      <div class="esf">${A.rotinas.map(r=>`
+        <div class="esfrow" style="--c:${subVar(r.h.sub)}">
+          <span class="esfn">${esc(r.h.name)}${(r.h.weight||1)>1?` <b class="pesoinl">peso ${r.h.weight}</b>`:""}</span>
+          <span class="esfbar"><i style="width:100%"><b style="width:${r.pct}%"></b></i></span>
+          <span class="esfv mono">${r.feito}/${r.total}</span>
+        </div>`).join("")}</div>
+    </div>`:""}
+
+    ${A.tags.length?`<div class="panel an">
+      <h2>Etiquetas da semana</h2>
+      <p class="hint">Quantas linhas carregaram cada etiqueta e quantas foram concluídas.</p>
+      <div class="tagcloud">${A.tags.map(([t,o])=>`
+        <button class="chip tag" data-tagq="${esc(t)}" title="Filtrar a semana por #${esc(t)}">#${esc(t)} <b>${o.f}/${o.n}</b></button>`).join("")}</div>
+    </div>`:""}
+
+    ${(A.retro.win||A.retro.block||A.retro.next)?`<div class="panel an">
+      <h2>Retrospectiva registrada</h2>
+      ${A.retro.win?`<div class="retroline"><span>O que funcionou</span><p>${esc(A.retro.win)}</p></div>`:""}
+      ${A.retro.block?`<div class="retroline"><span>O que travou</span><p>${esc(A.retro.block)}</p></div>`:""}
+      ${A.retro.next?`<div class="retroline"><span>Foco da próxima</span><p>${esc(A.retro.next)}</p></div>`:""}
+      ${(A.retro.energy||A.retro.mood)?`<div class="retroline"><span>Escalas</span><p>${A.retro.energy?`energia ${A.retro.energy}/5`:""}${A.retro.energy&&A.retro.mood?" · ":""}${A.retro.mood?`satisfação ${A.retro.mood}/5`:""}</p></div>`:""}
+    </div>`:`<p class="hint" style="margin:0 0 18px">A retrospectiva desta semana ainda está em branco — ela aparece aqui depois de preenchida na aba Semana.</p>`}
+  `;
+}
+
 /* ---------- render: histórico ---------- */
 function renderHist(){
+  $("#anweek").textContent=cur.replace("-W"," · semana ")+" · "+rangeLabel(cur);
+  renderAnalise();
   const ks=dataWeeks();
   const series=ks.map(k=> ({k,total:weekScore(k).pct,a:S.areas.map(a=> areaScore(a,k).pct)}));
   const done=series.filter(s=> s.total!=null);
@@ -1850,11 +2183,28 @@ function toast(msg,acao){
 }
 
 /* ---------- ações ---------- */
+const foco=sel=> setTimeout(()=>{ const i=document.querySelector(sel); if(i){ i.focus(); i.select&&i.select(); } },0);
+
+function excluirAtividade(id){
+  const w=week(cur), a=w.acts.find(x=>x.id===id); if(!a) return;
+  const tid=paraLixo({kind:"act",week:cur,rotulo:a.text,sub:a.sub,data:structuredClone(a)});
+  w.acts=w.acts.filter(x=>x.id!==id); save(); renderWeek();
+  toast(`"${a.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Atividade restaurada."); }});
+}
+function excluirSubetapa(ref){
+  const {a,s}=step(ref); if(!a||!s) return;
+  const tid=paraLixo({kind:"step",week:cur,actId:a.id,pai:paiSnapshot(a),rotulo:s.text,contexto:a.text,data:structuredClone(s)});
+  a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek();
+  toast(`Subetapa "${s.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Subetapa restaurada."); }});
+}
+
 function addAct(subId,text){
   text=text.trim(); if(!text) return;
   const m=text.match(/\s!([123])\s*$/);
   let weight=1; if(m){ weight=+m[1]; text=text.slice(0,m.index).trim(); }
-  week(cur,true).acts.push({id:uid(),sub:subId,text,status:"todo",weight,due:null,created:Date.now()});
+  const r=extraiTags(text);
+  if(!r.texto) return;
+  week(cur,true).acts.push({id:uid(),sub:subId,text:r.texto,status:"todo",weight,due:null,tags:r.tags,created:Date.now()});
   save(); renderWeek();
 }
 function act(id){ return week(cur).acts.find(a=>a.id===id); }
@@ -1863,7 +2213,9 @@ function step(ref){ const [aid,sid]=ref.split(":"); const a=act(aid); return {a,
 function addStep(actId,text){
   text=text.trim(); if(!text) return;
   const a=act(actId); if(!a) return;
-  (a.steps=a.steps||[]).push({id:uid(),text,done:false,due:null});
+  const r=extraiTags(text);
+  if(!r.texto) return;
+  (a.steps=a.steps||[]).push({id:uid(),text:r.texto,done:false,due:null,tags:r.tags});
   if(a.status==="done") a.status="doing"; // nova subetapa reabre a atividade
   save(); renderWeek();
 }
@@ -1917,8 +2269,8 @@ function carryOver(){
   (p.acts||[]).filter(a=> a.status==="todo"||a.status==="doing"||a.status==="skip").forEach(a=>{
     if(w.acts.some(x=> x.text===a.text && x.sub===a.sub)) return;
     // só as subetapas que ficaram pendentes vêm junto — o que já foi feito, foi
-    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null}));
-    w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,steps,carried:true,created:Date.now()});
+    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()}));
+    w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,tags:tagsDe(a).slice(),steps,carried:true,created:Date.now()});
     c++;
   });
   save(); renderWeek();
@@ -1973,7 +2325,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -1990,13 +2342,50 @@ document.addEventListener("click",e=>{
       const inp=document.querySelector(`[data-stepadd="${CSS.escape(d.steps)}"]`);
       if(inp && !(a.steps||[]).length) inp.focus(); } return; }
   if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){ s.done=!s.done; syncFromSteps(a); save(); renderWeek(); } return; }
-  if(d.stepdel){ const {a,s}=step(d.stepdel); if(s){
-      const tid=paraLixo({kind:"step",week:cur,actId:a.id,pai:paiSnapshot(a),rotulo:s.text,contexto:a.text,data:structuredClone(s)});
-      a.steps=a.steps.filter(x=>x.id!==s.id); syncFromSteps(a); save(); renderWeek();
-      toast(`Subetapa "${s.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Subetapa restaurada."); }});
-    } return; }
+  if(d.stepdel){ excluirSubetapa(d.stepdel); return; }
   if(d.push){ const a=act(d.push); if(a) empurrar(a,null); return; }
   if(d.spush){ const {a,s}=step(d.spush); if(a&&s) empurrar(a,s); return; }
+  if(d.tagq){
+    const alvo="#"+d.tagq;
+    query=(query.trim()===alvo)?"":alvo;
+    $("#q").value=query;
+    if(view!=="week"){ view="week"; render(); } else renderWeek();   // clicada no histórico, leva para a semana filtrada
+    return;
+  }
+  if(d.menu){
+    const a=act(d.menu); if(!a) return;
+    abrirMenu(t,[
+      {label:a.open?"Recolher subetapas":(a.steps&&a.steps.length?"Mostrar subetapas":"Dividir em subetapas"),icon:IC.chev,
+       fn:()=>{ a.open=!a.open; save(); renderWeek(); }},
+      {label:tagsDe(a).length?"Editar etiquetas":"Adicionar etiquetas",icon:IC.tag,hint:tagsDe(a).length?tagsDe(a).length+"":"",
+       fn:()=>{ a.tagOpen=!a.tagOpen; save(); renderWeek(); foco(`[data-tagval="${CSS.escape(a.id)}"]`); }},
+      {label:a.url?"Editar link":"Anexar link",icon:IC.link,hint:a.url?urlLabel(a.url):"",
+       fn:()=>{ a.linkOpen=!a.linkOpen; save(); renderWeek(); foco(`[data-linkval="${CSS.escape(a.id)}"]`); }},
+      {sep:true},
+      {label:"Peso",icon:IC.up,hint:"agora "+(a.weight||1),
+       fn:()=>{ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); }},
+      {label:"Dia-alvo",icon:IC.more,hint:a.due!=null?DIAS[a.due]:"sem dia",
+       fn:()=>{ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); }},
+      {label:"Adiar para a semana seguinte",icon:IC.push,fn:()=>empurrar(a,null)},
+      {sep:true},
+      {label:"Excluir",icon:IC.x,danger:true,fn:()=>excluirAtividade(a.id)}
+    ]);
+    return;
+  }
+  if(d.smenu){
+    const {a,s}=step(d.smenu); if(!a||!s) return;
+    const ref=d.smenu;
+    abrirMenu(t,[
+      {label:tagsDe(s).length?"Editar etiquetas":"Adicionar etiquetas",icon:IC.tag,
+       fn:()=>{ s.tagOpen=!s.tagOpen; save(); renderWeek(); foco(`[data-stagval="${CSS.escape(ref)}"]`); }},
+      {label:s.url?"Editar link":"Anexar link",icon:IC.link,hint:s.url?urlLabel(s.url):"",
+       fn:()=>{ s.linkOpen=!s.linkOpen; save(); renderWeek(); foco(`[data-slinkval="${CSS.escape(ref)}"]`); }},
+      {label:"Adiar para a semana seguinte",icon:IC.push,fn:()=>empurrar(a,s)},
+      {sep:true},
+      {label:"Excluir subetapa",icon:IC.x,danger:true,fn:()=>excluirSubetapa(ref)}
+    ]);
+    return;
+  }
   if(d.stepdue){ const {s}=step(d.stepdue); if(s){ s.due = s.due==null?0 : (s.due>=6? null : s.due+1); save(); renderWeek(); } return; }
   if(d.link){ const a=act(d.link); if(a){ a.linkOpen=!a.linkOpen; save(); renderWeek();
       if(a.linkOpen) setTimeout(()=>{ const i=document.querySelector(`[data-linkval="${CSS.escape(d.link)}"]`); if(i){ i.focus(); i.select(); } },0); } return; }
@@ -2056,11 +2445,7 @@ document.addEventListener("click",e=>{
   if(d.foldsub){ S.settings.foldedSubs[d.foldsub]=!S.settings.foldedSubs[d.foldsub]; save(); renderWeek(); return; }
   if(d.open){ openSub(d.open); return; }
   if(d.jump){ jumpToAct(d.jump); return; }
-  if(d.del){ const w=week(cur), a=w.acts.find(x=>x.id===d.del); if(!a) return;
-    const tid=paraLixo({kind:"act",week:cur,rotulo:a.text,sub:a.sub,data:structuredClone(a)});
-    w.acts=w.acts.filter(x=>x.id!==d.del); save(); renderWeek();
-    toast(`"${a.text}" excluída.`,{label:"Desfazer",fn:()=>{ restaurar(tid); save(); renderWeek(); toast("Atividade restaurada."); }});
-    return; }
+  if(d.del){ excluirAtividade(d.del); return; }
   if(d.weight){ const a=act(d.weight); if(a){ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); } return; }
   if(d.due){ const a=act(d.due); if(a){ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); } return; }
   if(d.hab){ const w=week(cur,true); const h=S.habits.find(x=>x.id===d.hab);
@@ -2112,11 +2497,12 @@ document.addEventListener("keydown",e=>{
   }
   const el=e.target, typing=/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
   if(e.key==="Enter" && el.dataset && el.dataset.add){ addAct(el.dataset.add, el.value); el.value=""; setTimeout(()=>{ const n=document.querySelector(`[data-add="${CSS.escape(el.dataset.add)}"]`); if(n) n.focus(); },0); return; }
-  if(e.key==="Enter" && el.dataset && (el.dataset.linkval||el.dataset.slinkval)){ e.preventDefault(); el.blur(); return; }
-  if(e.key==="Escape" && el.dataset && (el.dataset.linkval||el.dataset.slinkval)){
-    const ehStep=!!el.dataset.slinkval, ref=el.dataset.linkval||el.dataset.slinkval;
+  if(e.key==="Enter" && el.dataset && (el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval)){ e.preventDefault(); el.blur(); return; }
+  if(e.key==="Escape" && el.dataset && (el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval)){
+    const ref=el.dataset.linkval||el.dataset.slinkval||el.dataset.tagval||el.dataset.stagval;
+    const ehStep=!!(el.dataset.slinkval||el.dataset.stagval);
     const alvo=ehStep? step(ref).s : act(ref);
-    if(alvo){ alvo.linkOpen=false; save(); renderWeek(); }
+    if(alvo){ alvo.linkOpen=false; alvo.tagOpen=false; save(); renderWeek(); }
     return;
   }
   if(e.key==="Enter" && el.dataset && el.dataset.hiadd){
@@ -2176,6 +2562,16 @@ document.addEventListener("change",e=>{
   if(d.hiat){ const [hid,iid]=d.hiat.split(":"); const h=S.habits.find(x=>x.id===hid);
     const it=h&&(h.items||[]).find(x=>x.id===iid);
     if(it){ it.at=e.target.value||null; save(); render(); } return; }
+  if(d.tagval||d.stagval){
+    const ehStep=!!d.stagval, ref=d.tagval||d.stagval;
+    const alvo=ehStep? step(ref).s : act(ref);
+    if(!alvo) return;
+    alvo.tags=parseTags(e.target.value);
+    alvo.tagOpen=false;
+    save(); renderWeek();
+    toast(alvo.tags.length?`Etiquetas: ${alvo.tags.map(t=>"#"+t).join(" ")}`:"Etiquetas removidas.");
+    return;
+  }
   if(d.linkval||d.slinkval){
     const ehStep=!!d.slinkval, ref=d.linkval||d.slinkval;
     const alvo=ehStep? step(ref).s : act(ref);
