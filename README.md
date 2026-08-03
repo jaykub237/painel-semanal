@@ -82,6 +82,20 @@ total da semana e o tempo por frente.
 
 O tempo é o registro daquela semana: não é levado pelo "puxar semana anterior".
 
+## Transferir para outra atividade
+
+No menu de qualquer atividade ou subetapa, **Transferir para outra atividade**
+abre a lista de destinos da semana, com a cor e o nome da subcategoria de cada um.
+
+- Uma **subetapa** muda de dono, levando dia, horário, link, etiquetas e tempo.
+- Uma **atividade** vira subetapa do destino. Se ela tiver subetapas próprias,
+  o painel avisa antes: elas passam a ficar no mesmo nível, dentro do destino,
+  porque a estrutura só tem dois níveis.
+
+Nos dois casos o aviso traz **Desfazer**, que devolve a semana ao estado anterior.
+Uma atividade que fica sem etapas volta a "pendente" se estava concluída, e o
+destino recalcula o próprio estado a partir das etapas que passou a ter.
+
 ## Lixeira e adiamento
 
 Excluir uma atividade ou subetapa mostra um aviso com **Desfazer** por alguns

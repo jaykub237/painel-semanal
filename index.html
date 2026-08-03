@@ -591,13 +591,15 @@ table.hist tr:last-child td{border-bottom:none}
 .setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
 .indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
 /* ---------- menu suspenso ---------- */
-.menu{position:fixed;z-index:90;min-width:212px;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+.menu{position:fixed;z-index:90;min-width:212px;max-width:min(92vw,340px);max-height:min(62vh,360px);overflow-y:auto;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
   box-shadow:0 10px 34px rgba(8,14,20,.22),0 2px 6px rgba(8,14,20,.1);padding:5px;display:flex;flex-direction:column;gap:1px}
+.menuitem .pt{display:block;width:8px;height:8px;border-radius:99px}
 .menuitem{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border-radius:7px;font-size:13.3px;color:var(--ink);text-align:left}
 .menuitem:hover,.menuitem:focus-visible{background:var(--surface-2)}
 .menuitem i{flex:none;width:15px;height:15px;display:grid;place-items:center;color:var(--ink-3)}
 .menuitem i svg{width:14px;height:14px}
-.menuitem span{flex:1;min-width:0}
+.menuitem span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .menuitem em{flex:none;font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .menuitem.danger{color:var(--crit)}
 .menuitem.danger i{color:var(--crit)}
@@ -1131,10 +1133,18 @@ function abrirMenu(btn,itens){
          <i>${it.icon||""}</i><span>${esc(it.label)}</span>${it.hint?`<em>${esc(it.hint)}</em>`:""}
        </button>`).join("");
   document.body.appendChild(m);
-  const r=btn.getBoundingClientRect(), mr=m.getBoundingClientRect();
-  let left=Math.max(8,Math.min(r.right-mr.width, innerWidth-mr.width-8));
-  let top=r.bottom+6;
-  if(top+mr.height>innerHeight-8) top=Math.max(8,r.top-mr.height-6);
+  // cabe abaixo? senão acima; se não couber dos dois lados, limita a altura ao maior espaço
+  const marg=8, r=btn.getBoundingClientRect();
+  const abaixo=innerHeight-r.bottom-marg-6, acima=r.top-marg-6;
+  let mr=m.getBoundingClientRect();
+  let top;
+  if(mr.height<=abaixo) top=r.bottom+6;
+  else if(mr.height<=acima) top=r.top-mr.height-6;
+  else if(abaixo>=acima){ m.style.maxHeight=abaixo+"px"; top=r.bottom+6; }
+  else { m.style.maxHeight=acima+"px"; mr=m.getBoundingClientRect(); top=r.top-mr.height-6; }
+  mr=m.getBoundingClientRect();
+  top=Math.max(marg,Math.min(top,innerHeight-mr.height-marg));
+  const left=Math.max(marg,Math.min(r.right-mr.width, innerWidth-mr.width-marg));
   m.style.left=left+"px"; m.style.top=top+"px";
   m.addEventListener("click",e=>{
     const b=e.target.closest("[data-mi]"); if(!b) return;
@@ -1146,9 +1156,15 @@ function abrirMenu(btn,itens){
   const tecla=e=>{ if(e.key==="Escape"){ e.stopPropagation(); fecharMenu(); } };
   setTimeout(()=>document.addEventListener("mousedown",forra),0);
   document.addEventListener("keydown",tecla,true);
-  addEventListener("scroll",fecharMenu,{capture:true,once:true});
+  // rolar a lista de destinos não pode fechar o próprio menu
+  const rolou=e=>{ if(!(e.target instanceof Node) || !m.contains(e.target)) fecharMenu(); };
+  addEventListener("scroll",rolou,{capture:true});
   addEventListener("resize",fecharMenu,{once:true});
-  menuFechar=()=>{ document.removeEventListener("mousedown",forra); document.removeEventListener("keydown",tecla,true); };
+  menuFechar=()=>{
+    document.removeEventListener("mousedown",forra);
+    document.removeEventListener("keydown",tecla,true);
+    removeEventListener("scroll",rolou,{capture:true});
+  };
   m.querySelector(".menuitem")?.focus();
 }
 
@@ -1188,6 +1204,62 @@ function restaurar(id){
   return t;
 }
 const paiSnapshot=a=> ({id:a.id,sub:a.sub,text:a.text,status:a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,created:a.created||Date.now()});
+
+/* ---------- transferir para outra atividade ---------- */
+// Subetapa muda de dono; atividade inteira vira subetapa do destino. Nos dois casos
+// o desfazer devolve a lista de atividades da semana como estava antes.
+function alvosPara(idOrigem){
+  return week(cur).acts
+    .filter(a=> a.id!==idOrigem)
+    .map(a=>({a,sub:findSub(a.sub)}));
+}
+function transferir(origem,alvoId,s){
+  const w=week(cur), alvo=w.acts.find(a=>a.id===alvoId);
+  if(!alvo || alvo.id===origem.id) return;
+  const antes=structuredClone(w.acts);
+  const desfazer={label:"Desfazer",fn:()=>{ week(cur,true).acts=antes; save(); renderWeek(); toast("Transferência desfeita."); }};
+
+  if(s){
+    origem.steps=(origem.steps||[]).filter(x=>x.id!==s.id);
+    // esvaziada de etapas, a mãe não segue "concluída" pela conclusão que foi embora
+    if(!origem.steps.length && origem.status==="done") origem.status="todo";
+    syncFromSteps(origem);
+    (alvo.steps=alvo.steps||[]).push(s);
+    if(alvo.status==="done" && !s.done) alvo.status="doing";
+    syncFromSteps(alvo);
+    save(); renderWeek();
+    toast(`"${s.text}" agora é subetapa de "${alvo.text}".`,desfazer);
+    return;
+  }
+
+  const virou={id:uid(),text:origem.text,done:origem.status==="done",due:origem.due??null,at:origem.at??null,
+    url:origem.url??null,tags:tagsDe(origem).slice()};
+  if(tempoDe(origem)) virou.mins=tempoDe(origem);
+  const herdadas=(origem.steps||[]).map(x=> Object.assign(structuredClone(x),{id:uid()}));
+  w.acts=w.acts.filter(a=> a.id!==origem.id);
+  (alvo.steps=alvo.steps||[]).push(virou,...herdadas);
+  if(alvo.status==="done" && (!virou.done||herdadas.some(x=>!x.done))) alvo.status="doing";
+  syncFromSteps(alvo);
+  save(); renderWeek();
+  toast(`"${origem.text}" virou subetapa de "${alvo.text}"${herdadas.length?` com ${herdadas.length} etapa${herdadas.length>1?"s":""} junto`:""}.`,desfazer);
+}
+function menuTransferir(btn,origem,s){
+  const alvos=alvosPara(origem.id);
+  if(!alvos.length){ toast("Não há outra atividade nesta semana para receber."); return; }
+  abrirMenu(btn,alvos.map(({a,sub})=>({
+    label:a.text, icon:`<span class="pt" style="background:${subVar(a.sub)}"></span>`,
+    hint:sub?sub.name:"",
+    fn:()=>{
+      if(!s && (origem.steps||[]).length){
+        ask("Transferir com as subetapas?",
+          `"${origem.text}" vira uma subetapa de "${a.text}", e as ${origem.steps.length} subetapas dela passam a ficar no mesmo nível, dentro do destino.`,
+          "Transferir").then(ok=>{ if(ok) transferir(origem,a.id,null); });
+        return;
+      }
+      transferir(origem,a.id,s||null);
+    }
+  })));
+}
 
 /* ---------- adiar para a semana seguinte ---------- */
 // Mover, não copiar: a tarefa sai desta semana e some do percentual dela.
@@ -1275,6 +1347,7 @@ const IC={
   grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  move:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9"/><path d="M4 12h6"/><path d="M4 18h6"/><path d="M14 15l3.5 3.5L21 15"/><path d="M17.5 18.5V8"/></svg>',
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/></svg>',
   tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5V4a1 1 0 0 1 1-1h8.5a1 1 0 0 1 .7.3l7.5 7.5a1 1 0 0 1 0 1.4l-8.5 8.5a1 1 0 0 1-1.4 0L3.3 13.2a1 1 0 0 1-.3-.7z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></svg>',
   push:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg>',
@@ -2514,6 +2587,7 @@ document.addEventListener("click",e=>{
       {label:"Dia-alvo",icon:IC.more,hint:a.due!=null?DIAS[a.due]:"sem dia",
        fn:()=>{ a.due = a.due==null?0 : (a.due>=6? null : a.due+1); save(); renderWeek(); }},
       {label:"Adiar para a semana seguinte",icon:IC.push,fn:()=>empurrar(a,null)},
+      {label:"Transferir para outra atividade",icon:IC.move,fn:()=>menuTransferir(t,a,null)},
       {sep:true},
       {label:"Excluir",icon:IC.x,danger:true,fn:()=>excluirAtividade(a.id)}
     ]);
@@ -2530,6 +2604,7 @@ document.addEventListener("click",e=>{
       {label:"Tempo dedicado",icon:IC.clock,hint:tempoDe(s)?fmtMin(tempoDe(s)):"",
        fn:()=>{ s.timeOpen=!s.timeOpen; save(); renderWeek(); foco(`[data-stimeval="${CSS.escape(ref)}"]`); }},
       {label:"Adiar para a semana seguinte",icon:IC.push,fn:()=>empurrar(a,s)},
+      {label:"Transferir para outra atividade",icon:IC.move,fn:()=>menuTransferir(t,a,s)},
       {sep:true},
       {label:"Excluir subetapa",icon:IC.x,danger:true,fn:()=>excluirSubetapa(ref)}
     ]);
