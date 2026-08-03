@@ -84,8 +84,13 @@ O tempo é o registro daquela semana: não é levado pelo "puxar semana anterior
 
 ## Transferir para outra atividade
 
-No menu de qualquer atividade ou subetapa, **Transferir para outra atividade**
-abre a lista de destinos da semana, com a cor e o nome da subcategoria de cada um.
+**Arrastando**: pegue a alça da atividade ou da subetapa e solte **no miolo** da
+atividade de destino — a linha acende inteira com o aviso "virar subetapa". Soltar
+perto da **borda de cima ou de baixo** continua reordenando, como antes.
+
+**Pelo menu**: **Transferir para outra atividade** abre a lista de destinos da
+semana, agrupada por área e subcategoria, com um campo de busca no topo que filtra
+por nome de atividade ou de frente. Enter escolhe o primeiro resultado.
 
 - Uma **subetapa** muda de dono, levando dia, horário, link, etiquetas e tempo.
 - Uma **atividade** vira subetapa do destino. Se ela tiver subetapas próprias,

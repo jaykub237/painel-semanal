@@ -321,6 +321,12 @@ main{padding:24px 0 80px}
 .itemwrap{position:relative}
 .itemwrap.dragging{opacity:.4}
 .itemwrap.over{box-shadow:inset 0 2px 0 var(--accent)}
+.itemwrap.over-fim{box-shadow:inset 0 -2px 0 var(--accent)}
+/* miolo da linha: o item entra para dentro dela */
+.itemwrap.dentro{box-shadow:inset 0 0 0 2px var(--accent);border-radius:9px;background:var(--accent-soft)}
+.itemwrap.dentro .item::after{content:"virar subetapa";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);pointer-events:none}
+.itemwrap.dentro .item{position:relative}
 /* Uma linha só: caixa, nome, marcadores e menu. O nome é a coluna elástica —
    quando ele é longo, cresce em altura sem empurrar ninguém para outra linha. */
 .item{display:flex;align-items:flex-start;gap:9px;padding:6px 15px 6px 17px;flex-wrap:nowrap}
@@ -591,9 +597,16 @@ table.hist tr:last-child td{border-bottom:none}
 .setrow .num{width:58px;border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 7px;font-family:var(--mono);font-size:13px;text-align:center}
 .indent{padding-left:18px;border-left:2px solid var(--c);margin-left:2px}
 /* ---------- menu suspenso ---------- */
-.menu{position:fixed;z-index:90;min-width:212px;max-width:min(92vw,340px);max-height:min(62vh,360px);overflow-y:auto;
+.menu{position:fixed;z-index:90;min-width:212px;max-width:min(92vw,340px);max-height:min(62vh,360px);overflow:hidden;
   background:var(--surface);border:1px solid var(--line);border-radius:10px;
-  box-shadow:0 10px 34px rgba(8,14,20,.22),0 2px 6px rgba(8,14,20,.1);padding:5px;display:flex;flex-direction:column;gap:1px}
+  box-shadow:0 10px 34px rgba(8,14,20,.22),0 2px 6px rgba(8,14,20,.1);padding:5px;display:flex;flex-direction:column}
+.menulista{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:1px}
+.menubusca{flex:none;padding:1px 1px 6px}
+.menubusca input{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:6px 9px;font-size:12.8px}
+.menubusca input:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.menutit{flex:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);padding:9px 9px 3px}
+.menulista .menutit:first-child{padding-top:3px}
+.menuvazio{padding:9px;font-size:12.5px;color:var(--ink-3);font-style:italic}
 .menuitem .pt{display:block;width:8px;height:8px;border-radius:99px}
 .menuitem{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border-radius:7px;font-size:13.3px;color:var(--ink);text-align:left}
 .menuitem:hover,.menuitem:focus-visible{background:var(--surface-2)}
@@ -1120,18 +1133,25 @@ function fecharMenu(){
   if(m) m.remove();
   if(menuFechar){ menuFechar(); menuFechar=null; }
 }
-function abrirMenu(btn,itens){
+function abrirMenu(btn,itens,opts){
+  opts=opts||{};
   const jaEra=document.getElementById("menu")?.dataset.dono===btn.dataset.menuId;
   fecharMenu();
   if(jaEra) return;                       // clicar de novo no mesmo botão fecha
   const m=document.createElement("div");
   m.className="menu"; m.id="menu"; m.dataset.dono=btn.dataset.menuId||"";
   m.setAttribute("role","menu");
-  m.innerHTML=itens.map((it,i)=> it.sep
+  const corpo=itens.map((it,i)=> it.sep
     ? `<div class="menusep"></div>`
-    : `<button class="menuitem ${it.danger?"danger":""}" data-mi="${i}" role="menuitem">
+    : it.titulo
+    ? `<div class="menutit">${esc(it.titulo)}</div>`
+    : `<button class="menuitem ${it.danger?"danger":""}" data-mi="${i}" role="menuitem"
+         data-busca="${esc(((it.busca||it.label||"")+" "+(it.hint||"")).toLowerCase())}">
          <i>${it.icon||""}</i><span>${esc(it.label)}</span>${it.hint?`<em>${esc(it.hint)}</em>`:""}
        </button>`).join("");
+  m.innerHTML=(opts.busca?`<div class="menubusca">
+      <input type="search" placeholder="${esc(opts.busca)}" autocomplete="off" aria-label="${esc(opts.busca)}">
+    </div>`:"")+`<div class="menulista">${corpo}</div>`;
   document.body.appendChild(m);
   // cabe abaixo? senão acima; se não couber dos dois lados, limita a altura ao maior espaço
   const marg=8, r=btn.getBoundingClientRect();
@@ -1165,7 +1185,34 @@ function abrirMenu(btn,itens){
     document.removeEventListener("keydown",tecla,true);
     removeEventListener("scroll",rolou,{capture:true});
   };
-  m.querySelector(".menuitem")?.focus();
+
+  const campo=m.querySelector(".menubusca input");
+  if(campo){
+    const visiveis=()=> [...m.querySelectorAll(".menuitem")].filter(b=> b.style.display!=="none");
+    campo.addEventListener("input",()=>{
+      const q=campo.value.trim().toLowerCase();
+      m.querySelectorAll(".menuitem").forEach(b=>{
+        b.style.display = (!q || b.dataset.busca.includes(q)) ? "" : "none";
+      });
+      // título de grupo sem nenhum item visível não fica órfão na lista
+      m.querySelectorAll(".menutit").forEach(t=>{
+        let n=t.nextElementSibling, achou=false;
+        while(n && !n.classList.contains("menutit")){ if(n.classList.contains("menuitem")&&n.style.display!=="none"){ achou=true; break; } n=n.nextElementSibling; }
+        t.style.display=achou?"":"none";
+      });
+      const vazio=m.querySelector(".menuvazio");
+      if(vazio) vazio.style.display=visiveis().length?"none":"";
+    });
+    campo.addEventListener("keydown",e=>{
+      if(e.key==="Enter"){ e.preventDefault(); visiveis()[0]?.click(); }
+      if(e.key==="ArrowDown"){ e.preventDefault(); visiveis()[0]?.focus(); }
+    });
+    m.querySelector(".menulista").insertAdjacentHTML("beforeend",
+      `<div class="menuvazio" style="display:none">Nenhuma atividade com esse nome.</div>`);
+    setTimeout(()=>campo.focus(),0);
+  }else{
+    m.querySelector(".menuitem")?.focus();
+  }
 }
 
 /* ---------- lixeira ---------- */
@@ -1208,10 +1255,17 @@ const paiSnapshot=a=> ({id:a.id,sub:a.sub,text:a.text,status:a.status,weight:a.w
 /* ---------- transferir para outra atividade ---------- */
 // Subetapa muda de dono; atividade inteira vira subetapa do destino. Nos dois casos
 // o desfazer devolve a lista de atividades da semana como estava antes.
+// destinos na ordem em que os cartões aparecem na tela, com título por frente
 function alvosPara(idOrigem){
-  return week(cur).acts
-    .filter(a=> a.id!==idOrigem)
-    .map(a=>({a,sub:findSub(a.sub)}));
+  const acts=week(cur).acts.filter(a=> a.id!==idOrigem);
+  const lista=[];
+  S.areas.forEach(area=> area.subs.forEach(sub=>{
+    const dela=acts.filter(a=> a.sub===sub.id);
+    if(!dela.length) return;
+    lista.push({titulo:`${area.name} · ${sub.name}`});
+    dela.forEach(a=> lista.push({a,sub}));
+  }));
+  return lista;
 }
 function transferir(origem,alvoId,s){
   const w=week(cur), alvo=w.acts.find(a=>a.id===alvoId);
@@ -1243,22 +1297,28 @@ function transferir(origem,alvoId,s){
   save(); renderWeek();
   toast(`"${origem.text}" virou subetapa de "${alvo.text}"${herdadas.length?` com ${herdadas.length} etapa${herdadas.length>1?"s":""} junto`:""}.`,desfazer);
 }
+// atividade com subetapas não cabe inteira num nível só — avisa antes de achatar
+function transferirComAviso(origem,alvoId,s){
+  if(!s && (origem.steps||[]).length){
+    const alvo=week(cur).acts.find(a=>a.id===alvoId);
+    ask("Transferir com as subetapas?",
+      `"${origem.text}" vira uma subetapa de "${alvo?alvo.text:"destino"}", e as ${origem.steps.length} subetapas dela passam a ficar no mesmo nível, dentro do destino.`,
+      "Transferir").then(ok=>{ if(ok) transferir(origem,alvoId,null); });
+    return;
+  }
+  transferir(origem,alvoId,s||null);
+}
 function menuTransferir(btn,origem,s){
   const alvos=alvosPara(origem.id);
-  if(!alvos.length){ toast("Não há outra atividade nesta semana para receber."); return; }
-  abrirMenu(btn,alvos.map(({a,sub})=>({
-    label:a.text, icon:`<span class="pt" style="background:${subVar(a.sub)}"></span>`,
-    hint:sub?sub.name:"",
-    fn:()=>{
-      if(!s && (origem.steps||[]).length){
-        ask("Transferir com as subetapas?",
-          `"${origem.text}" vira uma subetapa de "${a.text}", e as ${origem.steps.length} subetapas dela passam a ficar no mesmo nível, dentro do destino.`,
-          "Transferir").then(ok=>{ if(ok) transferir(origem,a.id,null); });
-        return;
-      }
-      transferir(origem,a.id,s||null);
-    }
-  })));
+  if(!alvos.some(x=>x.a)){ toast("Não há outra atividade nesta semana para receber."); return; }
+  abrirMenu(btn, alvos.map(x=> x.titulo ? x : ({
+      label:x.a.text,
+      icon:`<span class="pt" style="background:${subVar(x.a.sub)}"></span>`,
+      hint:(x.a.steps||[]).length?`${x.a.steps.length} etapas`:"",
+      busca:`${x.a.text} ${x.sub?x.sub.name:""}`,
+      fn:()=>transferirComAviso(origem,x.a.id,s)
+    })),
+    {busca:"Procurar atividade…"});
 }
 
 /* ---------- adiar para a semana seguinte ---------- */
@@ -2846,44 +2906,74 @@ document.addEventListener("dragstart",e=>{
   e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain","");
   try{ e.dataTransfer.setDragImage(li,14,12); }catch(_){}
 });
+const limpaMarcas=()=> $$(".itemwrap.over,.itemwrap.over-fim,.itemwrap.dentro,.step.over").forEach(x=>x.classList.remove("over","over-fim","dentro"));
 document.addEventListener("dragend",()=>{
-  $$(".itemwrap,.step").forEach(x=>x.classList.remove("dragging","over"));
+  $$(".itemwrap,.step").forEach(x=>x.classList.remove("dragging","over","over-fim","dentro"));
   drag=null; dragStep=null;
 });
+// Nas bordas da linha, reordena. No miolo dela, entra para dentro da atividade —
+// é a mesma distinção que o gesto tem em qualquer lista com hierarquia.
+function zonaDe(li,y){
+  const r=li.getBoundingClientRect(), rel=(y-r.top)/Math.max(1,r.height);
+  return rel<0.32?"antes" : rel>0.68?"depois" : "dentro";
+}
 document.addEventListener("dragover",e=>{
   if(dragStep){
-    const st=e.target.closest(".step");
-    if(!e.target.closest(".steps")) return;
-    e.preventDefault();
-    $$(".step.over").forEach(x=>x.classList.remove("over"));
     const [aid,sid]=dragStep.split(":");
-    if(st && st.dataset.aid===aid && st.dataset.sid!==sid) st.classList.add("over");
+    const li=e.target.closest(".itemwrap");
+    if(e.target.closest(".steps")){
+      e.preventDefault(); limpaMarcas();
+      const st=e.target.closest(".step");
+      if(st && st.dataset.aid===aid && st.dataset.sid!==sid) st.classList.add("over");
+      return;
+    }
+    // fora da própria lista de etapas: soltar sobre outra atividade transfere
+    if(li && li.dataset.id!==aid){ e.preventDefault(); limpaMarcas(); li.classList.add("dentro"); }
     return;
   }
   if(!drag) return;
-  const li=e.target.closest(".itemwrap");
   if(!e.target.closest(".card")) return;
-  e.preventDefault(); $$(".itemwrap.over").forEach(x=>x.classList.remove("over"));
-  if(li&&li.dataset.id!==drag) li.classList.add("over");
+  e.preventDefault(); limpaMarcas();
+  const li=e.target.closest(".itemwrap");
+  if(li && li.dataset.id!==drag){
+    const z=zonaDe(li,e.clientY);
+    li.classList.add(z==="antes"?"over":z==="depois"?"over-fim":"dentro");
+  }
 });
 document.addEventListener("drop",e=>{
   if(dragStep){
     const [aid,sid]=dragStep.split(":");
-    if(!e.target.closest(".steps")) return;
-    e.preventDefault();
     const a=act(aid); if(!a||!a.steps) return;
-    const i=a.steps.findIndex(x=>x.id===sid); if(i<0) return;
-    const [it]=a.steps.splice(i,1);
-    const st=e.target.closest(".step");
-    const j=(st && st.dataset.aid===aid) ? a.steps.findIndex(x=>x.id===st.dataset.sid) : -1;
-    if(j>=0) a.steps.splice(j,0,it); else a.steps.push(it);
-    save(); renderWeek(); return;
+    if(e.target.closest(".steps")){
+      e.preventDefault();
+      const i=a.steps.findIndex(x=>x.id===sid); if(i<0) return;
+      const [it]=a.steps.splice(i,1);
+      const st=e.target.closest(".step");
+      const j=(st && st.dataset.aid===aid) ? a.steps.findIndex(x=>x.id===st.dataset.sid) : -1;
+      if(j>=0) a.steps.splice(j,0,it); else a.steps.push(it);
+      save(); renderWeek(); return;
+    }
+    const li=e.target.closest(".itemwrap");
+    if(li && li.dataset.id!==aid){
+      e.preventDefault();
+      const s=a.steps.find(x=>x.id===sid);
+      if(s) transferir(a,li.dataset.id,s);
+    }
+    return;
   }
-  if(!drag) return; const card=e.target.closest(".card"); if(!card) return; e.preventDefault();
-  const w=week(cur), i=w.acts.findIndex(a=>a.id===drag); if(i<0) return;
+  if(!drag) return;
+  const card=e.target.closest(".card"); if(!card) return;
+  e.preventDefault();
+  const w=week(cur), li=e.target.closest(".itemwrap");
+  if(li && li.dataset.id!==drag && zonaDe(li,e.clientY)==="dentro"){
+    const origem=w.acts.find(a=>a.id===drag);
+    if(origem) transferirComAviso(origem,li.dataset.id,null);
+    return;
+  }
+  const i=w.acts.findIndex(a=>a.id===drag); if(i<0) return;
   const [it]=w.acts.splice(i,1); it.sub=card.dataset.sub;
-  const li=e.target.closest(".itemwrap");
-  const j=li? w.acts.findIndex(a=>a.id===li.dataset.id) : -1;
+  let j=li? w.acts.findIndex(a=>a.id===li.dataset.id) : -1;
+  if(j>=0 && zonaDe(li,e.clientY)==="depois") j++;
   if(j>=0) w.acts.splice(j,0,it); else w.acts.push(it);
   save(); renderWeek();
 });
