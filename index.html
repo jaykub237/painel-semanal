@@ -353,6 +353,8 @@ main{padding:24px 0 80px}
 .sbox:hover{border-color:var(--ink-3)}
 .sbox svg{width:9px;height:9px}
 .step.done .sbox{border-color:var(--ok);background:var(--ok);color:#fff}
+.step.doing .sbox{border-color:var(--warn);color:var(--warn)}
+.step.doing .stx{color:var(--ink)}
 .step .stx{flex:1;min-width:0;display:block;font-family:inherit;font-size:12.8px;line-height:1.4;color:var(--ink-2);overflow-wrap:anywhere;border:1px solid transparent;background:none;padding:1px 5px;margin:-1px -5px;border-radius:6px;resize:none;overflow:hidden;min-height:18px}
 .step .stx:focus{border-color:var(--accent);background:var(--surface);outline:none;color:var(--ink)}
 .step.done .stx{color:var(--ink-3);text-decoration:line-through}
@@ -1358,7 +1360,7 @@ function empurrar(a,s){
       m={id:uid(),sub:a.sub,text:a.text,status:"todo",weight:a.weight||1,due:null,at:null,url:a.url??null,steps:[],carried:true,created:Date.now()};
       w.acts.push(m);
     }
-    const novo={id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice(),mins:tempoDe(s)||undefined,fromPush:true};
+    const novo={id:uid(),text:s.text,done:false,doing:!!s.doing,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice(),mins:tempoDe(s)||undefined,fromPush:true};
     (m.steps=m.steps||[]).push(novo);
     a.steps=(a.steps||[]).filter(x=>x.id!==s.id);
     // esvaziada de etapas, a atividade não pode continuar "concluída": a prova da
@@ -1372,7 +1374,7 @@ function empurrar(a,s){
     const novo=Object.assign({},a,{
       id:uid(), carried:true, fromPush:true, created:Date.now(),
       status:a.status==="skip"?"todo":a.status,
-      steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,due:x.due??null,at:x.at??null,url:x.url??null,tags:tagsDe(x).slice()}))
+      steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,doing:!!x.doing,due:x.due??null,at:x.at??null,url:x.url??null,tags:tagsDe(x).slice()}))
     });
     w.acts.push(novo);
     atual.pushed.push({id:uid(),kind:"act",text:a.text,sub:a.sub,peso:a.weight||1,
@@ -1410,7 +1412,7 @@ function trazerDeVolta(pid){
     delete s.fromPush;
     const mae=w.acts.find(a=>a.id===p.origemId);
     if(mae){ (mae.steps=mae.steps||[]).push(s); syncFromSteps(mae); }
-    else w.acts.push({id:uid(),sub:p.sub,text:s.text,status:s.done?"done":"todo",weight:1,due:s.due??null,at:s.at??null,
+    else w.acts.push({id:uid(),sub:p.sub,text:s.text,status:stepSt(s),weight:1,due:s.due??null,at:s.at??null,
       url:s.url??null,tags:tagsDe(s).slice(),steps:[],created:Date.now()});
   }
   w.pushed=w.pushed.filter(x=>x.id!==pid);
@@ -1421,11 +1423,16 @@ function trazerDeVolta(pid){
 /* ---------- cálculo ---------- */
 // Uma atividade com subetapas vale a fração de subetapas concluídas — mais fiel
 // que "em andamento" genérico. Marcada como concluída à mão, vale 1 de qualquer jeito.
+// subetapa em andamento vale o mesmo crédito parcial da atividade em andamento
+const stepSt=s=> s.done?"done":(s.doing?"doing":"todo");
 function actFactor(a){
   if(a.status==="done") return 1;
   if(a.status==="skip") return 0;
   const st=a.steps||[];
-  if(st.length) return st.filter(x=>x.done).length/st.length;
+  if(st.length){
+    const p=S.settings.partial/100;
+    return st.reduce((n,x)=> n + (x.done?1:(x.doing?p:0)), 0)/st.length;
+  }
   return a.status==="doing" ? S.settings.partial/100 : 0;
 }
 function subScore(subId,k){
@@ -1794,7 +1801,7 @@ function dayView(i,lista,today,mon){
     return ((x.a&&x.a.created)||0)-((y.a&&y.a.created)||0);
   });
   const eh=i===today, passou=today>=0&&i<today;
-  const stOf=e=> e.h ? (e.pend?"todo":"done") : (e.s ? (e.s.done?"done":"todo") : e.a.status);
+  const stOf=e=> e.h ? (e.pend?"todo":"done") : (e.s ? stepSt(e.s) : e.a.status);
   const feitos=list.filter(e=> stOf(e)==="done").length;
   const andando=list.filter(e=> stOf(e)==="doing").length;
   const adiadas=list.filter(e=> stOf(e)==="skip").length;
@@ -1854,7 +1861,7 @@ function dayItem(e,late){
     </div>`;
   }
   const a=e.a, s=e.s, sub=findSub(a.sub);
-  const st=s?(s.done?"done":"todo"):a.status;
+  const st=s?stepSt(s):a.status;
   // a subetapa herda a prioridade da atividade: se o capítulo é peso 3, reescrever
   // a conclusão dele também é o que importa naquele dia
   const chave=(a.weight||1)>1;
@@ -1886,8 +1893,9 @@ function agendaItem(e,late){
   const cor=`--c:${subVar(a.sub)}`;
   if(s){
     // subetapa com dia próprio: o contexto é a atividade-mãe, não a subcategoria
-    return `<div class="ai substep ${late?"late":""}" data-s="${s.done?"done":"todo"}" style="${cor}">
-      <button class="abox" data-steptoggle="${a.id}:${s.id}" title="${s.done?"Concluída":"Pendente"} — clique para marcar" aria-label="Subetapa ${s.done?"concluída":"pendente"}">${s.done?IC.check:""}</button>
+    const sst=stepSt(s);
+    return `<div class="ai substep ${late?"late":""}" data-s="${sst}" style="${cor}">
+      <button class="abox" data-steptoggle="${a.id}:${s.id}" title="${STNAME[sst]} — clique para avançar" aria-label="Subetapa ${STNAME[sst]}">${stIcon(sst)}</button>
       <button class="atxt" data-jump="${a.id}" title="Ir para a atividade">
         <span>${s.at?`<time>${esc(s.at)}</time> `:""}${esc(s.text)}</span>
         <em>${esc(a.text)}${late?" · atrasada":""}</em>
@@ -1976,9 +1984,10 @@ function itemHTML(a){
     ${open?`<div class="steps">
       ${steps.map(s=>{
         const slate=s.due!=null && !s.done && cur===todayKey() && s.due < ((new Date().getDay()||7)-1);
-        return `<div class="step ${s.done?"done":""}" data-aid="${a.id}" data-sid="${s.id}">
+        const sst=stepSt(s);
+        return `<div class="step ${sst==="done"?"done":sst==="doing"?"doing":""}" data-aid="${a.id}" data-sid="${s.id}">
         <span class="sgrip" data-stepgrip="${a.id}:${s.id}" draggable="true" title="Arrastar para reordenar">${IC.grip}</span>
-        <button class="sbox" data-steptoggle="${a.id}:${s.id}" aria-label="${s.done?"Concluída":"Pendente"}">${IC.check}</button>
+        <button class="sbox" data-steptoggle="${a.id}:${s.id}" title="${STNAME[sst]} — clique para avançar" aria-label="Estado: ${STNAME[sst]}">${stIcon(sst)}</button>
         <textarea class="stx" rows="1" data-steptext="${a.id}:${s.id}" aria-label="Descrição da subetapa">${esc(s.text)}</textarea>
         ${tempoDe(s)?`<button class="chip tempo mini" data-stime="${a.id}:${s.id}" title="Tempo dedicado — clique para ajustar">${fmtMin(tempoDe(s))}</button>`:""}
         ${tagsDe(s).length?`<span class="stags">${tagsDe(s).map(t=>`<button class="chip tag mini" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`).join("")}</span>`:""}
@@ -2590,7 +2599,8 @@ function addStep(actId,text){
 function syncFromSteps(a){
   const st=a.steps||[]; if(!st.length || a.status==="skip") return;
   const done=st.filter(x=>x.done).length;
-  a.status = done===st.length ? "done" : done>0 ? "doing" : "todo";
+  const andando=st.some(x=>x.doing);
+  a.status = done===st.length ? "done" : (done>0||andando) ? "doing" : "todo";
 }
 
 function flash(el){
@@ -2637,7 +2647,7 @@ function carryOver(){
     if(w.acts.some(x=> x.text===a.text && x.sub===a.sub)) return;
     // só as subetapas que ficaram pendentes vêm junto — o que já foi feito, foi
     // o tempo não vem junto: ele é o registro do que foi gasto naquela semana
-    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()}));
+    const steps=(a.steps||[]).filter(s=>!s.done).map(s=>({id:uid(),text:s.text,done:false,doing:!!s.doing,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice()}));
     w.acts.push({id:uid(),sub:a.sub,text:a.text,status:a.status==="skip"?"todo":a.status,weight:a.weight||1,due:a.due??null,at:a.at??null,url:a.url??null,tags:tagsDe(a).slice(),steps,carried:true,created:Date.now()});
     c++;
   });
@@ -2702,14 +2712,20 @@ document.addEventListener("click",e=>{
     a.status=NEXT[a.status];
     // marcar/desmarcar a atividade inteira arrasta as subetapas junto
     if(a.steps&&a.steps.length){
-      if(a.status==="done") a.steps.forEach(s=> s.done=true);
-      if(a.status==="todo") a.steps.forEach(s=> s.done=false);
+      if(a.status==="done") a.steps.forEach(s=>{ s.done=true; s.doing=false; });
+      if(a.status==="todo") a.steps.forEach(s=>{ s.done=false; s.doing=false; });
     }
     if(a.status==="done") a.doneAt=Date.now(); save(); renderWeek(); } return; }
   if(d.steps){ const a=act(d.steps); if(a){ a.open=!a.open; save(); renderWeek();
       const inp=document.querySelector(`[data-stepadd="${CSS.escape(d.steps)}"]`);
       if(inp && !(a.steps||[]).length) inp.focus(); } return; }
-  if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){ s.done=!s.done; syncFromSteps(a); save(); renderWeek(); } return; }
+  // mesmo ciclo da atividade: pendente › em andamento › concluída
+  if(d.steptoggle){ const {a,s}=step(d.steptoggle); if(s){
+      if(s.done){ s.done=false; s.doing=false; }
+      else if(s.doing){ s.doing=false; s.done=true; }
+      else s.doing=true;
+      syncFromSteps(a); save(); renderWeek();
+    } return; }
   if(d.stepdel){ excluirSubetapa(d.stepdel); return; }
   if(d.push){ const a=act(d.push); if(a) empurrar(a,null); return; }
   if(d.spush){ const {a,s}=step(d.spush); if(a&&s) empurrar(a,s); return; }
