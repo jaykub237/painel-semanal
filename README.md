@@ -77,7 +77,9 @@ subetapas.
 A partir do tempo o painel sugere um peso — até 30 min peso 1, até 2h peso 2,
 acima disso peso 3, com as duas faixas ajustáveis em **Ajustes → Preferências**.
 Quando a sugestão diverge do peso escolhido, aparece um marcador `› peso N` que
-aplica a mudança num clique. O histórico traz o mesmo confronto em lista, com o
+aplica a mudança num clique. Nem toda tarefa longa é importante: o `×` ao lado
+do marcador (ou a opção no menu) desliga a sugestão só naquela atividade, e ela
+sai também da conta "peso × relógio" do histórico. O histórico traz o mesmo confronto em lista, com o
 total da semana e o tempo por frente.
 
 O tempo é o registro daquela semana: não é levado pelo "puxar semana anterior".
@@ -109,10 +111,22 @@ que guarda os últimos 60 itens por até 60 dias e devolve cada um à semana de
 onde saiu. Se a subcategoria de origem tiver sido excluída, o painel pede que
 ela seja recriada antes.
 
-O botão `»` na atividade ou na subetapa **move** o item para a semana seguinte
-— ele sai da semana atual e do percentual dela. Adiar uma subetapa leva junto
-uma casca da atividade-mãe na semana de destino, ou anexa à que já existir lá.
-Uma atividade que fica sem nenhuma etapa depois disso volta a "pendente":
+**Adiar** move o item para a semana seguinte, e o adiamento tem preço nos dois
+sentidos:
+
+- Na **semana de origem** o item deixa uma dívida: ele sai da lista, mas o peso
+  dele continua no denominador. Sem isso, adiar aumentaria o percentual da semana
+  em que a tarefa não saiu. A dívida aparece no rodapé do cartão, com o valor
+  descontado e um **trazer de volta** que desfaz o adiamento.
+- Na **semana de destino** o item chega marcado como "veio adiada" e, ao ser
+  concluído, rende um bônus de 15% sobre o próprio peso.
+
+Ambos são ajustáveis em **Ajustes → Preferências** — o desconto pode ser
+desligado e o bônus vai de 0 a 50%. Percentuais são limitados a 100%.
+
+Adiar uma subetapa leva junto uma casca da atividade-mãe na semana de destino, ou
+anexa à que já existir lá, e a dívida é a fração do peso que aquela etapa
+representava. Uma atividade que fica sem nenhuma etapa volta a "pendente":
 manter "concluída" inflaria o percentual da semana.
 
 ## Links

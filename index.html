@@ -624,8 +624,19 @@ table.hist tr:last-child td{border-bottom:none}
 .chip.tempo svg{width:10px;height:10px;flex:none}
 .chip.tempo:hover{border-color:var(--line-2);color:var(--ink)}
 .chip.tempo.mini{font-size:9.5px;padding:1px 5px}
+.sugpar{display:inline-flex;gap:2px;align-items:center}
 .chip.sug{color:var(--warn);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent);cursor:pointer;text-transform:none;letter-spacing:0}
 .chip.sug:hover{background:color-mix(in srgb,var(--warn) 22%,transparent)}
+.chip.sugx{color:var(--ink-3);border-color:transparent;background:color-mix(in srgb,var(--warn) 14%,transparent);cursor:pointer;padding:1px 5px;line-height:1.35}
+.chip.sugx:hover{color:var(--crit);background:color-mix(in srgb,var(--crit) 14%,transparent)}
+
+/* adiadas: ficam à vista no cartão de origem, senão o desconto seria invisível */
+.pushrow{display:flex;align-items:center;gap:9px;padding:4px 15px 4px 17px;font-size:12.8px;color:var(--ink-3)}
+.pushrow:hover{background:var(--surface-2)}
+.pushrow .pn{flex:1;min-width:0;overflow-wrap:anywhere;text-decoration:line-through;text-decoration-color:var(--line-2)}
+.pushrow .pn em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px;text-decoration:none;display:inline-block}
+.pushrow .pv{flex:none;font-size:11.5px;color:var(--crit);font-variant-numeric:tabular-nums}
+.pushrow .lnk{flex:none;font-size:11.5px}
 .timerow .quick{display:flex;gap:4px;flex:none}
 .qb{font-family:var(--mono);font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
 .qb:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
@@ -836,6 +847,15 @@ table.hist tr:last-child td{border-bottom:none}
       <div class="setrow"><div class="grow">Atividade em andamento vale <small style="color:var(--ink-3)">— crédito parcial no cálculo</small></div>
         <input class="num" id="partial" type="number" min="0" max="100" step="5">
       </div>
+      <div class="setrow"><div class="grow">Adiar desconta a semana de origem <small style="color:var(--ink-3)">— o que foi adiado continua no denominador da semana em que era para ter saído</small></div>
+        <div class="seg" id="pushpen">
+          <button data-pp="1" aria-pressed="true">Sim</button>
+          <button data-pp="0" aria-pressed="false">Não</button>
+        </div>
+      </div>
+      <div class="setrow"><div class="grow">Bônus ao concluir o que foi adiado <small style="color:var(--ink-3)">— percentual extra sobre o peso do item, na semana seguinte</small></div>
+        <input class="num" id="pushbonus" type="number" min="0" max="50" step="5">
+      </div>
       <div class="setrow"><div class="grow">Tempo que já pede peso 2 <small style="color:var(--ink-3)">— em minutos; abaixo disso a sugestão é peso 1</small></div>
         <input class="num" id="tmedio" type="number" min="5" max="480" step="5">
       </div>
@@ -969,7 +989,7 @@ const todayKey=()=> isoKey(new Date());
 /* ---------- estado ---------- */
 const DEFAULT={
   version:1,
-  settings:{theme:"auto",goal:75,partial:50,tempoMedio:30,tempoAlto:120,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
+  settings:{theme:"auto",goal:75,partial:50,tempoMedio:30,tempoAlto:120,pushPenalty:true,pushBonus:15,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
   areas:[
     {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
       {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
@@ -1000,8 +1020,8 @@ let saveT;
 function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ toast("Não foi possível salvar: armazenamento cheio."); } syncTouch(); },120); }
 
 function week(k,make){
-  if(!S.weeks[k]){ if(!make) return {goals:{},acts:[],habits:{},retro:{}}; S.weeks[k]={goals:{},acts:[],habits:{},retro:{}}; }
-  const w=S.weeks[k]; w.goals=w.goals||{}; w.acts=w.acts||[]; w.habits=w.habits||{}; w.retro=w.retro||{};
+  if(!S.weeks[k]){ if(!make) return {goals:{},acts:[],habits:{},retro:{},pushed:[]}; S.weeks[k]={goals:{},acts:[],habits:{},retro:{},pushed:[]}; }
+  const w=S.weeks[k]; w.goals=w.goals||{}; w.acts=w.acts||[]; w.habits=w.habits||{}; w.retro=w.retro||{}; w.pushed=w.pushed||[];
   return w;
 }
 const allSubs=()=> S.areas.flatMap(a=> a.subs.map(s=> ({...s,area:a})));
@@ -1322,33 +1342,80 @@ function menuTransferir(btn,origem,s){
 }
 
 /* ---------- adiar para a semana seguinte ---------- */
-// Mover, não copiar: a tarefa sai desta semana e some do percentual dela.
+// Adiar não é apagar: o item sai da semana mas deixa uma dívida nela, que continua
+// pesando no denominador. E chega na semana seguinte marcado, para render um bônus
+// pequeno quando finalmente sair.
+const bonusPush=()=> S.settings.pushBonus==null?15:S.settings.pushBonus;
+const descontaPush=()=> S.settings.pushPenalty!==false;
+
 function empurrar(a,s){
-  const prox=shiftKey(cur,1), w=week(prox,true);
+  const prox=shiftKey(cur,1), w=week(prox,true), atual=week(cur,true);
+  atual.pushed=atual.pushed||[];
   if(s){
+    const antes=Math.max(1,(a.steps||[]).length);
     let m=w.acts.find(x=> x.text===a.text && x.sub===a.sub);
     if(!m){
       m={id:uid(),sub:a.sub,text:a.text,status:"todo",weight:a.weight||1,due:null,at:null,url:a.url??null,steps:[],carried:true,created:Date.now()};
       w.acts.push(m);
     }
-    (m.steps=m.steps||[]).push({id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice(),mins:tempoDe(s)||undefined});
+    const novo={id:uid(),text:s.text,done:false,due:s.due??null,at:s.at??null,url:s.url??null,tags:tagsDe(s).slice(),mins:tempoDe(s)||undefined,fromPush:true};
+    (m.steps=m.steps||[]).push(novo);
     a.steps=(a.steps||[]).filter(x=>x.id!==s.id);
     // esvaziada de etapas, a atividade não pode continuar "concluída": a prova da
     // conclusão foi junto com as etapas, e ela seguiria inflando o percentual da semana
     if(!a.steps.length && a.status==="done") a.status="todo";
     syncFromSteps(a);
+    atual.pushed.push({id:uid(),kind:"step",text:s.text,sub:a.sub,peso:(a.weight||1)/antes,
+      to:prox,destId:m.id,destStepId:novo.id,origemId:a.id,at:Date.now()});
   }else{
-    const atual=week(cur);
     atual.acts=atual.acts.filter(x=>x.id!==a.id);
-    w.acts.push(Object.assign({},a,{
-      id:uid(), carried:true, created:Date.now(),
+    const novo=Object.assign({},a,{
+      id:uid(), carried:true, fromPush:true, created:Date.now(),
       status:a.status==="skip"?"todo":a.status,
       steps:(a.steps||[]).map(x=>({id:uid(),text:x.text,done:!!x.done,due:x.due??null,at:x.at??null,url:x.url??null,tags:tagsDe(x).slice()}))
-    }));
+    });
+    w.acts.push(novo);
+    atual.pushed.push({id:uid(),kind:"act",text:a.text,sub:a.sub,peso:a.weight||1,
+      to:prox,destId:novo.id,at:Date.now()});
   }
   save(); renderWeek();
-  toast(`${s?"Subetapa":"Atividade"} movida para ${prox.replace("-W"," · semana ")}.`,
+  toast(`${s?"Subetapa":"Atividade"} adiada para ${prox.replace("-W"," · semana ")}${descontaPush()?" — segue contando nesta":""}.`,
         {label:"Ir para lá",fn:()=>{ cur=prox; render(); }});
+}
+
+// desfaz o adiamento: traz o item de volta e apaga a dívida
+function trazerDeVolta(pid){
+  const w=week(cur,true), p=(w.pushed||[]).find(x=>x.id===pid);
+  if(!p) return;
+  const destW=S.weeks[p.to];
+  const some=()=>{ w.pushed=w.pushed.filter(x=>x.id!==pid); save(); renderWeek(); };
+  if(!destW){ some(); toast("A semana de destino não existe mais — registro removido."); return; }
+
+  if(p.kind==="act"){
+    const i=destW.acts.findIndex(a=>a.id===p.destId);
+    if(i<0){ some(); toast("A atividade já não está na semana seguinte — registro removido."); return; }
+    const [a]=destW.acts.splice(i,1);
+    delete a.fromPush; delete a.carried;
+    w.acts.push(a);
+  }else{
+    const pai=destW.acts.find(a=>a.id===p.destId);
+    const s=pai&&(pai.steps||[]).find(x=>x.id===p.destStepId);
+    if(!s){ some(); toast("A subetapa já não está na semana seguinte — registro removido."); return; }
+    pai.steps=pai.steps.filter(x=>x.id!==p.destStepId);
+    syncFromSteps(pai);
+    // a casca criada só para receber a subetapa não fica sobrando na semana seguinte —
+    // mas nada que o usuário tenha mexido é removido
+    if(!pai.steps.length && pai.carried && pai.status==="todo" && !tempoDe(pai) && !tagsDe(pai).length && !pai.url)
+      destW.acts=destW.acts.filter(a=>a.id!==pai.id);
+    delete s.fromPush;
+    const mae=w.acts.find(a=>a.id===p.origemId);
+    if(mae){ (mae.steps=mae.steps||[]).push(s); syncFromSteps(mae); }
+    else w.acts.push({id:uid(),sub:p.sub,text:s.text,status:s.done?"done":"todo",weight:1,due:s.due??null,at:s.at??null,
+      url:s.url??null,tags:tagsDe(s).slice(),steps:[],created:Date.now()});
+  }
+  w.pushed=w.pushed.filter(x=>x.id!==pid);
+  save(); renderWeek();
+  toast(`"${p.text}" voltou para esta semana.`);
 }
 
 /* ---------- cálculo ---------- */
@@ -1364,7 +1431,18 @@ function actFactor(a){
 function subScore(subId,k){
   const w=week(k), acts=w.acts.filter(a=> a.sub===subId && a.status!=="skip");
   let num=0,den=0;
-  acts.forEach(a=>{ const wt=a.weight||1; den+=wt; num+=wt*actFactor(a); });
+  const bonus=bonusPush()/100;
+  acts.forEach(a=>{
+    const wt=a.weight||1; den+=wt; num+=wt*actFactor(a);
+    // o que voltou de um adiamento rende um bônus pequeno quando enfim sai
+    if(bonus>0){
+      if(a.fromPush && a.status==="done") num+=wt*bonus;
+      const st=a.steps||[];
+      if(st.length) st.forEach(x=>{ if(x.fromPush && x.done) num+=(wt/st.length)*bonus; });
+    }
+  });
+  // dívida de adiamento: o item saiu da semana, mas o plano dela continua cobrando
+  if(descontaPush()) (w.pushed||[]).filter(p=> p.sub===subId).forEach(p=> den+=(p.peso||1));
   S.habits.filter(h=> h.sub===subId).forEach(h=>{
     const wt=h.weight||1;
     if(h.mode==="daily"){
@@ -1378,22 +1456,23 @@ function subScore(subId,k){
     }
   });
   const total=w.acts.filter(a=> a.sub===subId).length;
-  return {num,den,pct:den?Math.round(num/den*100):null,
+  // o bônus pode empurrar acima de 100 — o teto mantém o número legível
+  return {num,den,pct:den?Math.min(100,Math.round(num/den*100)):null,
     done:acts.filter(a=>a.status==="done").length, count:acts.length, total};
 }
 function areaScore(area,k){
   let num=0,den=0;
   area.subs.forEach(s=>{ const r=subScore(s.id,k); num+=r.num; den+=r.den; });
-  return {num,den,pct:den?Math.round(num/den*100):null};
+  return {num,den,pct:den?Math.min(100,Math.round(num/den*100)):null};
 }
 function weekScore(k){
   let num=0,den=0;
   S.areas.forEach(a=>{ const r=areaScore(a,k); num+=r.num; den+=r.den; });
-  return {num,den,pct:den?Math.round(num/den*100):null};
+  return {num,den,pct:den?Math.min(100,Math.round(num/den*100)):null};
 }
 const marcouRotina=v=> typeof v==="number" ? v>0
   : !!v && (Object.keys(v.d||{}).length>0 || Object.values(v.i||{}).some(m=> Object.keys(m||{}).length>0));
-const hasData=k=>{ const w=S.weeks[k]; return !!w && (w.acts.length>0 || Object.values(w.habits||{}).some(marcouRotina) || Object.values(w.goals||{}).some(v=>v&&v.trim())); };
+const hasData=k=>{ const w=S.weeks[k]; return !!w && (w.acts.length>0 || (w.pushed||[]).length>0 || Object.values(w.habits||{}).some(marcouRotina) || Object.values(w.goals||{}).some(v=>v&&v.trim())); };
 const dataWeeks=()=> Object.keys(S.weeks).filter(hasData).sort();
 
 /* ---------- ícones ---------- */
@@ -1505,6 +1584,16 @@ function renderWeek(){
           q?"Nada corresponde ao filtro."
           :(hd||soSub)&&feitas?`Tudo concluído aqui — ${feitas} atividade${feitas>1?"s":""} oculta${feitas>1?"s":""}.`
           :"Nenhuma atividade ainda."}</li>`}</ul>
+        ${(()=>{
+          const adiadas=(w.pushed||[]).filter(p=> p.sub===sub.id);
+          if(!adiadas.length) return "";
+          return `<div class="subhead">Adiadas para a semana seguinte</div>`+adiadas.map(p=>`
+            <div class="pushrow">
+              <span class="pn">${esc(p.text)}${p.kind==="step"?`<em>subetapa</em>`:""}</span>
+              <span class="pv mono" title="${descontaPush()?`Continua pesando ${p.peso===1?"1 ponto":p.peso.toFixed(2)+" ponto"} nesta semana`:"O desconto está desligado nas preferências"}">${descontaPush()?"−"+(p.peso>=1?p.peso.toFixed(0):String(+p.peso.toFixed(2)).replace(".",",")):"—"}</span>
+              <button class="lnk" data-unpush="${p.id}">trazer de volta</button>
+            </div>`).join("");
+        })()}
         <div class="add">
           <input type="text" data-add="${sub.id}" placeholder="Nova atividade — Enter para salvar" autocomplete="off">
         </div>
@@ -1834,9 +1923,14 @@ function itemHTML(a){
   if(a.due!=null) chips.push(`<button class="chip due ${late?"late":""}" data-due="${a.id}" title="Dia-alvo — clique para avançar">${DIAS[a.due]}</button>`);
   const tt=tempoTotal(a), sug=pesoSugerido(tt);
   if(tt) chips.push(`<button class="chip tempo" data-time="${a.id}" title="Tempo dedicado${(a.steps||[]).some(s=>tempoDe(s))?" (com as subetapas)":""} — clique para ajustar">${IC.clock}${fmtMin(tt)}</button>`);
-  if(sug && sug!==(a.weight||1))
-    chips.push(`<button class="chip sug" data-sugw="${a.id}:${sug}" title="${fmtMin(tt)} de trabalho sugere peso ${sug} em vez de ${a.weight||1} — clique para aplicar">› peso ${sug}</button>`);
-  if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
+  // tempo longo nem sempre é tarefa importante — a sugestão pode ser dispensada por item
+  if(sug && sug!==(a.weight||1) && !a.sugOff)
+    chips.push(`<span class="sugpar">
+      <button class="chip sug" data-sugw="${a.id}:${sug}" title="${fmtMin(tt)} de trabalho sugere peso ${sug} em vez de ${a.weight||1} — clique para aplicar">› peso ${sug}</button>
+      <button class="chip sugx" data-sugoff="${a.id}" title="Ignorar a sugestão de peso nesta atividade" aria-label="Ignorar a sugestão">×</button>
+    </span>`);
+  if(a.fromPush) chips.push(`<span class="chip carry" title="Veio adiada da semana anterior — concluí-la aqui rende um bônus de ${bonusPush()}%">veio adiada</span>`);
+  else if(a.carried) chips.push(`<span class="chip carry">herdada</span>`);
   if(a.status==="skip") chips.push(`<span class="chip">adiada</span>`);
   tagsDe(a).forEach(t=> chips.push(`<button class="chip tag" data-tagq="${esc(t)}" title="Filtrar por #${esc(t)}">#${esc(t)}</button>`));
   if(a.url) chips.push(`<a class="chip lk" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" title="Abrir ${esc(a.url)}">${IC.link}${esc(urlLabel(a.url))}</a>`);
@@ -1995,11 +2089,18 @@ function analiseSemana(k){
   const minTotal=acts.reduce((n,a)=> n+tempoTotal(a),0);
   const tempoSub=new Map();
   acts.forEach(a=>{ const t=tempoTotal(a); if(t) tempoSub.set(a.sub,(tempoSub.get(a.sub)||0)+t); });
-  const calib=comTempo.map(a=>({a,min:tempoTotal(a),sug:pesoSugerido(tempoTotal(a))}))
+  const ignoradas=comTempo.filter(a=> a.sugOff).length;
+  const calib=comTempo.filter(a=> !a.sugOff).map(a=>({a,min:tempoTotal(a),sug:pesoSugerido(tempoTotal(a))}))
     .filter(x=> x.sug!=null);
   const batem=calib.filter(x=> x.sug===(x.a.weight||1)).length;
   const desalinhadas=calib.filter(x=> x.sug!==(x.a.weight||1))
     .sort((x,y)=> Math.abs(y.sug-(y.a.weight||1))-Math.abs(x.sug-(x.a.weight||1))||y.min-x.min);
+
+  // adiamentos: o que saiu daqui e o que chegou adiado e rendeu bônus
+  const adiadasProx=(w.pushed||[]);
+  const pesoAdiado=adiadasProx.reduce((n,p)=> n+(p.peso||1),0);
+  const vindas=acts.filter(a=> a.fromPush);
+  const vindasFeitas=vindas.filter(a=> a.status==="done").length;
 
   const anterior=weekScore(shiftKey(k,-1)).pct;
   const atual=weekScore(k).pct;
@@ -2007,7 +2108,8 @@ function analiseSemana(k){
 
   return {acts,adiadas,feitas,steps:steps.length,stepsFeitas,dias,
     noPrazo,atrasadas,semCarimbo,aindaAbertas,porSub,rotinas,
-    minTotal,comTempo:comTempo.length,tempoSub,calib:calib.length,batem,desalinhadas,
+    minTotal,comTempo:comTempo.length,tempoSub,calib:calib.length,batem,desalinhadas,ignoradas,
+    adiadasProx,pesoAdiado,vindas:vindas.length,vindasFeitas,
     tags:[...tags.entries()].sort((a,b)=> b[1].n-a[1].n),
     atual,anterior,delta:(atual!=null&&anterior!=null)?atual-anterior:null,media4:avg(ult),
     retro:w.retro||{}};
@@ -2076,6 +2178,8 @@ function renderAnalise(){
           <div class="pontbar"><i class="ok" style="width:${pontual}%"></i><i class="late" style="width:${100-pontual}%"></i></div>
         `:`<p class="vazio">Nenhuma atividade concluída com dia-alvo ainda nesta semana.</p>`}
         ${A.aindaAbertas?`<p class="obs">${A.aindaAbertas} com dia marcado ${A.aindaAbertas>1?"seguem":"segue"} em aberto.</p>`:""}
+        ${A.adiadasProx.length?`<p class="obs">${A.adiadasProx.length} ${A.adiadasProx.length>1?"foram adiadas":"foi adiada"} para a semana seguinte${descontaPush()?` e ${A.adiadasProx.length>1?"seguem pesando":"segue pesando"} aqui`:" (desconto desligado)"}.</p>`:""}
+        ${A.vindas?`<p class="obs">${A.vindasFeitas} de ${A.vindas} que ${A.vindas>1?"chegaram adiadas":"chegou adiada"} ${A.vindasFeitas===1?"saiu":"saíram"} com bônus de ${bonusPush()}%.</p>`:""}
         ${A.semCarimbo?`<p class="obs">${A.semCarimbo} ${A.semCarimbo>1?"não têm":"não tem"} registro da data de conclusão e ${A.semCarimbo>1?"ficaram":"ficou"} fora desta conta.</p>`:""}
       </div>
     </div>
@@ -2110,7 +2214,7 @@ function renderAnalise(){
         </div>
         <div class="calib">
           <div class="calibhead">Peso × relógio
-            <span>${A.batem} de ${A.calib} com o peso que o tempo sugere · faixas atuais: até ${fmtMin(limiteMedio())} peso 1, até ${fmtMin(limiteAlto())} peso 2, acima disso peso 3</span>
+            <span>${A.batem} de ${A.calib} com o peso que o tempo sugere${A.ignoradas?` · ${A.ignoradas} com a sugestão ignorada`:""} · faixas atuais: até ${fmtMin(limiteMedio())} peso 1, até ${fmtMin(limiteAlto())} peso 2, acima disso peso 3</span>
           </div>
           ${A.desalinhadas.length?`<div class="esf">${A.desalinhadas.slice(0,6).map(x=>`
             <div class="calibrow">
@@ -2362,6 +2466,8 @@ function renderSet(){
   $("#partial").value=S.settings.partial;
   $("#tmedio").value=limiteMedio();
   $("#talto").value=limiteAlto();
+  $("#pushbonus").value=bonusPush();
+  $$("#pushpen button").forEach(b=> b.setAttribute("aria-pressed", (b.dataset.pp==="1")===descontaPush()));
   $$("#theme button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.t===S.settings.theme));
   renderSync();
 }
@@ -2587,7 +2693,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-sugoff],[data-unpush],[data-pp],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -2620,6 +2726,10 @@ document.addEventListener("click",e=>{
     if(s){ s.mins = n===0 ? 0 : tempoDe(s)+n; save(); renderWeek(); }
     return;
   }
+  if(d.unpush){ trazerDeVolta(d.unpush); return; }
+  if(d.sugoff){ const a=act(d.sugoff);
+    if(a){ a.sugOff=true; save(); renderWeek(); toast("Sugestão ignorada nesta atividade.",
+      {label:"Voltar a sugerir",fn:()=>{ a.sugOff=false; save(); renderWeek(); }}); } return; }
   if(d.sugw){ const [id,n]=d.sugw.split(":"); const a=act(id);
     if(a){ a.weight=Math.max(1,Math.min(3,+n||1)); save(); render();   // pode ter vindo do histórico
       toast(`Peso ${a.weight} aplicado a partir do tempo registrado.`); } return; }
@@ -2641,6 +2751,10 @@ document.addEventListener("click",e=>{
        fn:()=>{ a.linkOpen=!a.linkOpen; save(); renderWeek(); foco(`[data-linkval="${CSS.escape(a.id)}"]`); }},
       {label:"Tempo dedicado",icon:IC.clock,hint:tempoTotal(a)?fmtMin(tempoTotal(a)):"",
        fn:()=>{ a.timeOpen=!a.timeOpen; save(); renderWeek(); foco(`[data-timeval="${CSS.escape(a.id)}"]`); }},
+      {label:a.sugOff?"Voltar a sugerir peso pelo tempo":"Ignorar a sugestão de peso",icon:IC.clock,
+       hint:a.sugOff?"ignorada":"",
+       fn:()=>{ a.sugOff=!a.sugOff; save(); renderWeek();
+         toast(a.sugOff?"Sugestão de peso desligada nesta atividade.":"Sugestão de peso religada."); }},
       {sep:true},
       {label:"Peso",icon:IC.up,hint:"agora "+(a.weight||1),
        fn:()=>{ a.weight=((a.weight||1)%3)+1; save(); renderWeek(); }},
@@ -2721,6 +2835,7 @@ document.addEventListener("click",e=>{
   if(d.trashdel){ S.trash=(S.trash||[]).filter(t=>t.id!==d.trashdel); save(); renderSet(); return; }
   if(d.hweight){ const [hid,n]=d.hweight.split(":"); const h=S.habits.find(x=>x.id===hid);
       if(h){ h.weight=Math.max(1,Math.min(3,Number(n)||1)); save(); render(); } return; }
+  if(d.pp!=null && "pp" in d){ S.settings.pushPenalty=d.pp==="1"; save(); render(); return; }
   if(d.hidel){ const [hid,iid]=d.hidel.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
       h.items=(h.items||[]).filter(x=>x.id!==iid);
       Object.values(S.weeks).forEach(w=>{ const v=w.habits&&w.habits[hid]; if(v&&typeof v==="object"&&v.i) delete v.i[iid]; });
@@ -2885,6 +3000,7 @@ document.addEventListener("change",e=>{
     if(limiteAlto()<=S.settings.tempoMedio) S.settings.tempoAlto=S.settings.tempoMedio*2;   // o alto tem de ficar acima do médio
     save(); renderSet(); return; }
   if(id==="talto"){ S.settings.tempoAlto=Math.max(limiteMedio()+5,Math.min(960,+e.target.value||120)); save(); renderSet(); return; }
+  if(id==="pushbonus"){ S.settings.pushBonus=Math.max(0,Math.min(50,+e.target.value||0)); save(); renderSet(); return; }
 });
 
 /* arrastar para reordenar/mover entre cartões */
