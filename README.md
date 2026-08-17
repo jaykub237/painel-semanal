@@ -24,6 +24,20 @@ A página fica em `https://<usuario>.github.io/<repositorio>/`.
 Com **Sincronizar automaticamente** ligado, o painel envia sozinho 8 segundos depois de
 cada alteração e puxa a versão remota ao abrir, quando ela é mais recente.
 
+## Lembrete de abertura
+
+Em **Ajustes → Preferências** dá para escrever um recado que aparece num aviso ao
+abrir o painel — o foco da semana, a tarefa que não pode escapar. A frequência é
+**toda vez**, **uma vez por dia** (padrão) ou **desligado**, e o próprio aviso tem
+um botão de editar, para atualizar o recado sem ir aos Ajustes. Sem mensagem
+escrita, nada aparece.
+
+## Ordem das áreas
+
+As áreas se reordenam arrastando pela alça, em **Ajustes → Categorias** — a mesma
+listra de destino do resto do painel indica onde a área vai cair. As setas de subir
+e descer continuam ali para quem preferir. Subcategorias seguem só com as setas.
+
 ## Rotinas
 
 O que se repete toda semana vive em **Ajustes → Rotinas**, em duas naturezas:

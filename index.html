@@ -656,6 +656,16 @@ table.hist tr:last-child td{border-bottom:none}
 .trashrow .tname{font-size:13.8px;line-height:1.35;overflow-wrap:anywhere}
 .trashrow .tmeta{font-size:11.5px;color:var(--ink-3);margin-top:2px;overflow-wrap:anywhere}
 .trashrow .btn{flex:none;padding:4px 10px;font-size:12.5px}
+/* reordenar áreas arrastando: mesma gramática do resto — listra em cima ou embaixo */
+.areablock{border-radius:9px;transition:box-shadow .12s}
+.areablock.dragging{opacity:.45}
+.areablock.over{box-shadow:inset 0 2px 0 var(--accent)}
+.areablock.over-fim{box-shadow:inset 0 -2px 0 var(--accent)}
+.agrip{flex:none;display:grid;place-items:center;width:16px;height:22px;margin-left:-6px;border-radius:4px;color:var(--ink-3);cursor:grab;opacity:0;transition:opacity .15s}
+.agrip svg{width:12px;height:12px}
+.arearow:hover .agrip,.areablock:focus-within .agrip{opacity:1}
+.agrip:active{cursor:grabbing}
+@media (hover:none){.agrip{opacity:1}}
 .swatches{display:flex;gap:3px;flex:none}
 .sw{width:14px;height:14px;border-radius:4px;background:var(--c);border:2px solid transparent;opacity:.45;transition:.12s}
 .sw:hover{opacity:.85;transform:scale(1.12)}
@@ -677,6 +687,11 @@ table.hist tr:last-child td{border-bottom:none}
 .dlg h3{margin:0 0 7px;font-size:16px;font-weight:650;letter-spacing:-.01em}
 .dlg p{margin:0 0 18px;font-size:13.8px;line-height:1.55;color:var(--ink-2)}
 .dlg .row{display:flex;gap:8px;justify-content:flex-end}
+.dlg.lembrete{max-width:470px;border-left:3px solid var(--accent)}
+.dlg.lembrete h3{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.dlg p.lem-txt{font-size:17px;line-height:1.5;color:var(--ink);white-space:pre-wrap;margin:0 0 20px;font-weight:520;letter-spacing:-.005em}
+#lem-edit{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:10px 12px;font-size:15px;line-height:1.5;resize:vertical;margin-bottom:18px}
+#lem-edit:focus{border-color:var(--accent);background:var(--surface);outline:none}
 .dlg .btn.danger{background:var(--crit);border-color:var(--crit);color:#fff}
 .dlg .btn.danger:hover{filter:brightness(1.08)}
 
@@ -849,6 +864,20 @@ table.hist tr:last-child td{border-bottom:none}
       <div class="setrow"><div class="grow">Atividade em andamento vale <small style="color:var(--ink-3)">— crédito parcial no cálculo</small></div>
         <input class="num" id="partial" type="number" min="0" max="100" step="5">
       </div>
+      <div class="setrow"><div class="grow">Lembrete ao abrir o painel <small style="color:var(--ink-3)">— um recado seu, para reforçar o que importa</small></div>
+        <div class="seg" id="lemfreq">
+          <button data-lf="sempre" aria-pressed="false">Toda vez</button>
+          <button data-lf="dia" aria-pressed="true">1× por dia</button>
+          <button data-lf="off" aria-pressed="false">Desligado</button>
+        </div>
+      </div>
+      <div class="setrow" style="align-items:flex-start">
+        <div class="grow">
+          <label for="lemtxt" style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px">Mensagem</label>
+          <textarea id="lemtxt" rows="3" placeholder="Ex: esta semana é o capítulo 2 — o resto pode esperar." style="width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:13.5px;line-height:1.5;resize:vertical"></textarea>
+        </div>
+        <button class="btn" id="lemver" style="margin-top:22px">Ver</button>
+      </div>
       <div class="setrow"><div class="grow">Adiar desconta a semana de origem <small style="color:var(--ink-3)">— o que foi adiado continua no denominador da semana em que era para ter saído</small></div>
         <div class="seg" id="pushpen">
           <button data-pp="1" aria-pressed="true">Sim</button>
@@ -929,6 +958,18 @@ table.hist tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<div class="mask" id="lmask" role="dialog" aria-modal="true" aria-labelledby="lem-t">
+  <div class="dlg lembrete">
+    <h3 id="lem-t">Antes de começar</h3>
+    <p class="lem-txt" id="lem-txt"></p>
+    <textarea id="lem-edit" class="hidden" rows="4" placeholder="O que você não pode perder de vista nesta semana?" aria-label="Mensagem do lembrete"></textarea>
+    <div class="row">
+      <button class="btn" id="lem-editar">Editar</button>
+      <button class="btn pri" id="lem-ok">Começar</button>
+    </div>
+  </div>
+</div>
+
 <datalist id="taglist"></datalist>
 
 <div class="toast" id="toast"></div>
@@ -991,7 +1032,7 @@ const todayKey=()=> isoKey(new Date());
 /* ---------- estado ---------- */
 const DEFAULT={
   version:1,
-  settings:{theme:"auto",goal:75,partial:50,tempoMedio:30,tempoAlto:120,pushPenalty:true,pushBonus:15,hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
+  settings:{theme:"auto",goal:75,partial:50,tempoMedio:30,tempoAlto:120,pushPenalty:true,pushBonus:15,lembrete:"",lembreteFreq:"dia",hideDone:false,hideDoneSubs:{},folded:{},foldedSubs:{},agendaDay:null,agendaFold:false,agendaSub:null},
   areas:[
     {id:"a1",name:"Vida pessoal",tone:"personal",subs:[
       {id:"s11",name:"Saúde financeira"},{id:"s12",name:"Saúde física"},
@@ -2396,8 +2437,9 @@ function sparkSVG(vals,color){
 /* ---------- render: ajustes ---------- */
 function renderSet(){
   $("#cats").innerHTML=S.areas.map((a,ai)=>`
-    <div style="margin-bottom:18px">
-      <div class="setrow">
+    <div class="areablock" data-area="${a.id}" style="margin-bottom:18px">
+      <div class="setrow arearow">
+        <span class="agrip" data-agrip="${a.id}" draggable="true" title="Arrastar para reordenar as áreas">${IC.grip}</span>
         <span style="width:3px;height:18px;background:var(--${a.tone});border-radius:2px;flex:none"></span>
         <div class="grow"><input type="text" value="${esc(a.name)}" data-aname="${a.id}" style="font-weight:640"></div>
         <button class="ib" data-amove="${a.id}" data-d="-1" title="Subir" ${ai===0?"disabled style=opacity:.3":""}>${IC.up}</button>
@@ -2476,6 +2518,8 @@ function renderSet(){
   $("#tmedio").value=limiteMedio();
   $("#talto").value=limiteAlto();
   $("#pushbonus").value=bonusPush();
+  $("#lemtxt").value=S.settings.lembrete||"";
+  $$("#lemfreq button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.lf===lemFreq()));
   $$("#pushpen button").forEach(b=> b.setAttribute("aria-pressed", (b.dataset.pp==="1")===descontaPush()));
   $$("#theme button").forEach(b=> b.setAttribute("aria-pressed", b.dataset.t===S.settings.theme));
   renderSync();
@@ -2521,6 +2565,54 @@ function applyTheme(){
   if(t==="auto") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme",t);
 }
+/* ---------- lembrete de abertura ---------- */
+// Um recado do usuário para ele mesmo. Fica no estado, então viaja na sincronização.
+const lemTexto=()=> (S.settings.lembrete||"").trim();
+const lemFreq=()=> S.settings.lembreteFreq||"dia";
+const hojeISO=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+
+function deveMostrarLembrete(){
+  if(!lemTexto() || lemFreq()==="off") return false;
+  if(lemFreq()==="sempre") return true;
+  return S.settings.lembreteVisto!==hojeISO();     // uma vez por dia
+}
+function abrirLembrete(forcado){
+  if(!forcado && !deveMostrarLembrete()) return;
+  if(!lemTexto()) return;
+  $("#lem-txt").textContent=lemTexto();
+  $("#lem-txt").classList.remove("hidden");
+  $("#lem-edit").classList.add("hidden");
+  $("#lem-editar").textContent="Editar";
+  $("#lmask").classList.add("on");
+  setTimeout(()=>$("#lem-ok").focus(),20);
+  if(lemFreq()==="dia"){ S.settings.lembreteVisto=hojeISO(); save(); }
+}
+function fecharLembrete(){
+  const ed=$("#lem-edit");
+  if(!ed.classList.contains("hidden")){       // saiu com o campo aberto: guarda o texto
+    S.settings.lembrete=ed.value.trim();
+    save();
+    if(view==="set") renderSet();
+  }
+  $("#lmask").classList.remove("on");
+}
+$("#lem-ok").onclick=fecharLembrete;
+$("#lem-editar").onclick=()=>{
+  const ed=$("#lem-edit"), txt=$("#lem-txt");
+  if(ed.classList.contains("hidden")){
+    ed.value=lemTexto(); ed.classList.remove("hidden"); txt.classList.add("hidden");
+    $("#lem-editar").textContent="Guardar";
+    ed.focus();
+  }else{
+    S.settings.lembrete=ed.value.trim(); save();
+    if(view==="set") renderSet();
+    txt.textContent=lemTexto(); ed.classList.add("hidden"); txt.classList.remove("hidden");
+    $("#lem-editar").textContent="Editar";
+    if(!lemTexto()) fecharLembrete();
+  }
+};
+$("#lmask").onclick=e=>{ if(e.target.id==="lmask") fecharLembrete(); };
+
 // Substitui confirm(): promessa resolvida pelos botões do diálogo.
 let askResolve=null;
 function ask(titulo,msg,rotulo){
@@ -2703,7 +2795,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-sugoff],[data-unpush],[data-pp],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-sugoff],[data-unpush],[data-pp],[data-lf],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -2852,6 +2944,8 @@ document.addEventListener("click",e=>{
   if(d.hweight){ const [hid,n]=d.hweight.split(":"); const h=S.habits.find(x=>x.id===hid);
       if(h){ h.weight=Math.max(1,Math.min(3,Number(n)||1)); save(); render(); } return; }
   if(d.pp!=null && "pp" in d){ S.settings.pushPenalty=d.pp==="1"; save(); render(); return; }
+  if(d.lf){ S.settings.lembreteFreq=d.lf; save(); renderSet();
+    toast(d.lf==="off"?"Lembrete desligado.":d.lf==="sempre"?"O lembrete aparece toda vez que você abrir.":"O lembrete aparece uma vez por dia."); return; }
   if(d.hidel){ const [hid,iid]=d.hidel.split(":"); const h=S.habits.find(x=>x.id===hid); if(h){
       h.items=(h.items||[]).filter(x=>x.id!==iid);
       Object.values(S.weeks).forEach(w=>{ const v=w.habits&&w.habits[hid]; if(v&&typeof v==="object"&&v.i) delete v.i[iid]; });
@@ -2905,6 +2999,10 @@ document.addEventListener("click",e=>{
 });
 
 document.addEventListener("keydown",e=>{
+  if($("#lmask").classList.contains("on")){
+    if(e.key==="Escape"||(e.key==="Enter"&&$("#lem-edit").classList.contains("hidden"))){ e.preventDefault(); fecharLembrete(); }
+    return;
+  }
   if(askResolve){ // diálogo aberto: só Esc e Enter respondem
     if(e.key==="Escape"){ e.preventDefault(); closeAsk(false); }
     if(e.key==="Enter"){ e.preventDefault(); closeAsk(true); }
@@ -2954,6 +3052,7 @@ document.addEventListener("input",e=>{
     return;
   }
   if(e.target.id==="q"){ query=e.target.value; renderWeek(); return; }
+  if(e.target.id==="lemtxt"){ S.settings.lembrete=e.target.value; save(); return; }
 });
 document.addEventListener("change",e=>{
   const d=e.target.dataset, id=e.target.id;
@@ -3017,11 +3116,20 @@ document.addEventListener("change",e=>{
     save(); renderSet(); return; }
   if(id==="talto"){ S.settings.tempoAlto=Math.max(limiteMedio()+5,Math.min(960,+e.target.value||120)); save(); renderSet(); return; }
   if(id==="pushbonus"){ S.settings.pushBonus=Math.max(0,Math.min(50,+e.target.value||0)); save(); renderSet(); return; }
+  if(id==="lemtxt"){ S.settings.lembrete=e.target.value.trim(); save(); return; }   // ao sair do campo, apara os espaços
 });
 
 /* arrastar para reordenar/mover entre cartões */
-let drag=null, dragStep=null;
+let drag=null, dragStep=null, dragArea=null;
 document.addEventListener("dragstart",e=>{
+  const ag=e.target.closest("[data-agrip]");
+  if(ag){
+    dragArea=ag.dataset.agrip;
+    const bloco=ag.closest(".areablock"); bloco.classList.add("dragging");
+    e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain","");
+    try{ e.dataTransfer.setDragImage(bloco,14,12); }catch(_){}
+    e.stopPropagation(); return;
+  }
   // subetapa: arrasta só dentro da própria atividade
   const sg=e.target.closest("[data-stepgrip]");
   if(sg){
@@ -3040,8 +3148,8 @@ document.addEventListener("dragstart",e=>{
 });
 const limpaMarcas=()=> $$(".itemwrap.over,.itemwrap.over-fim,.itemwrap.dentro,.step.over").forEach(x=>x.classList.remove("over","over-fim","dentro"));
 document.addEventListener("dragend",()=>{
-  $$(".itemwrap,.step").forEach(x=>x.classList.remove("dragging","over","over-fim","dentro"));
-  drag=null; dragStep=null;
+  $$(".itemwrap,.step,.areablock").forEach(x=>x.classList.remove("dragging","over","over-fim","dentro"));
+  drag=null; dragStep=null; dragArea=null;
 });
 // Nas bordas da linha, reordena. No miolo dela, entra para dentro da atividade —
 // é a mesma distinção que o gesto tem em qualquer lista com hierarquia.
@@ -3050,6 +3158,17 @@ function zonaDe(li,y){
   return rel<0.32?"antes" : rel>0.68?"depois" : "dentro";
 }
 document.addEventListener("dragover",e=>{
+  if(dragArea){
+    const b=e.target.closest(".areablock");
+    if(!b) return;
+    e.preventDefault();
+    $$(".areablock.over,.areablock.over-fim").forEach(x=>x.classList.remove("over","over-fim"));
+    if(b.dataset.area!==dragArea){
+      const r=b.getBoundingClientRect();
+      b.classList.add(e.clientY < r.top+r.height/2 ? "over" : "over-fim");
+    }
+    return;
+  }
   if(dragStep){
     const [aid,sid]=dragStep.split(":");
     const li=e.target.closest(".itemwrap");
@@ -3073,6 +3192,19 @@ document.addEventListener("dragover",e=>{
   }
 });
 document.addEventListener("drop",e=>{
+  if(dragArea){
+    const b=e.target.closest(".areablock");
+    if(!b || b.dataset.area===dragArea) return;
+    e.preventDefault();
+    const i=S.areas.findIndex(a=>a.id===dragArea); if(i<0) return;
+    const [mov]=S.areas.splice(i,1);
+    let j=S.areas.findIndex(a=>a.id===b.dataset.area);
+    const r=b.getBoundingClientRect();
+    if(e.clientY >= r.top+r.height/2) j++;
+    S.areas.splice(Math.max(0,j),0,mov);
+    save(); render();
+    return;
+  }
   if(dragStep){
     const [aid,sid]=dragStep.split(":");
     const a=act(aid); if(!a||!a.steps) return;
@@ -3139,6 +3271,10 @@ function novaRotina(diaria){
 }
 $("#addHabit").onclick=()=>novaRotina(false);
 $("#addDaily").onclick=()=>novaRotina(true);
+$("#lemver").onclick=()=>{
+  if(!lemTexto()){ toast("Escreva a mensagem primeiro."); $("#lemtxt").focus(); return; }
+  abrirLembrete(true);
+};
 $("#emptyTrash").onclick=()=>{
   const n=(S.trash||[]).length;
   if(!n){ toast("A lixeira já está vazia."); return; }
@@ -3336,6 +3472,7 @@ $("#ghpush").onclick=()=>push(true);
 $("#ghpull").onclick=()=>pull(true);
 
 render();
+abrirLembrete(false);
 if(cfg.auto&&cfg.token&&cfg.gist) pull(false);
 })();
 </script>
