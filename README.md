@@ -1,7 +1,40 @@
 # Painel Semanal
 
-Registro de progresso semanal — página única, sem dependências, sem servidor.
+Registro de progresso semanal — sem dependências, sem build, sem servidor.
 Os dados ficam no `localStorage` do navegador e sincronizam com um Gist privado do GitHub.
+
+## Arquivos
+
+| Arquivo | O que é |
+|---|---|
+| `index.html` | Esqueleto: lateral, topo, palco, gaveta e os `<template>` de cada seção |
+| `styles.css` | Todo o estilo, do sistema de cores ao layout do esqueleto |
+| `app.js` | Estado, cálculo, rotas e render |
+
+Eram um arquivo só de 3.600 linhas até a reformulação; a separação existe para
+achar as coisas, não para ganhar desempenho.
+
+## Navegação
+
+A lateral fixa é a espinha do painel: seletor de semana, anel de progresso,
+sequência, e então as seções — **Semana**, **Agenda**, cada **frente** agrupada
+pela sua área, **Rotinas**, **Retrospectiva**, **Histórico** e **Ajustes**. No
+telefone ela vira gaveta, aberta pelo botão de menu.
+
+Cada seção é uma página com endereço próprio na migalha (`Painel › Vida
+profissional › Tese PPGCP`). O conteúdo é montado a partir de um `<template>`
+do `index.html`, então acrescentar uma seção é: criar o `<template>`, registrar
+o nome e o ícone em `SECOES`, e tratar a rota no `render()`.
+
+**Semana** é o painel de entrada: hero com o percentual, quatro widgets (hoje,
+distribuição, pontualidade, tempo), o mosaico de frentes com objetivo e barra, e
+o que pesa mais na semana. **A página de uma frente** tem hero com ícone e
+objetivo editável, widgets próprios e a lista de atividades.
+
+Clicar numa atividade — pelo menu, pela agenda ou pela visão do dia — abre a
+**gaveta lateral** com tudo: estado, peso, dia, horário, tempo, etiquetas, link,
+subetapas e as ações de mover. É lá que mora o detalhe; a linha na lista fica
+enxuta.
 
 ## Publicar
 
