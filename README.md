@@ -24,6 +24,27 @@ A página fica em `https://<usuario>.github.io/<repositorio>/`.
 Com **Sincronizar automaticamente** ligado, o painel envia sozinho 8 segundos depois de
 cada alteração e puxa a versão remota ao abrir, quando ela é mais recente.
 
+## Identidade e realização
+
+Cada subcategoria tem um **ícone** escolhido pelo próprio nome — "Saúde financeira"
+vira carteira, "Tese" vira livro, "Casa e bichos" vira casa. O ícone acompanha o
+nome quando ele muda, e pode ser trocado à mão em **Ajustes → Categorias**, onde
+um seletor com busca lista os 28 desenhos disponíveis. A opção "Automático" devolve
+o comportamento pelo nome.
+
+Sinais de conclusão, mantidos discretos de propósito:
+
+- **Frente fechada**: o cartão em 100% troca a faixa e o percentual para o verde e
+  ganha a linha "Frente fechada nesta semana".
+- **Meta da semana**: ao cruzar a meta, o anel do topo passa a verde, a legenda vira
+  "meta" e há um pulso único no instante da virada.
+- **Sequência**: a partir de duas semanas fechadas na meta, aparece uma pastilha com
+  a contagem. A semana em curso só entra na conta depois de bater a meta — ela nunca
+  zera a sequência enquanto está sendo construída.
+- **Ao concluir**: a caixa dá um salto curto (340 ms), em atividades e subetapas.
+
+Tudo isso respeita `prefers-reduced-motion`.
+
 ## Lembrete de abertura
 
 Em **Ajustes → Preferências** dá para escrever um recado que aparece num aviso ao

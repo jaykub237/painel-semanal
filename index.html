@@ -101,7 +101,7 @@ header.top{position:sticky;top:0;z-index:30;background:var(--surface);border-bot
 
 /* ---------- genéricos ---------- */
 main{padding:24px 0 80px}
-.area{margin-bottom:30px}
+.area{margin-bottom:38px}
 .area-head{display:flex;align-items:center;gap:12px;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line)}
 .area-head h2{margin:0;font-size:13px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono)}
 .area-head .apct{margin-left:auto;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink-2)}
@@ -117,6 +117,39 @@ main{padding:24px 0 80px}
 .fold-chip b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--ink-3)}
 .fold-chip .fb{width:26px;height:4px;border-radius:99px;background:var(--line);overflow:hidden;flex:none}
 .fold-chip .fb i{display:block;height:100%;border-radius:99px;background:var(--c)}
+.fold-chip .fi{display:grid;place-items:center;width:14px;height:14px;color:var(--c);flex:none}
+.fold-chip .fi svg{width:14px;height:14px}
+.fold-chip.plena{border-color:color-mix(in srgb,var(--ok) 42%,transparent);background:color-mix(in srgb,var(--ok) 7%,transparent)}
+.fold-chip.plena b{color:var(--ok)}
+
+/* ---------- identidade e realização ---------- */
+.subicon{display:grid;place-items:center;width:22px;height:22px;flex:none;color:var(--c);opacity:.95}
+.subicon svg{width:18px;height:18px}
+.card.plena{border-color:color-mix(in srgb,var(--ok) 34%,var(--line))}
+.card.plena::before{background:var(--ok)}
+.card.plena .subicon{color:var(--ok)}
+.card.plena .bar i{background:var(--ok)}
+.icobtn{display:grid;place-items:center;width:26px;height:26px;flex:none;border:1px solid var(--line);border-radius:7px;color:var(--c);background:var(--surface-2)}
+.icobtn svg{width:15px;height:15px}
+.icobtn:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent)}
+
+/* sequência: aparece só a partir de duas semanas, para não parecer cobrança */
+.streak{display:flex;align-items:center;gap:5px;padding:4px 10px 4px 8px;border-radius:99px;
+  border:1px solid color-mix(in srgb,var(--warn) 34%,transparent);background:color-mix(in srgb,var(--warn) 10%,transparent);
+  font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.streak .sfogo{display:grid;place-items:center;width:14px;height:14px;color:var(--warn)}
+.streak .sfogo svg{width:14px;height:14px}
+.streak b{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--warn)}
+.ring.meta #ringarc{stroke:var(--ok)}
+.ring.meta .num{color:var(--ok)}
+.ring.meta .cap{color:var(--ok)}
+
+@keyframes feitopop{0%{transform:scale(1)}35%{transform:scale(1.28)}100%{transform:scale(1)}}
+@keyframes anelpulso{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 45%,transparent)}
+  70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.st.feito,.sbox.feito{animation:feitopop .34s cubic-bezier(.2,.9,.3,1.2)}
+.ring.comemora{border-radius:99px;animation:anelpulso .9s ease-out}
+@media (prefers-reduced-motion:reduce){.st.feito,.sbox.feito,.ring.comemora{animation:none}}
 
 /* ---------- agenda da semana ---------- */
 .agenda{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:26px;overflow:hidden}
@@ -283,16 +316,16 @@ main{padding:24px 0 80px}
   .card .item .tags{flex:1 1 100%;max-width:none;justify-content:flex-start;margin-left:26px;padding-top:1px}
 }
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
-.card-head{padding:13px 15px 11px 17px;border-bottom:1px solid var(--line)}
+.card-head{padding:15px 17px 12px 18px;border-bottom:1px solid var(--line)}
 .card-title{display:flex;align-items:center;gap:9px}
-.card-title h3{margin:0;font-size:14.5px;font-weight:640;letter-spacing:-.005em}
+.card-title h3{margin:0;font-size:15.5px;font-weight:640;letter-spacing:-.01em}
 .ctoggle{width:20px;height:20px;flex:none;display:grid;place-items:center;border-radius:5px;color:var(--ink-3);margin-left:-4px}
 .ctoggle:hover{background:var(--surface-2);color:var(--ink)}
 .ctoggle svg{width:13px;height:13px;transition:transform .18s}
 .ctoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
 .card.fold .card-head{border-bottom:none;padding-bottom:12px}
 .addcard{align-self:stretch}
-.card-title .h3in{flex:1;min-width:0;font-size:14.5px;font-weight:640;letter-spacing:-.005em;border:1px solid transparent;background:none;border-radius:6px;padding:2px 6px;margin:-2px -6px}
+.card-title .h3in{flex:1;min-width:0;font-size:15.5px;font-weight:640;letter-spacing:-.01em;border:1px solid transparent;background:none;border-radius:6px;padding:2px 6px;margin:-2px -6px}
 .card-title .h3in:hover{background:var(--surface-2);border-color:var(--line)}
 .card-title .h3in:focus{background:var(--surface);border-color:var(--accent);outline:none}
 .card-title .kill{width:22px;height:22px;flex:none;display:grid;place-items:center;border-radius:5px;color:var(--ink-3);opacity:0;transition:.15s}
@@ -676,6 +709,8 @@ table.hist tr:last-child td{border-bottom:none}
 .seg button:last-child{border-right:none}
 .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
 .empty{color:var(--ink-3);font-size:13px;font-style:italic;padding:10px 15px 10px 17px}
+.plenamsg{display:flex;align-items:center;gap:8px;padding:8px 15px 10px 17px;font-size:12.5px;color:var(--ok)}
+.plenamsg svg{width:13px;height:13px;flex:none}
 .hidden{display:none !important}
 
 /* Diálogo próprio: confirm() nativo é bloqueado quando a página roda em iframe
@@ -734,7 +769,7 @@ table.hist tr:last-child td{border-bottom:none}
         <button class="btn" id="today">Hoje</button>
       </div>
 
-      <div class="ring">
+      <div class="ring" id="ring">
         <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
           <circle cx="23" cy="23" r="19" fill="none" stroke="var(--line)" stroke-width="5"/>
           <circle id="ringarc" cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5"
@@ -742,9 +777,10 @@ table.hist tr:last-child td{border-bottom:none}
         </svg>
         <div>
           <div class="num mono" id="overall">0%</div>
-          <div class="cap">semana</div>
+          <div class="cap" id="ringcap">semana</div>
         </div>
       </div>
+      <div class="streak hidden" id="streak" title=""><span class="sfogo">${'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 3 4.5 4.2 4.5 8a4.5 4.5 0 0 1-9 0c0-1.4.6-2.3 1.3-3.2.5 1 1.2 1.5 2 1.5C11 7.5 10.5 5 12 3z"/><path d="M8.5 15.5c0 2.5 1.6 4.5 3.5 4.5s3.5-2 3.5-4.5"/></svg>'}</span><b id="streakn"></b><span id="streakt"></span></div>
     </div>
 
     <div class="tabs" role="tablist">
@@ -1131,6 +1167,79 @@ function rotFator(h,st,i){
   return its.filter(it=> (st.i[it.id]||{})[i]).length/its.length;
 }
 const rotDiaFeito=(h,st,i)=> rotFator(h,st,i)>=1;
+
+/* ---------- ícones das subcategorias ---------- */
+// Traço fino, mesma gramática dos outros ícones. O nome da frente escolhe o desenho
+// sozinho; quem quiser troca à mão em Ajustes.
+const SVG=(d,extra)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}${extra||""}</svg>`;
+const ICONES={
+  alvo:{n:"Alvo",s:SVG('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/>')},
+  casa:{n:"Casa",s:SVG('<path d="M4 11.5 12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>')},
+  corpo:{n:"Corpo",s:SVG('<path d="M3 12h2M19 12h2"/><rect x="5" y="8.5" width="3" height="7" rx="1"/><rect x="16" y="8.5" width="3" height="7" rx="1"/><path d="M8 12h8"/>')},
+  coracao:{n:"Coração",s:SVG('<path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.6 12 20 12 20z"/>')},
+  pulso:{n:"Saúde",s:SVG('<path d="M3 12h4l2.5-6 4 12L16 12h5"/>')},
+  dinheiro:{n:"Dinheiro",s:SVG('<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h.01M17 12h.01"/>')},
+  livro:{n:"Livro",s:SVG('<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H18v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M8 4v16"/>')},
+  caneta:{n:"Escrita",s:SVG('<path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M14.5 6.5l3 3"/>')},
+  pesquisa:{n:"Pesquisa",s:SVG('<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>')},
+  globo:{n:"Mundo",s:SVG('<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4a13 13 0 0 1 0 16 13 13 0 0 1 0-16z"/>')},
+  fala:{n:"Idiomas",s:SVG('<path d="M20 14a2 2 0 0 1-2 2H9l-4 3v-3H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 10.5h6M9 13h4"/>')},
+  mala:{n:"Trabalho",s:SVG('<rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M3 13h18"/>')},
+  codigo:{n:"Código",s:SVG('<path d="M9 8l-5 4 5 4"/><path d="M15 8l5 4-5 4"/>')},
+  musica:{n:"Música",s:SVG('<path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>')},
+  arte:{n:"Arte",s:SVG('<path d="M12 4a8 8 0 1 0 0 16c1.3 0 1.8-1 1.4-2-.5-1.2.3-2 1.6-2H18a3 3 0 0 0 3-3c0-4.5-4-9-9-9z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor"/><circle cx="12" cy="8" r="1" fill="currentColor"/>')},
+  planta:{n:"Planta",s:SVG('<path d="M12 20v-7"/><path d="M12 13c0-3.5 2.5-6 6-6 0 3.5-2.5 6-6 6z"/><path d="M12 15c0-3-2-5-5-5 0 3 2 5 5 5z"/>')},
+  pet:{n:"Bichos",s:SVG('<circle cx="8" cy="8.5" r="1.9"/><circle cx="16" cy="8.5" r="1.9"/><circle cx="5.5" cy="13.5" r="1.6"/><circle cx="18.5" cy="13.5" r="1.6"/><path d="M12 12.5c2.6 0 4.5 2 4.5 4.2 0 1.7-1.4 2.6-3 2.3-1-.2-2-.2-3 0-1.6.3-3-.6-3-2.3 0-2.2 1.9-4.2 4.5-4.2z"/>')},
+  comida:{n:"Comida",s:SVG('<path d="M6 3v8a2 2 0 0 0 4 0V3"/><path d="M8 11v10"/><path d="M17 3c-1.5 1.5-2 3.5-2 5.5S16 12 17 12s2-1.5 2-3.5S18.5 4.5 17 3z"/><path d="M17 12v9"/>')},
+  viagem:{n:"Viagem",s:SVG('<path d="M3 13l8-2 3.5-6.5a1.5 1.5 0 0 1 2.7 1.3L15 11l5.5-1.4a1.2 1.2 0 0 1 .6 2.3L4.5 17 3 13z"/>')},
+  familia:{n:"Família",s:SVG('<circle cx="8.5" cy="8" r="2.7"/><circle cx="16.5" cy="9.5" r="2.2"/><path d="M3.5 19c0-2.8 2.2-5 5-5s5 2.2 5 5"/><path d="M14.5 19c0-2.2 1.3-3.6 3-3.6s3 1.4 3 3.6"/>')},
+  sono:{n:"Descanso",s:SVG('<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>')},
+  cafe:{n:"Café",s:SVG('<path d="M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M16 9.5h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M7 3.5v2M11 3.5v2"/>')},
+  compras:{n:"Compras",s:SVG('<path d="M5 7h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/>')},
+  bicicleta:{n:"Movimento",s:SVG('<circle cx="6" cy="16.5" r="3.5"/><circle cx="18" cy="16.5" r="3.5"/><path d="M6 16.5l4-8h5"/><path d="M10 8.5h4l4 8"/>')},
+  camera:{n:"Registro",s:SVG('<rect x="3" y="7" width="18" height="13" rx="2.5"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8.5 7l1.5-2.5h4L15.5 7"/>')},
+  estrela:{n:"Estrela",s:SVG('<path d="M12 4.5l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 10.2l5.4-.8z"/>')},
+  relampago:{n:"Energia",s:SVG('<path d="M13.5 3L6 13.5h5L10.5 21 18 10.5h-5z"/>')},
+  montanha:{n:"Metas",s:SVG('<path d="M3 19l6.5-11 4 6 2.5-4 5 9z"/><circle cx="17" cy="6" r="1.6"/>')}
+};
+// palavra no nome › ícone; a primeira que casar vence
+const PISTAS=[
+  [/\bcasa|lar|dom[ié]cil|moradia|apartament|faxin/i,"casa"],
+  [/f[íi]sic|corpo|academia|treino|muscul|malha|exerc[íi]c|gym/i,"corpo"],
+  // o específico vem antes do genérico: "saúde financeira" é dinheiro, não saúde
+  [/financ|dinheiro|grana|or[çc]ament|invest|econom|conta/i,"dinheiro"],
+  [/sa[úu]de|m[ée]dic|terap|bem.?estar|mental/i,"pulso"],
+  [/cora[çc][ãa]o|amor|relacion|namor|casament/i,"coracao"],
+  [/tese|disserta|acad[êe]mic|estud|leitura|ler|livro|curso|faculdade|ppgcp/i,"livro"],
+  [/escrit|escrever|reda[çc]|texto|artigo|blog|di[áa]rio/i,"caneta"],
+  [/pesquis|investiga|ci[êe]nc|lab|dados|an[áa]lise/i,"pesquisa"],
+  [/idioma|l[íi]ngua|ingl[êe]s|espanhol|franc[êe]s|alem[ãa]o|convers/i,"fala"],
+  [/trabalh|emprego|carreir|profiss|escrit[óo]rio|cliente|freela/i,"mala"],
+  [/c[óo]digo|program|dev|software|site|app|tech/i,"codigo"],
+  [/m[úu]sic|viol[ãa]o|guitarr|piano|canto|banda/i,"musica"],
+  [/arte|desenh|pint|criativ|design|foto.?grafia/i,"arte"],
+  [/jardim|planta|horta|natureza|verde/i,"planta"],
+  [/pet|gato|cachorr|c[ãa]o|bicho|animal/i,"pet"],
+  [/comida|cozinh|aliment|receita|dieta|nutri/i,"comida"],
+  [/viagem|viajar|passeio|f[ée]rias|trip/i,"viagem"],
+  [/fam[íi]lia|filh|pais|m[ãa]e|pai\b|irm[ãa]|amig|social/i,"familia"],
+  [/sono|dormir|descans|pausa|medita|calma/i,"sono"],
+  [/caf[ée]|rotina.?matin|manh[ãa]/i,"cafe"],
+  [/compra|mercado|supermerc|shopping/i,"compras"],
+  [/corrida|correr|bike|bicicl|caminhada|pedal|nata[çc]/i,"bicicleta"],
+  [/foto|v[íi]deo|registro|mem[óo]ria/i,"camera"],
+  [/hobby|hobbies|lazer|divers[ãa]o|jogo|game/i,"estrela"],
+  [/energia|h[áa]bito|disciplina|foco/i,"relampago"],
+  [/meta|objetivo|projeto|plano|sonho|futuro/i,"montanha"]
+];
+function adivinhaIcone(nome){
+  const n=String(nome||"");
+  for(const [re,ic] of PISTAS) if(re.test(n)) return ic;
+  return "alvo";
+}
+const chaveIcone=sub=> (sub&&sub.icon&&ICONES[sub.icon]) ? sub.icon : adivinhaIcone(sub&&sub.name);
+const iconeSub=sub=> ICONES[chaveIcone(sub)].s;
+const iconeDe=subId=>{ const s=findSub(subId); return s?iconeSub(s):ICONES.alvo.s; };
 
 /* ---------- tags ---------- */
 // Etiqueta livre, minúscula, sem "#" guardado — o "#" é só como se escreve e se procura.
@@ -1547,6 +1656,37 @@ function stIcon(s){ return s==="done"?IC.check: s==="doing"?IC.half: s==="skip"?
 const NEXT={todo:"doing",doing:"done",done:"skip",skip:"todo"};
 const STNAME={todo:"pendente",doing:"em andamento",done:"concluída",skip:"adiada"};
 
+/* ---------- realização ---------- */
+// Sequência de semanas fechadas na meta, contada de trás para a frente.
+// Conta só as semanas já fechadas: a semana em curso ainda está sendo construída e
+// zerar a sequência por causa dela seria cobrar por algo que ainda não aconteceu.
+function sequenciaNaMeta(){
+  const ks=dataWeeks().filter(k=> k<cur);
+  let n=0;
+  for(let i=ks.length-1;i>=0;i--){
+    const p=weekScore(ks[i]).pct;
+    if(p==null) continue;
+    if(p>=S.settings.goal) n++; else break;
+  }
+  const atual=weekScore(cur).pct;
+  if(atual!=null && atual>=S.settings.goal) n++;   // a semana corrente entra quando já bateu
+  return n;
+}
+let metaAnterior=null;
+// anima uma vez e limpa: o render refaz o DOM, então a classe não pode ficar grudada
+function pulsa(el,classe){
+  if(!el) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  el.classList.remove(classe);
+  void el.offsetWidth;
+  el.classList.add(classe);
+  setTimeout(()=>el.classList.remove(classe),900);
+}
+function celebraItem(id){
+  const el=document.querySelector(`.itemwrap[data-id="${CSS.escape(id)}"] .st`);
+  pulsa(el,"feito");
+}
+
 /* ---------- render: semana ---------- */
 function renderWeek(){
   $("#wkey").textContent=cur.replace("-W"," · semana ");
@@ -1558,6 +1698,24 @@ function renderWeek(){
   $("#overall").textContent=(ws.pct==null?"—":pct+"%");
   const C=2*Math.PI*19;
   $("#ringarc").setAttribute("stroke-dashoffset", C-(C*pct/100));
+
+  // meta batida: o anel muda de cor e pulsa uma vez, no instante em que cruza
+  const naMeta=ws.pct!=null && pct>=S.settings.goal;
+  const ring=$("#ring");
+  ring.classList.toggle("meta",naMeta);
+  $("#ringcap").textContent=naMeta?"meta":"semana";
+  if(naMeta && metaAnterior===false) pulsa(ring,"comemora");
+  if(ws.pct!=null) metaAnterior=naMeta;
+
+  // sequência de semanas na meta — o que dá peso é não querer perder
+  const seq=sequenciaNaMeta();
+  const el=$("#streak");
+  el.classList.toggle("hidden",seq<2);
+  if(seq>=2){
+    $("#streakn").textContent=seq;
+    $("#streakt").textContent="semanas na meta";
+    el.title=`Você fechou as últimas ${seq} semanas em ${S.settings.goal}% ou mais.`;
+  }
 
   const q=query.trim().toLowerCase();
   const w=week(cur);
@@ -1579,10 +1737,12 @@ function renderWeek(){
       const sopen=!S.settings.foldedSubs[sub.id];
       const pendentes=w.acts.filter(a=> a.sub===sub.id && a.status!=="done" && a.status!=="skip").length;
       const temObj=(w.goals[sub.id]||"").trim().length>0;
-      return `<article class="card ${sopen?"":"fold"}" style="--c:${subVar(sub.id)}" data-sub="${sub.id}">
+      const plena=r.pct===100;
+      return `<article class="card ${sopen?"":"fold"} ${plena?"plena":""}" style="--c:${subVar(sub.id)}" data-sub="${sub.id}">
         <div class="card-head">
           <div class="card-title">
             <button class="ctoggle" data-foldsub="${sub.id}" aria-expanded="${sopen}" aria-controls="body-${sub.id}" title="${sopen?"Recolher":"Expandir"} ${esc(sub.name)}">${IC.chev}</button>
+            <span class="subicon" aria-hidden="true">${iconeSub(sub)}</span>
             <input class="h3in" value="${esc(sub.name)}" data-sname="${sub.id}" aria-label="Nome da subcategoria" title="Clique para renomear">
             ${feitas?`<button class="ib eye ${soSub?"on":""}" data-hidesub="${sub.id}" aria-pressed="${soSub}"
               title="${soSub?`Mostrar as ${feitas} concluída${feitas>1?"s":""} desta frente`:`Ocultar as ${feitas} concluída${feitas>1?"s":""} desta frente`}">${soSub?IC.eyeoff:IC.eye}</button>`:""}
@@ -1631,7 +1791,8 @@ function renderWeek(){
         <ul class="list">${acts.length?acts.map(a=>itemHTML(a)).join(""):`<li class="empty">${
           q?"Nada corresponde ao filtro."
           :(hd||soSub)&&feitas?`Tudo concluído aqui — ${feitas} atividade${feitas>1?"s":""} oculta${feitas>1?"s":""}.`
-          :"Nenhuma atividade ainda."}</li>`}</ul>
+          :"Comece por uma linha só. O resto vem depois."}</li>`}</ul>
+        ${plena&&acts.length?`<div class="plenamsg">${IC.check}<span>Frente fechada nesta semana.</span></div>`:""}
         ${(()=>{
           const adiadas=(w.pushed||[]).filter(p=> p.sub===sub.id);
           if(!adiadas.length) return "";
@@ -1653,8 +1814,9 @@ function renderWeek(){
     // recolhida, a área vira uma fita de chips — o percentual de cada frente continua à vista
     const folded=area.subs.map(sub=>{
       const r=subScore(sub.id,cur);
-      return `<button class="fold-chip" data-open="${area.id}:${sub.id}" style="--c:${subVar(sub.id)}" title="Abrir ${esc(area.name)} nesta subcategoria">
-        <span class="fb"><i style="width:${r.pct||0}%"></i></span>${esc(sub.name)} <b>${r.pct==null?"—":r.pct+"%"}</b>
+      return `<button class="fold-chip ${r.pct===100?"plena":""}" data-open="${area.id}:${sub.id}" style="--c:${subVar(sub.id)}" title="Abrir ${esc(area.name)} nesta subcategoria">
+        <span class="fi">${iconeSub(sub)}</span>${esc(sub.name)}
+        <span class="fb"><i style="width:${r.pct||0}%"></i></span><b>${r.pct==null?"—":r.pct+"%"}</b>
       </button>`;
     }).join("");
 
@@ -2448,6 +2610,8 @@ function renderSet(){
       </div>
       <div class="indent" style="--c:var(--${a.tone})">
         ${a.subs.map((s,si)=>`<div class="setrow">
+          <button class="icobtn" data-icon="${s.id}" data-menu-id="ico-${s.id}" style="--c:${subVar(s.id)}"
+            title="${s.icon?`Ícone: ${ICONES[chaveIcone(s)].n}`:`Ícone automático pelo nome: ${ICONES[chaveIcone(s)].n}`} — clique para trocar">${iconeSub(s)}</button>
           <div class="swatches">${Array.from({length:KN},(_,i)=>`<button class="sw" data-scolor="${s.id}:${i+1}" aria-pressed="${s.color===i+1}" style="--c:var(--k${i+1})" title="Cor ${i+1} para ${esc(s.name)}"></button>`).join("")}</div>
           <div class="grow"><input type="text" value="${esc(s.name)}" data-sname="${s.id}"></div>
           <button class="ib" data-smove="${s.id}" data-d="-1" ${si===0?"disabled style=opacity:.3":""} title="Subir">${IC.up}</button>
@@ -2795,7 +2959,7 @@ function download(text,name,mime){
 
 /* ---------- eventos ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-sugoff],[data-unpush],[data-pp],[data-lf],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
+  const t=e.target.closest("[data-cycle],[data-del],[data-weight],[data-due],[data-steps],[data-steptoggle],[data-stepdel],[data-stepdue],[data-agday],[data-agsub],[data-agfold],[data-scolor],[data-icon],[data-hidesub],[data-rot],[data-gorot],[data-hmode],[data-hday],[data-hdays],[data-hidel],[data-hweight],[data-push],[data-spush],[data-restore],[data-trashdel],[data-menu],[data-smenu],[data-tagq],[data-time],[data-stime],[data-timeadd],[data-stimeadd],[data-sugw],[data-sugoff],[data-unpush],[data-pp],[data-lf],[data-link],[data-slink],[data-linkdel],[data-slinkdel],[data-fold],[data-foldsub],[data-open],[data-jump],[data-hab],[data-scale],[data-go],[data-t],[data-amove],[data-adel],[data-smove],[data-sdel],[data-addsub],[data-newsub],[data-hdel],.tab");
   if(!t) return;
   const d=t.dataset;
 
@@ -2807,7 +2971,10 @@ document.addEventListener("click",e=>{
       if(a.status==="done") a.steps.forEach(s=>{ s.done=true; s.doing=false; });
       if(a.status==="todo") a.steps.forEach(s=>{ s.done=false; s.doing=false; });
     }
-    if(a.status==="done") a.doneAt=Date.now(); save(); renderWeek(); } return; }
+    if(a.status==="done") a.doneAt=Date.now();
+    save(); renderWeek();
+    if(a.status==="done") celebraItem(a.id);
+    } return; }
   if(d.steps){ const a=act(d.steps); if(a){ a.open=!a.open; save(); renderWeek();
       const inp=document.querySelector(`[data-stepadd="${CSS.escape(d.steps)}"]`);
       if(inp && !(a.steps||[]).length) inp.focus(); } return; }
@@ -2817,6 +2984,7 @@ document.addEventListener("click",e=>{
       else if(s.doing){ s.doing=false; s.done=true; }
       else s.doing=true;
       syncFromSteps(a); save(); renderWeek();
+      if(s.done) pulsa(document.querySelector(`.step[data-sid="${CSS.escape(s.id)}"] .sbox`),"feito");
     } return; }
   if(d.stepdel){ excluirSubetapa(d.stepdel); return; }
   if(d.push){ const a=act(d.push); if(a) empurrar(a,null); return; }
@@ -2903,6 +3071,15 @@ document.addEventListener("click",e=>{
   if("agsub" in d){ S.settings.agendaSub = d.agsub||null; save(); renderAgenda(week(cur)); return; }
   if(d.agfold){ S.settings.agendaFold=!S.settings.agendaFold; save(); renderAgenda(week(cur)); return; }
   if(d.scolor){ const [sid,n]=d.scolor.split(":"); const s=findSub(sid); if(s){ s.color=Number(n); save(); renderSet(); } return; }
+  if(d.icon){
+    const s=findSub(d.icon); if(!s) return;
+    const itens=[{label:`Automático pelo nome (${ICONES[adivinhaIcone(s.name)].n})`,icon:ICONES[adivinhaIcone(s.name)].s,busca:"automatico auto nome",
+      fn:()=>{ delete s.icon; save(); render(); toast("Ícone volta a seguir o nome da frente."); }},{sep:true}]
+      .concat(Object.entries(ICONES).map(([k,v])=>({label:v.n,icon:v.s,busca:k+" "+v.n,
+        fn:()=>{ s.icon=k; save(); render(); }})));
+    abrirMenu(t,itens,{busca:"Procurar ícone…"});
+    return;
+  }
   if(d.hidesub){ const h=S.settings.hideDoneSubs; if(h[d.hidesub]) delete h[d.hidesub]; else h[d.hidesub]=true; save(); renderWeek(); return; }
   if(d.rot){
     const [hid,iid,di]=d.rot.split(":"); const h=S.habits.find(x=>x.id===hid); if(!h) return;
