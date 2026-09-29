@@ -1,65 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="790" viewBox="0 0 1000 790" font-family="Liberation Sans, Arial, Helvetica, sans-serif">
-  <rect width="1000" height="790" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="630" viewBox="0 0 1000 630" font-family="Liberation Sans, Arial, Helvetica, sans-serif">
+  <rect width="1000" height="630" fill="#ffffff"/>
   <text x="60" y="62" font-size="22" font-weight="700" fill="#1e2a33">Os três eixos temáticos e sua interseção</text>
-  <text x="60" y="87" font-size="13.5" fill="#4a5a66">Diagnóstico sistêmico da segurança e da sustentabilidade na Amazônia</text>
+  <text x="60" y="87" font-size="13.5" fill="#4a5a66">Segurança e sustentabilidade na Amazônia</text>
 
-  <!-- chave superior: diagnóstico sistêmico -->
-  <path d="M120 150 V132 H880 V150" fill="none" stroke="#8a98a3" stroke-width="1.3"/>
-  <rect x="425" y="118" width="150" height="28" rx="14" fill="#ffffff" stroke="#8a98a3" stroke-width="1.3"/>
-  <text x="500" y="137" font-size="13" font-weight="700" fill="#1e2a33" text-anchor="middle">Diagnóstico sistêmico</text>
+  <circle cx="270" cy="285" r="150" fill="#264b63" fill-opacity="0.26" stroke="#264b63" stroke-width="1.6"/>
+  <circle cx="500" cy="285" r="150" fill="#dfe635" fill-opacity="0.40" stroke="#c2cb22" stroke-width="1.6"/>
+  <circle cx="730" cy="285" r="150" fill="#1a9e6e" fill-opacity="0.28" stroke="#12925f" stroke-width="1.6"/>
 
-  <!-- círculos -->
-  <circle cx="270" cy="310" r="150" fill="#264b63" fill-opacity="0.26" stroke="#264b63" stroke-width="1.6"/>
-  <circle cx="500" cy="310" r="150" fill="#dfe635" fill-opacity="0.40" stroke="#c2cb22" stroke-width="1.6"/>
-  <circle cx="730" cy="310" r="150" fill="#1a9e6e" fill-opacity="0.28" stroke="#12925f" stroke-width="1.6"/>
-
-  <!-- rótulos dos eixos -->
   <g fill="#1f4a63" text-anchor="middle">
-    <text x="255" y="282" font-size="16" font-weight="700" letter-spacing="3">EIXO 1</text>
-    <text x="255" y="307" font-size="14" font-weight="700">Soberania, Defesa</text>
-    <text x="255" y="325" font-size="14" font-weight="700">e Presença Estatal</text>
-    <text x="255" y="343" font-size="14" font-weight="700">Integrada</text>
+    <text x="255" y="257" font-size="16" font-weight="700" letter-spacing="3">EIXO 1</text>
+    <text x="255" y="282" font-size="14" font-weight="700">Soberania, Defesa</text>
+    <text x="255" y="300" font-size="14" font-weight="700">e Presença Estatal</text>
+    <text x="255" y="318" font-size="14" font-weight="700">Integrada</text>
 
-    <text x="500" y="282" font-size="16" font-weight="700" letter-spacing="3">EIXO 2</text>
-    <text x="500" y="307" font-size="14" font-weight="700">Bioeconomia e</text>
-    <text x="500" y="325" font-size="14" font-weight="700">Economias Ilícitas</text>
-    <text x="500" y="343" font-size="14" font-weight="700">na Amazônia</text>
+    <text x="500" y="257" font-size="16" font-weight="700" letter-spacing="3">EIXO 2</text>
+    <text x="500" y="282" font-size="14" font-weight="700">Bioeconomia e</text>
+    <text x="500" y="300" font-size="14" font-weight="700">Economias Ilícitas</text>
+    <text x="500" y="318" font-size="14" font-weight="700">na Amazônia</text>
 
-    <text x="745" y="282" font-size="16" font-weight="700" letter-spacing="3">EIXO 3</text>
-    <text x="745" y="307" font-size="14" font-weight="700">Governança e</text>
-    <text x="745" y="325" font-size="14" font-weight="700">Fortalecimento</text>
-    <text x="745" y="343" font-size="14" font-weight="700">Institucional</text>
+    <text x="745" y="257" font-size="16" font-weight="700" letter-spacing="3">EIXO 3</text>
+    <text x="745" y="282" font-size="14" font-weight="700">Governança e</text>
+    <text x="745" y="300" font-size="14" font-weight="700">Fortalecimento</text>
+    <text x="745" y="318" font-size="14" font-weight="700">Institucional</text>
   </g>
 
-  <!-- interseções 1-2 e 2-3 -->
-  <g stroke="#6b7780" stroke-width="1">
-    <line x1="385" y1="380" x2="385" y2="478"/>
-    <line x1="615" y1="380" x2="615" y2="478"/>
-  </g>
-  <circle cx="385" cy="380" r="3" fill="#1e2a33"/>
-  <circle cx="615" cy="380" r="3" fill="#1e2a33"/>
-  <g fill="#1e2a33" text-anchor="middle" font-size="12">
-    <text x="385" y="496">presença estatal contra</text>
-    <text x="385" y="511">as economias ilícitas</text>
-    <text x="615" y="496">segurança jurídica e</text>
-    <text x="615" y="511">integridade das cadeias</text>
-  </g>
-
-  <!-- relação 1-3 -->
-  <path d="M200 448 Q200 580 500 580 Q800 580 800 448" fill="none" stroke="#6b7780" stroke-width="1.2" stroke-dasharray="5 4"/>
-  <rect x="405" y="568" width="190" height="24" fill="#ffffff"/>
-  <text x="500" y="585" font-size="12" fill="#1e2a33" text-anchor="middle">soberania sustentada por instituições</text>
-
-  <!-- legenda -->
   <g font-size="13.5" fill="#1e2a33">
-    <rect x="60" y="632" width="16" height="16" rx="3" fill="#264b63"/>
-    <text x="84" y="645">Eixo 1 · Soberania, Defesa e Presença Estatal Integrada</text>
-    <rect x="60" y="658" width="16" height="16" rx="3" fill="#d6de1e"/>
-    <text x="84" y="671">Eixo 2 · Bioeconomia e Economias Ilícitas na Amazônia</text>
-    <rect x="60" y="684" width="16" height="16" rx="3" fill="#12925f"/>
-    <text x="84" y="697">Eixo 3 · Governança e Fortalecimento Institucional</text>
+    <rect x="60" y="478" width="16" height="16" rx="3" fill="#264b63"/>
+    <text x="84" y="491">Eixo 1 · Soberania, Defesa e Presença Estatal Integrada</text>
+    <rect x="60" y="504" width="16" height="16" rx="3" fill="#d6de1e"/>
+    <text x="84" y="517">Eixo 2 · Bioeconomia e Economias Ilícitas na Amazônia</text>
+    <rect x="60" y="530" width="16" height="16" rx="3" fill="#12925f"/>
+    <text x="84" y="543">Eixo 3 · Governança e Fortalecimento Institucional</text>
   </g>
 
-  <line x1="60" y1="730" x2="940" y2="730" stroke="#e3e7ea" stroke-width="1"/>
-  <text x="60" y="756" font-size="11" fill="#6b7780">Fonte: Centro Soberania e Clima.</text>
+  <line x1="60" y1="572" x2="940" y2="572" stroke="#e3e7ea" stroke-width="1"/>
+  <text x="60" y="597" font-size="11" fill="#6b7780">Fonte: Centro Soberania e Clima.</text>
 </svg>
