@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="790" viewBox="0 0 680 790" font-family="Liberation Sans, Arial, Helvetica, sans-serif">
+  <rect width="680" height="790" fill="#ffffff"/>
+  <text x="60" y="72" font-size="21" font-weight="700" fill="#1e2a33">Os três eixos temáticos e sua interseção</text>
+  <text x="60" y="96" font-size="13" fill="#4a5a66">Diagnóstico sistêmico da segurança e da sustentabilidade na Amazônia</text>
+
+  <!-- círculos -->
+  <circle cx="340" cy="265" r="155" fill="#264b63" fill-opacity="0.30" stroke="#264b63" stroke-width="1.6"/>
+  <circle cx="441" cy="407" r="155" fill="#dfe635" fill-opacity="0.42" stroke="#c9d22a" stroke-width="1.6"/>
+  <circle cx="243" cy="407" r="155" fill="#1a9e6e" fill-opacity="0.32" stroke="#12925f" stroke-width="1.6"/>
+
+  <!-- rótulos dos eixos -->
+  <g fill="#1f4a63" text-anchor="middle">
+    <text x="340" y="172" font-size="17" font-weight="700" letter-spacing="3">EIXO 1</text>
+    <text x="340" y="197" font-size="13.5" font-weight="700">Soberania, Defesa e Presença</text>
+    <text x="340" y="214" font-size="13.5" font-weight="700">Estatal Integrada</text>
+
+    <text x="505" y="437" font-size="17" font-weight="700" letter-spacing="3">EIXO 2</text>
+    <text x="505" y="460" font-size="13.5" font-weight="700">Bioeconomia e</text>
+    <text x="505" y="477" font-size="13.5" font-weight="700">Economias Ilícitas</text>
+    <text x="505" y="494" font-size="13.5" font-weight="700">na Amazônia</text>
+
+    <text x="178" y="429" font-size="17" font-weight="700" letter-spacing="3">EIXO 3</text>
+    <text x="178" y="452" font-size="13.5" font-weight="700">Governança e</text>
+    <text x="178" y="469" font-size="13.5" font-weight="700">Fortalecimento</text>
+    <text x="178" y="486" font-size="13.5" font-weight="700">Institucional</text>
+  </g>
+
+  <!-- interseções -->
+  <g fill="#1e2a33" text-anchor="middle" font-size="11">
+    <text x="254" y="308">soberania sustentada</text>
+    <text x="254" y="322">por instituições</text>
+
+    <text x="428" y="302">presença estatal</text>
+    <text x="428" y="316">contra as economias</text>
+    <text x="428" y="330">ilícitas</text>
+
+    <text x="341" y="442">segurança jurídica</text>
+    <text x="341" y="456">e integridade</text>
+    <text x="341" y="470">das cadeias</text>
+  </g>
+
+  <!-- centro -->
+  <rect x="295" y="362" width="92" height="38" rx="7" fill="#ffffff" fill-opacity="0.92"/>
+  <text x="341" y="378" font-size="12.5" font-weight="700" fill="#1e2a33" text-anchor="middle">Diagnóstico</text>
+  <text x="341" y="393" font-size="12.5" font-weight="700" fill="#1e2a33" text-anchor="middle">sistêmico</text>
+
+  <!-- legenda -->
+  <g font-size="13.5" fill="#1e2a33">
+    <rect x="90" y="610" width="18" height="18" rx="3" fill="#264b63"/>
+    <text x="118" y="624">Eixo 1 · Soberania, Defesa e Presença Estatal Integrada</text>
+    <rect x="90" y="642" width="18" height="18" rx="3" fill="#d6de1e"/>
+    <text x="118" y="656">Eixo 2 · Bioeconomia e Economias Ilícitas na Amazônia</text>
+    <rect x="90" y="674" width="18" height="18" rx="3" fill="#12925f"/>
+    <text x="118" y="688">Eixo 3 · Governança e Fortalecimento Institucional</text>
+  </g>
+
+  <line x1="60" y1="728" x2="620" y2="728" stroke="#e3e7ea" stroke-width="1"/>
+  <text x="60" y="752" font-size="11" fill="#6b7780">Fonte: Centro Soberania e Clima.</text>
+</svg>
